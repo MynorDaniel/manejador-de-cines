@@ -1,0 +1,408 @@
+Casos de uso de alto nivel
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+
+Sesión
+
+Número: 001
+Caso de uso: Iniciar sesión
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de iniciar sesión, el sistema pide un correo electrónico y una contraseña, el usuario envia los datos requeridos, el sistema redirige al usuario a un panel principal mostrando una lista de películas
+Tipo: Primario
+
+Número: 002
+Caso de uso: Cerrar sesión
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario selecciona la opción de cerrar sesión, el sistema redirige al usuario a la pantalla de inicio
+Tipo: Primario
+
+Usuarios
+
+Número: 003
+Caso de uso: Crear usuario administrador de sistema
+Actores: Administrador del Sistema
+Descripción: El usuario ingresa al apartado de crear usuario, el sistema pide información del nuevo usuario, el usuario envía los datos incluyendo el rol "administrador del sistema", el sistema confirma el éxito de la operación
+Tipo: Secundario
+
+Número: 004
+Caso de uso: Crear usuario administrador de cines
+Actores: Administrador del Sistema
+Descripción: El usuario ingresa al apartado de crear usuario, el sistema pide información del nuevo usuario, el usuario envía los datos incluyendo el rol "administrador de cines", el sistema confirma el éxito de la operación
+Tipo: Secundario
+
+Número: 005
+Caso de uso: Crear usuario normal
+Actores: Administrador del Sistema, Usuario Normal
+Descripción: El usuario ingresa al apartado de crear cuenta, el sistema pide información del nuevo usuario, el usuario envía los datos, el sistema confirma el éxito de la operacioón
+Tipo: Primario
+
+Número: 006
+Caso de uso: Ver perfil de usuario
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines
+Descripción: El usuario ingresa al apartado del perfil, el sistema muestra información relacionada al usuario
+Tipo: Primario
+
+Número: 007
+Caso de uso: Editar perfil de usuario
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines
+Descripción: El usuario ingresa al apartado de editar perfil, el sistema muestra la información del usuario lista para editar, el usuario edita la información y la envía al sistema, el sistema muestra los cambios realizados
+Tipo: Secundario
+
+Número: 008
+Caso de uso: Desactivar cuenta de usuario
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines
+Descripción: El usuario ingresa al apartado de eliminar cuenta y confirma la operación, el sistema elimina la cuenta y redirige a la pantalla de inicio
+Tipo: Secundario
+
+Cartera digital
+
+Número: 009
+Caso de uso: Recargar cartera digital
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines
+Descripción: El usuario ingresa a la cartera digital, el sistema muestra el saldo disponible con la opción de agregar saldo, el usuario ingresa el saldo, el sistema muestra la cartera actualizada
+Tipo: Secundario
+
+Número: 010
+Caso de uso: Ver movimientos de la cartera digital
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines
+Descripción: El usuario ingresa a la cartera digital, el sistema muestra las transacciones de la cartera
+Tipo: Secundario
+
+Anuncios
+
+Número: 011
+Caso de uso: Comprar anuncio
+Actores: Anunciante
+Descripción: El usuario ingresa al apartado de comprar anuncio, el sistema muestra el precio, los tipos de anuncio, los periodos de tiempo y opciones para ingresar el contenido anuncio, el usuario selecciona el tipo, el periodo de tiempo, ingresa el contenido del anuncio y paga, el sistema confirma el éxito de la operación
+Tipo: Primario
+
+Número: 012
+Caso de uso: Desactivar anuncio
+Actores: Anunciante, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de anuncios, el sistema muestra todos los anuncios con una opción de desactivar, el usuario desactiva el anuncio, el sistema muestra los anuncios sin el recién eliminado
+Tipo: Secundario
+
+Número: 013
+Caso de uso: Cambiar precio en tipos de anuncios
+Actores: Administrador del Sistema
+Descripción: El usuario ingresa al apartado de configuración de anuncios y selecciona la opción de cambiar precios, el sistema muestra el precio actual de cada tipo de anuncio con la opción de modificarlos, el usuario modifica los precios, el sistema confirma el éxito de la operación
+Tipo: Secundario
+
+Número: 014
+Caso de uso: Cambiar precio en periodos de tiempo de anuncios
+Actores: Administrador del Sistema
+Descripción: El usuario ingresa al apartado de configuración de anuncios y selecciona la opción de cambiar precio en los periodos de tiempo, el sistema muestra el precio actual de cada periodo de anuncio con la opción de modificarlos, el usuario modifica los precios, el sistema confirma el éxito de la operación
+Tipo: Secundario
+
+Número: 015
+Caso de uso: Bloquear anuncios en cine
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de configuración del cine, el sistema muestra una opción para bloquear los anuncios indicando el precio, el usuario confirma el bloqueo y paga, el sistema elimina los anuncios en el cine correspondiente
+Tipo: Secundario
+
+Número: 016
+Caso de uso: Editar anuncio
+Actores: Anunciante
+Descripción: El usuario ingresa al anuncio, el sistema muestra el anuncio con la opción de editar, el usuario edita su contenido, el sistema muestra el anuncio con los datos modificados
+Tipo: Secundario
+
+Salas
+
+Número: 018
+Caso de uso: Crear sala
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de crear sala, el sistema muestra opciones para ingresar la información incluyendo filas y columnas, el usuario ingresa los datos, el sistema muestra el éxito de la operación
+Tipo: Primario
+
+Número: 019
+Caso de uso: Calificar sala
+Actores: Usuario Normal
+Descripción: El usuario ingresa al panel de la sala, el sistema muestra una opción para calificar, el usuario califica la sala, el sistema refleja la reseña en la información de la sala
+Tipo: Primario
+
+Número: 020
+Caso de uso: Cambiar bloqueo de comentarios a sala
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de bloqueo de comentarios, el sistema muestra una opción para cambiar el estado del bloqueo, el usuario cambia el estado del bloqueo de comentarios, el sistema refleja el cambio en los comentarios de las salas
+Tipo: Secundario
+
+Número: 021
+Caso de uso: Cambiar bloqueo de calificaciones a sala
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de bloqueo de calificaciones, el sistema muestra una opción para cambiar el estado del bloqueo, el usuario cambia el estado del bloqueo de calificaciones, el sistema refleja el cambio en las salas
+Tipo: Secundario
+
+Número: 022
+Caso de uso: Cambiar visibilidad de sala
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de salas, el sistema muestra cada sala con una opción de cambiar la visibilidad, el usuario cambia la visibilidad de una sala, el sistema refleja el cambio en la sala correspondiente
+Tipo: Secundario
+
+Número: 023
+Caso de uso: Editar sala
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al panel de edición de la sala, el sistema muestra la información con opciones de editar, el usuario edita la información, el sistema refleja los cambios en los datos mostrados de la sala
+Tipo: Secundario
+
+Número: 024
+Caso de uso: Ver sala
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de la sala, el sistema muestra la sala con su información, incluyendo proyecciones
+Tipo: Primario
+
+Número: 025
+Caso de uso: Eliminar sala
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de la sala, el sistema muestra la opción de eliminar, el usuario elimina la sala, el sistema confirma el éxito de la operación
+Tipo: Secundario
+
+Cines
+
+Número: 026
+Caso de uso: Ver cine
+Actores: Usuario Normal, Anunciante
+Descripción:
+Tipo: Primario
+
+Número: 027
+Caso de uso: Cambiar costo por día a cine
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 028
+Caso de uso: Cambiar costo global a cines
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 029
+Caso de uso: Crear cine
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 030
+Caso de uso: Editar cine
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 031
+Caso de uso: Eliminar cine
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 032
+Caso de uso: Pagar costo por día de un cine
+Actores: Administrador de Cines
+Descripción:
+Tipo: Primario
+
+Películas
+
+Número: 033
+Caso de uso: Ver película
+Actores: Usuario Normal, Anunciante
+Descripción:
+Tipo: Primario
+
+Número: 034
+Caso de uso: Buscar película
+Actores: Usuario Normal, Anunciante
+Descripción:
+Tipo: Primario
+
+Número: 035
+Caso de uso: Calificar película
+Actores: Usuario Normal
+Descripción:
+Tipo: Primario
+
+Número: 036
+Caso de uso: Crear película
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 037
+Caso de uso: Editar película
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 038
+Caso de uso: Eliminar película
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Boletos
+
+Número: 039
+Caso de uso: Comprar boleto
+Actores: Usuario Normal, Anunciante
+Descripción:
+Tipo: Primario
+
+Número: 040
+Caso de uso: Ver boletos comprados
+Actores: Usuario Normal, Anunciante
+Descripción:
+Tipo: Primario
+
+Número: 041
+Caso de uso: Descargar boleto
+Actores: Usuario Normal, Anunciante
+Descripción:
+Tipo: Primario
+
+Comentarios
+
+Número: 042
+Caso de uso: Crear comentario a sala
+Actores: Usuario Normal
+Descripción:
+Tipo: Primario
+
+Número: 043
+Caso de uso: Crear comentario a película
+Actores: Usuario Normal
+Descripción:
+Tipo: Primario
+
+Número: 044
+Caso de uso: Editar comentario
+Actores: Usuario Normal
+Descripción:
+Tipo: Primario
+
+Número: 045
+Caso de uso: Ver comentarios
+Actores: Usuario Normal, Anunciante, Administrador de Cines
+Descripción:
+Tipo: Primario
+
+Número: 046
+Caso de uso: Eliminar comentario
+Actores: Usuario Normal, Administrador de Cines
+Descripción:
+Tipo: Primario
+
+Categorías
+
+Número: 047
+Caso de uso: Crear categoría
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 048
+Caso de uso: Editar categoría
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 049
+Caso de uso: Eliminar categoría
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Número: 050
+Caso de uso: Ver categorías
+Actores: Usuario Normal, Anunciante
+Descripción:
+Tipo: Primario
+
+Reportes admin cines
+
+Número: 051
+Caso de uso: Ver reporte comentarios a salas
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Número: 052
+Caso de uso: Ver reporte películas proyectadas en salas
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Número: 053
+Caso de uso: Ver reporte calificaciones en salas
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Número: 054
+Caso de uso: Ver reporte ventas de boletos
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Reportes admin sistema
+
+Número: 055
+Caso de uso: Ver reporte ganancias de cines
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Número: 056
+Caso de uso: Ver reporte anuncios comprados
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Número: 057
+Caso de uso: Ver reporte ganancias por anunciantes
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Número: 058
+Caso de uso: Ver reporte salas más populares
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Número: 059
+Caso de uso: Ver reporte salas más comentadas
+Actores: Administrador de Cines, Administrador del Sistema
+Descripción:
+Tipo: Consulta
+
+Exportación
+
+Número: 060
+Caso de uso: Exportar reporte
+Actores: Administrador del Sistema
+Descripción:
+Tipo: Primario
+
+Proyecciones
+
+Número: 061
+Caso de uso: Crear proyección
+Actores: Administrador de Cines
+Descripción:
+Tipo: Primario
+
+Número: 062
+Caso de uso: Editar proyeccion
+Actores: Administrador de Cines
+Descripción:
+Tipo: Primario
+
+Número: 063
+Caso de uso: Ver proyección
+Actores: Administrador de Cines
+Descripción:
+Tipo: Primario
+
+Número: 064
+Caso de uso: Eliminar proyeccion
+Actores: Administrador de Cines
+Descripción:
+Tipo: Primario
