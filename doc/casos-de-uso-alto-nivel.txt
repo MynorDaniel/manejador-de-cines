@@ -159,226 +159,226 @@ Cines
 
 Número: 026
 Caso de uso: Ver cine
-Actores: Usuario Normal, Anunciante
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado del cine, el sistema muestra información relacionada al cine seleccionado
 Tipo: Primario
 
 Número: 027
 Caso de uso: Cambiar costo por día a cine
 Actores: Administrador del Sistema
-Descripción:
-Tipo: Primario
+Descripción: El usuario ingresa al apartado de cambiar costo por día a cine, el sistema muestra una opción para cambiar el precio, el usuario cambia el precio, el sistema refleja el nuevo precio en el cine
+Tipo: Secundario
 
 Número: 028
 Caso de uso: Cambiar costo global a cines
 Actores: Administrador del Sistema
-Descripción:
-Tipo: Primario
+Descripción: El usuario ingresa al apartado de cambiar el costo por día global a cines, el sistema muestra una opción para cambiar el precio, el usuario cambia el precio, el sistema confirma el éxito de la operación
+Tipo: Secundario
 
 Número: 029
 Caso de uso: Crear cine
-Actores: Administrador del Sistema
-Descripción:
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de crear cine, el sistema muestra opciónes para ingresar información relacionada al nuevo cine, el usuario ingresa y confirma la información, el sistema muestra el cine creado
 Tipo: Primario
 
 Número: 030
 Caso de uso: Editar cine
-Actores: Administrador del Sistema
-Descripción:
-Tipo: Primario
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de editar cine, el sistema muestra la información relacionada al cine con opciónes para editarla, el usuario ingresa y confirma la nueva información, el sistema muestra el cine editado
+Tipo: Secundario
 
 Número: 031
 Caso de uso: Eliminar cine
-Actores: Administrador del Sistema
-Descripción:
-Tipo: Primario
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al cine, el sistema muestra una opción de eliminar cine, el usuario confirma la eliminación del cine, el sistema muestra la lista de cines sin el recién eliminado
+Tipo: Secundario
 
 Número: 032
 Caso de uso: Pagar costo por día de un cine
 Actores: Administrador de Cines
-Descripción:
-Tipo: Primario
+Descripción: El usuario ingresa al apartado de pagar costo relacionado al cine, el sistema muestra la deuda actual con la opción de pagarla, el usuario paga la deuda indicando la fecha de pago, el sistema confirma el éxito de la operación
+Tipo: Secundario
 
 Películas
 
 Número: 033
 Caso de uso: Ver película
-Actores: Usuario Normal, Anunciante
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de la película, el sistema muestra información relacionada a la película seleccionada
 Tipo: Primario
 
 Número: 034
 Caso de uso: Buscar película
-Actores: Usuario Normal, Anunciante
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de buscar película, el sistema muestra opciónes para buscar una película en base al nombre y filtros, el usuario ingresa los datos y busca la película, el sistema muestra las coincidencias encontradas
 Tipo: Primario
 
 Número: 035
 Caso de uso: Calificar película
-Actores: Usuario Normal
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de la película, el sistema muestra la película con la opción de calificarla, el usuario califíca la película, el sistema muestra la película reflejando la nueva reseña
 Tipo: Primario
 
 Número: 036
 Caso de uso: Crear película
-Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
+Actores: Administrador del Sistema
+Descripción: El usuario ingresa al apartado de crear película, el sistema muestra opciones para ingresar los datos de la nueva película, el usuario ingresa los datos y confirma la creación, el sistema muestra la película creada
 Tipo: Primario
 
 Número: 037
 Caso de uso: Editar película
-Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Primario
+Actores: Administrador del Sistema
+Descripción: El usuario ingresa al apartado de editar película, el sistema muestra la información de la película con opciones para editarla, el usuario edita la información, el sistema muestra los datos editados de la película
+Tipo: Secundario
 
 Número: 038
 Caso de uso: Eliminar película
-Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Primario
+Actores: Administrador del Sistema
+Descripción: El usuario ingresa al apartado de la película, el sistema muestra la opción de eliminar la película, el usuario confirma la eliminación, el sistema muestra la lista de películas sin la recién eliminada
+Tipo: Secundario
 
 Boletos
 
 Número: 039
 Caso de uso: Comprar boleto
-Actores: Usuario Normal, Anunciante
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de comprar boleto, el sistema muestra opciones para elegir el cine, la sala y el horario, el usuario ingresa la información requerida, el sistema muestra el precio y la opción de pagar, el usuario realiza el pago, el sistema confirma el éxito de la operación
 Tipo: Primario
 
 Número: 040
 Caso de uso: Ver boletos comprados
-Actores: Usuario Normal, Anunciante
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de boletos comprados, el sistema muestra una lista de todos los boletos comprados por el usuario
 Tipo: Primario
 
 Número: 041
 Caso de uso: Descargar boleto
-Actores: Usuario Normal, Anunciante
-Descripción:
-Tipo: Primario
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de boletos comprados, el sistema muestra cada boleto con la opción de descargar el boleto, el usuario realiza la descarga
+Tipo: Secundario
 
 Comentarios
 
 Número: 042
 Caso de uso: Crear comentario a sala
-Actores: Usuario Normal
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de comentarios de la sala, el sistema muestra todos los comentarios con la opción de realizar uno, el usuario ingresa un comentario, el sistema refleja el comentario en la lista de comentarios
 Tipo: Primario
 
 Número: 043
 Caso de uso: Crear comentario a película
-Actores: Usuario Normal
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de comentarios de la película, el sistema muestra todos los comentarios con la opción de realizar uno, el usuario ingresa un comentario, el sistema refleja el comentario en la lista de comentarios
 Tipo: Primario
 
 Número: 044
 Caso de uso: Editar comentario
-Actores: Usuario Normal
-Descripción:
-Tipo: Primario
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de comentarios, el sistema muestra los comentarios del usuario entre la lista de comentarios con la opción de editarlos, el usuario edita un comentario, el sistema refleja los cambios en la lista de comentarios
+Tipo: Secundario
 
 Número: 045
 Caso de uso: Ver comentarios
-Actores: Usuario Normal, Anunciante, Administrador de Cines
-Descripción:
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de comentarios, el sistema muestra una lista de todos los comentarios
 Tipo: Primario
 
 Número: 046
 Caso de uso: Eliminar comentario
-Actores: Usuario Normal, Administrador de Cines
-Descripción:
-Tipo: Primario
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de comentarios, el sistema muestra los comentarios del usuario entre la lista de comentarios con la opción de eliminarlos, el usuario elimina un comentario, el sistema refleja los cambios en la lista de comentarios
+Tipo: Secundario
 
 Categorías
 
 Número: 047
 Caso de uso: Crear categoría
 Actores: Administrador del Sistema
-Descripción:
+Descripción: El usuario ingresa al apartado de crear categoría, el sistema muestra opciones para ingresar la información de la nueva categoría, el usuario ingresa la información y confirma la creación, el sistema muestra la nueva categoría en la lista general
 Tipo: Primario
 
 Número: 048
 Caso de uso: Editar categoría
 Actores: Administrador del Sistema
-Descripción:
-Tipo: Primario
+Descripción: El usuario ingresa al apartado de editar una categoría, el sistema muestra la información de la categoría con la opción de editarla, el usuario confirma la eliminación, el sistema muestra la categoría con la información cambiada
+Tipo: Secundario
 
 Número: 049
 Caso de uso: Eliminar categoría
 Actores: Administrador del Sistema
-Descripción:
-Tipo: Primario
+Descripción: El usuario ingresa al listado de categorías, el sistema muestra cada categoría con la opción de eliminarla, el usuario confirma la eliminación de una categoría, el sistema muestra la lista de categorías sin la recién eliminada
+Tipo: Secundario
 
 Número: 050
 Caso de uso: Ver categorías
-Actores: Usuario Normal, Anunciante
-Descripción:
-Tipo: Primario
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
+Descripción: El usuario ingresa al apartado de categorías, el sistema muestra una lista de todas las categorías de películas disponibles
+Tipo: Secundario
 
 Reportes admin cines
 
 Número: 051
 Caso de uso: Ver reporte comentarios a salas
-Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de reporte de comentarios a salas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Número: 052
 Caso de uso: Ver reporte películas proyectadas en salas
-Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de reporte de películas proyectadas en salas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Número: 053
 Caso de uso: Ver reporte calificaciones en salas
-Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de reporte de calificaciones en salas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Número: 054
 Caso de uso: Ver reporte ventas de boletos
-Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Actores: Administrador de Cines
+Descripción: El usuario ingresa al apartado de reporte de ventas de boletos, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Reportes admin sistema
 
 Número: 055
 Caso de uso: Ver reporte ganancias de cines
 Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Descripción: El usuario ingresa al apartado de reporte de comentarios a salas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Número: 056
 Caso de uso: Ver reporte anuncios comprados
 Actores: Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Descripción: El usuario ingresa al apartado de reporte de anuncios comprados, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Número: 057
 Caso de uso: Ver reporte ganancias por anunciantes
 Actores: Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Descripción: El usuario ingresa al apartado de reporte de ganancias por anunciantes, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Número: 058
 Caso de uso: Ver reporte salas más populares
 Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Descripción: El usuario ingresa al apartado de reporte de salas más populares, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Número: 059
 Caso de uso: Ver reporte salas más comentadas
 Actores: Administrador de Cines, Administrador del Sistema
-Descripción:
-Tipo: Consulta
+Descripción: El usuario ingresa al apartado de reporte de salas más comentadas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
+Tipo: Primario
 
 Exportación
 
 Número: 060
 Caso de uso: Exportar reporte
 Actores: Administrador del Sistema
-Descripción:
+Descripción: El usuario ingresa al apartado del reporte, el sistema muestra el reporte con la opción de exportarlo, el usuario confirma la exportación del reporte, el sistema muestra el reporte exportado
 Tipo: Primario
 
 Proyecciones
@@ -386,23 +386,11 @@ Proyecciones
 Número: 061
 Caso de uso: Crear proyección
 Actores: Administrador de Cines
-Descripción:
+Descripción: El usuario ingresa al apartado de crear proyección, el sistema muestra opciones para elegir la sala, película y horario, el usuario ingresa la información requerida y confirma la creación, el sistema muestra la proyección creada en la lista de proyecciones
 Tipo: Primario
 
 Número: 062
 Caso de uso: Editar proyeccion
 Actores: Administrador de Cines
-Descripción:
-Tipo: Primario
-
-Número: 063
-Caso de uso: Ver proyección
-Actores: Administrador de Cines
-Descripción:
-Tipo: Primario
-
-Número: 064
-Caso de uso: Eliminar proyeccion
-Actores: Administrador de Cines
-Descripción:
-Tipo: Primario
+Descripción: El usuario ingresa al apartado de editar proyección, el sistema muestra la información con opciones de editarla, el usuario edita la información disponible, el sistema muestra la información editada
+Tipo: Secundario
