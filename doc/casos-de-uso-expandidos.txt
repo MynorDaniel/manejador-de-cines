@@ -1,0 +1,1305 @@
+Casos de uso expandidos
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 001
+Caso de uso: Iniciar sesión
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir que el usuario acceda al sistema utilizando credenciales válidas.
+Precondición: Ninguna
+Resumen: El usuario ingresa al apartado de iniciar sesión, el sistema pide un correo electrónico y una contraseña, el usuario envía los datos requeridos, el sistema redirige al usuario a un panel principal mostrando una lista de películas.
+Tipo: Primario, Real
+Referencias: 002 (Cerrar sesión)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de iniciar sesión.
+2. El sistema muestra los campos para ingresar correo electrónico y contraseña.
+3. El usuario ingresa las credenciales y confirma el inicio de sesión.
+4. El sistema valida los datos ingresados.
+5. El usuario espera la respuesta.
+6. El sistema verifica las credenciales y el rol del usuario.
+7. El sistema redirige al usuario al panel principal mostrando la lista de películas disponibles.
+
+Escenarios alternos:
+4. Si las credenciales son incorrectas, el sistema muestra un mensaje indicando que el correo o la contraseña no son válidos.
+6. Si la cuenta del usuario está desactivada, el sistema muestra un mensaje indicando que no es posible iniciar sesión.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 002
+Caso de uso: Cerrar sesión
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir que el usuario finalice su sesión activa en el sistema.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario selecciona la opción de cerrar sesión, el sistema redirige al usuario a la pantalla de inicio.
+Tipo: Primario, Real
+Referencias: 001 (Iniciar sesión)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de cerrar sesión.
+2. El sistema invalida la sesión actual.
+3. El sistema redirige al usuario a la pantalla de inicio.
+
+Escenarios alternos:
+2. Si ocurre un error al cerrar la sesión, el sistema muestra un mensaje indicando que la operación no pudo completarse correctamente e invita a intentarlo de nuevo.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 003
+Caso de uso: Crear usuario administrador de sistema
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir al administrador del sistema crear un nuevo usuario con rol de administrador del sistema.
+Precondición: Ninguna
+Resumen: El usuario ingresa al apartado de crear usuario, el sistema pide información del nuevo usuario, el usuario envía los datos incluyendo el rol "administrador del sistema", el sistema confirma el éxito de la operación.
+Tipo: Secundario, Real
+Referencias: 005 (Crear usuario normal)
+
+Flujo principal:
+
+1. El administrador del sistema selecciona la opción de crear usuario.
+2. El sistema muestra el formulario con los campos requeridos para el nuevo usuario.
+3. El administrador del sistema ingresa los datos incluyendo el rol "administrador del sistema" y confirma la creación.
+4. El sistema valida los datos ingresados.
+5. El sistema confirma que el usuario ha sido creado correctamente.
+
+Escenarios alternos:
+4. Si algún dato es inválido o falta información, el sistema muestra un mensaje indicando el error y solicita corregirlo.
+5. Si el correo ya existe, el sistema muestra un mensaje indicando duplicidad y no crea el usuario.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 004
+Caso de uso: Crear usuario administrador de cines
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir al administrador del sistema crear un usuario con rol de administrador de cines.
+Precondición: Ninguna
+Resumen: El usuario ingresa al apartado de crear usuario, el sistema pide información del nuevo usuario, el usuario envía los datos incluyendo el rol "administrador de cines", el sistema confirma el éxito de la operación.
+Tipo: Secundario, Real
+Referencias: 003 (Crear usuario administrador de sistema), 005 (Crear usuario normal)
+
+Flujo principal:
+
+1. El administrador del sistema selecciona la opción de crear usuario.
+2. El sistema muestra el formulario con los campos requeridos para el nuevo usuario.
+3. El administrador del sistema ingresa los datos incluyendo el rol "administrador de cines" y confirma la creación.
+4. El sistema valida los datos ingresados.
+5. El sistema confirma que el usuario ha sido creado correctamente.
+
+Escenarios alternos:
+4. Si algún dato es inválido o falta información, el sistema muestra un mensaje indicando el error y solicita corregirlo.
+5. Si el correo ya existe, el sistema muestra un mensaje indicando duplicidad y no crea el usuario.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 005
+Caso de uso: Crear usuario normal
+Actores: Administrador del Sistema, Usuario Normal (Iniciador)
+Propósito: Permitir crear un nuevo usuario normal para acceder al sistema.
+Precondición: Ninguna
+Resumen: El usuario ingresa al apartado de crear cuenta, el sistema pide información del nuevo usuario, el usuario envía los datos, el sistema confirma el éxito de la operación.
+Tipo: Primario, Real
+Referencias: 003, 004
+
+Flujo principal:
+
+1. El usuario selecciona la opción de crear cuenta.
+2. El sistema muestra el formulario para ingresar datos del nuevo usuario.
+3. El usuario ingresa los datos requeridos y confirma la creación.
+4. El sistema valida los datos ingresados.
+5. El sistema confirma que el usuario ha sido creado correctamente y muestra un mensaje de éxito.
+
+Escenarios alternos:
+4. Si algún dato es inválido o falta información, el sistema muestra un mensaje indicando el error y solicita corregirlo.
+5. Si el correo ya existe, el sistema muestra un mensaje indicando duplicidad y no crea la cuenta.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 006
+Caso de uso: Ver perfil de usuario
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines (Iniciador)
+Propósito: Permitir al usuario visualizar su información personal en el sistema.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado del perfil, el sistema muestra información relacionada al usuario.
+Tipo: Primario, Real
+Referencias: 007 (Editar perfil de usuario)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de ver perfil.
+2. El sistema muestra la información del perfil del usuario incluyendo datos básicos y rol.
+3. El usuario revisa la información presentada.
+
+Escenarios alternos:
+2. Si hay un error al cargar los datos, el sistema muestra un mensaje indicando que no se pudo cargar el perfil y sugiere intentar más tarde.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 007
+Caso de uso: Editar perfil de usuario
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines (Iniciador)
+Propósito: Permitir al usuario modificar su información personal en el sistema.
+Precondición: 006 (Ver perfil de usuario)
+Resumen: El usuario ingresa al apartado de editar perfil, el sistema muestra la información del usuario lista para editar, el usuario edita la información y la envía al sistema, el sistema muestra los cambios realizados.
+Tipo: Secundario, Real
+Referencias: 006
+
+Flujo principal:
+
+1. El usuario selecciona la opción de editar perfil.
+2. El sistema muestra los campos del perfil con la información actual editable.
+3. El usuario realiza los cambios deseados y confirma la actualización.
+4. El sistema valida los datos ingresados.
+5. El sistema actualiza el perfil y muestra la información modificada.
+
+Escenarios alternos:
+4. Si algún dato ingresado es inválido o falta información, el sistema muestra un mensaje indicando el error y solicita corrección.
+5. Si ocurre un error en la actualización, el sistema mantiene los datos anteriores y notifica que no se pudo completar la operación.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 008
+Caso de uso: Desactivar cuenta de usuario
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines (Iniciador)
+Propósito: Permitir al usuario o administrador desactivar una cuenta en el sistema.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de eliminar cuenta y confirma la operación, el sistema elimina la cuenta y redirige a la pantalla de inicio.
+Tipo: Secundario, Real
+Referencias: 001 (Iniciar sesión)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de desactivar cuenta.
+2. El sistema solicita confirmación de la operación.
+3. El usuario confirma la desactivación.
+4. El sistema inactiva la cuenta y elimina el acceso del usuario.
+5. El sistema redirige al usuario a la pantalla de inicio.
+
+Escenarios alternos:
+5. Si ocurre un error durante la desactivación, el sistema mantiene la cuenta activa y muestra un mensaje de fallo.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 009
+Caso de uso: Recargar cartera digital
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines (Iniciador)
+Propósito: Permitir al usuario agregar saldo a su cartera digital.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa a la cartera digital, el sistema muestra el saldo disponible con la opción de agregar saldo, el usuario ingresa el monto, el sistema muestra la cartera actualizada.
+Tipo: Secundario, Real
+Referencias: 010 (Ver movimientos de la cartera digital)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de acceder a la cartera digital.
+2. El sistema muestra el saldo disponible y la opción de agregar saldo.
+3. El usuario ingresa el monto que desea agregar y confirma la operación.
+4. El sistema valida el monto ingresado.
+5. El sistema actualiza el saldo de la cartera digital y muestra el nuevo saldo.
+
+Escenarios alternos:
+4. Si el monto ingresado es inválido, el sistema muestra un mensaje de error y solicita un valor válido.
+5. Si ocurre un error en la transacción, el sistema no actualiza el saldo y muestra un mensaje indicando que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 010
+Caso de uso: Ver movimientos de la cartera digital
+Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines (Iniciador)
+Propósito: Permitir al usuario visualizar el historial de transacciones de su cartera digital.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa a la cartera digital, el sistema muestra las transacciones realizadas en la cartera.
+Tipo: Secundario, Real
+Referencias: 009 (Recargar cartera digital)
+
+Flujo principal:
+
+1. El usuario ingresa a la opción de ver movimientos de la cartera digital.
+2. El sistema carga y muestra la lista de transacciones con detalles como fecha, monto y tipo de operación.
+3. El usuario revisa las transacciones mostradas.
+
+Escenarios alternos:
+2. Si ocurre un error al cargar los movimientos, el sistema muestra un mensaje indicando que no se pudieron cargar las transacciones y sugiere intentar más tarde.
+2. Si no existen transacciones registradas, el sistema muestra un mensaje indicando que no hay movimientos disponibles.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 011
+Caso de uso: Comprar anuncio
+Actores: Anunciante (Iniciador)
+Propósito: Permitir al anunciante comprar un anuncio.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de comprar anuncio, el sistema muestra el precio, los tipos de anuncio, los periodos de tiempo y opciones para ingresar el contenido del anuncio, el usuario selecciona el tipo, el periodo de tiempo, ingresa el contenido del anuncio y paga, el sistema confirma el éxito de la operación.
+Tipo: Primario, Real
+Referencias: 012 (Desactivar anuncio), 013 (Cambiar precio en tipos de anuncios), 014 (Cambiar precio en periodos de tiempo de anuncios)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de comprar anuncio.
+2. El sistema muestra los tipos de anuncios, precios y periodos de tiempo disponibles.
+3. El usuario selecciona el tipo de anuncio, el periodo de tiempo y carga el contenido del anuncio.
+4. El sistema valida la información ingresada.
+5. El usuario confirma el pago.
+6. El sistema procesa el pago y confirma que la compra del anuncio fue exitosa.
+
+Escenarios alternos:
+4. Si la información ingresada es incompleta o inválida, el sistema muestra un mensaje de error y solicita corrección.
+6. Si el pago falla, el sistema notifica al usuario y no registra la compra del anuncio.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 012
+Caso de uso: Desactivar anuncio
+Actores: Anunciante, Administrador del Sistema (Iniciador)
+Propósito: Permitir desactivar un anuncio previamente creado.
+Precondición: 011 (Comprar anuncio)
+Resumen: El usuario ingresa al apartado de anuncios, el sistema muestra todos los anuncios con una opción de desactivar, el usuario desactiva el anuncio, el sistema muestra los anuncios sin el recientemente desactivado.
+Tipo: Secundario, Real
+Referencias: 011 (Comprar anuncio)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de ver anuncios.
+2. El sistema muestra la lista de anuncios activos.
+3. El usuario selecciona el anuncio que desea desactivar.
+4. El sistema solicita confirmación de desactivación.
+5. El usuario confirma la desactivación.
+6. El sistema marca el anuncio como desactivado y actualiza la lista de anuncios.
+
+Escenarios alternos:
+5. Si ocurre un error en el proceso de desactivación, el sistema informa al usuario que no se pudo completar la acción.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 013
+Caso de uso: Cambiar precio en tipos de anuncios
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir modificar los precios de los diferentes tipos de anuncios.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de configuración de anuncios y selecciona la opción de cambiar precios, el sistema muestra el precio actual de cada tipo de anuncio con la opción de modificarlos, el usuario modifica los precios, el sistema confirma el éxito de la operación.
+Tipo: Secundario, Real
+Referencias: 011 (Comprar anuncio), 014 (Cambiar precio en periodos de tiempo de anuncios)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de configuración de anuncios.
+2. El sistema muestra los tipos de anuncios con sus precios actuales.
+3. El usuario modifica los precios de los tipos de anuncios.
+4. El sistema valida los valores ingresados.
+5. El usuario confirma los cambios.
+6. El sistema actualiza los precios y confirma la operación.
+
+Escenarios alternos:
+4. Si algún precio ingresado es inválido, el sistema muestra un mensaje de error y solicita valores correctos.
+6. Si ocurre un error al actualizar los precios, el sistema notifica al usuario que los cambios no fueron aplicados.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 014
+Caso de uso: Cambiar precio en periodos de tiempo de anuncios
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir modificar los precios según el periodo de tiempo de los anuncios.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de configuración de anuncios y selecciona la opción de cambiar precio en los periodos de tiempo, el sistema muestra el precio actual de cada periodo de anuncio con la opción de modificarlos, el usuario modifica los precios, el sistema confirma el éxito de la operación.
+Tipo: Secundario, Real
+Referencias: 011 (Comprar anuncio), 013 (Cambiar precio en tipos de anuncios)
+
+Flujo principal:
+
+1. El usuario selecciona la opción de configuración de anuncios.
+2. El sistema muestra los periodos de tiempo de anuncios con sus precios actuales.
+3. El usuario modifica los precios de los periodos de tiempo.
+4. El sistema valida los valores ingresados.
+5. El usuario confirma los cambios.
+6. El sistema actualiza los precios y confirma la operación.
+
+Escenarios alternos:
+4. Si algún precio ingresado es inválido, el sistema muestra un mensaje de error y solicita valores correctos.
+6. Si ocurre un error al actualizar los precios, el sistema notifica al usuario que los cambios no fueron aplicados.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 015
+Caso de uso: Bloquear anuncios en cine
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir bloquear los anuncios en un cine determinado.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de configuración del cine, el sistema muestra una opción para bloquear los anuncios indicando el precio, el usuario confirma el bloqueo y paga, el sistema elimina los anuncios en el cine correspondiente.
+Tipo: Secundario, Real
+Referencias: 011 (Comprar anuncio)
+
+Flujo principal:
+
+1. El usuario selecciona el cine en el apartado de configuración.
+2. El sistema muestra la opción de bloquear anuncios con el precio correspondiente.
+3. El usuario confirma la acción de bloqueo.
+4. El sistema solicita confirmación de pago.
+5. El usuario realiza el pago.
+6. El sistema bloquea los anuncios en el cine y confirma la operación.
+
+Escenarios alternos:
+4. Si el usuario no confirma el pago, el sistema cancela la operación y no bloquea los anuncios.
+5. Si ocurre un error en el pago, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 016
+Caso de uso: Editar anuncio
+Actores: Anunciante (Iniciador)
+Propósito: Permitir modificar el contenido de un anuncio existente.
+Precondición: 011 (Comprar anuncio)
+Resumen: El usuario ingresa al anuncio, el sistema muestra el anuncio con la opción de editar, el usuario edita su contenido, el sistema muestra el anuncio con los datos modificados.
+Tipo: Secundario, Real
+Referencias: 011 (Comprar anuncio), 012 (Desactivar anuncio)
+
+Flujo principal:
+
+1. El usuario selecciona el anuncio que desea editar.
+2. El sistema muestra el contenido actual del anuncio con la opción de editar.
+3. El usuario realiza las modificaciones necesarias.
+4. El sistema valida los cambios ingresados.
+5. El usuario confirma la edición.
+6. El sistema actualiza el anuncio y muestra el contenido modificado.
+
+Escenarios alternos:
+4. Si los cambios ingresados son inválidos, el sistema muestra un mensaje de error y solicita corrección.
+6. Si ocurre un error al actualizar el anuncio, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 018
+Caso de uso: Crear sala
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir crear una nueva sala de cine con su configuración.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de crear sala, el sistema muestra opciones para ingresar la información incluyendo filas y columnas, el usuario ingresa los datos, el sistema muestra el éxito de la operación.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la opción de crear sala.
+2. El sistema muestra las opciones para ingresar nombre, filas y columnas de la sala.
+3. El usuario ingresa los datos de la sala.
+4. El sistema valida la información ingresada.
+5. El usuario confirma la creación de la sala.
+6. El sistema guarda la información y confirma que la sala fue creada exitosamente.
+
+Escenarios alternos:
+4. Si la información ingresada es inválida o incompleta, el sistema muestra un mensaje de error y solicita corrección.
+6. Si ocurre un error al guardar la información, el sistema notifica al usuario que la sala no pudo ser creada.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 019
+Caso de uso: Calificar sala
+Actores: Usuario Normal (Iniciador)
+Propósito: Permitir a los usuarios calificar una sala de cine.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al panel de la sala, el sistema muestra una opción para calificar, el usuario califica la sala, el sistema refleja la reseña en la información de la sala.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la sala que desea calificar.
+2. El sistema muestra la información de la sala con la opción de calificar.
+3. El usuario selecciona la calificación y confirma.
+4. El sistema registra la calificación y actualiza la información de la sala.
+
+Escenarios alternos:
+3. Si la calificación ingresada es inválida, el sistema muestra un mensaje de error y solicita una calificación válida.
+4. Si ocurre un error al registrar la calificación, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 020
+Caso de uso: Cambiar bloqueo de comentarios a sala
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir activar o desactivar la opción de comentarios en una sala.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de bloqueo de comentarios, el sistema muestra una opción para cambiar el estado del bloqueo, el usuario cambia el estado del bloqueo de comentarios, el sistema refleja el cambio en los comentarios de las salas.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de bloqueo de comentarios.
+2. El sistema muestra el estado actual del bloqueo y la opción de cambiarlo.
+3. El usuario modifica el estado del bloqueo de comentarios.
+4. El sistema actualiza el estado y refleja el cambio en la sala correspondiente.
+
+Escenarios alternos:
+3. Si el cambio no puede aplicarse por error del sistema, se muestra un mensaje de error y el bloqueo permanece igual.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 021
+Caso de uso: Cambiar bloqueo de calificaciones a sala
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir activar o desactivar la opción de calificaciones en una sala.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de bloqueo de calificaciones, el sistema muestra una opción para cambiar el estado del bloqueo, el usuario cambia el estado del bloqueo de calificaciones, el sistema refleja el cambio en las salas.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de bloqueo de calificaciones.
+2. El sistema muestra el estado actual del bloqueo y la opción de cambiarlo.
+3. El usuario modifica el estado del bloqueo de calificaciones.
+4. El sistema actualiza el estado y refleja el cambio en la sala correspondiente.
+
+Escenarios alternos:
+3. Si el cambio no puede aplicarse por error del sistema, se muestra un mensaje de error y el bloqueo permanece igual.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 022
+Caso de uso: Cambiar visibilidad de sala
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir cambiar si una sala es visible o no para los usuarios.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de salas, el sistema muestra cada sala con una opción de cambiar la visibilidad, el usuario cambia la visibilidad de una sala, el sistema refleja el cambio en la sala correspondiente.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de salas.
+2. El sistema muestra la lista de salas con su estado de visibilidad.
+3. El usuario cambia el estado de visibilidad de la sala deseada.
+4. El sistema actualiza la visibilidad y confirma el cambio.
+
+Escenarios alternos:
+3. Si la sala no puede cambiar su visibilidad, el sistema muestra un mensaje de error.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 023
+Caso de uso: Editar sala
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir modificar la información de una sala existente.
+Precondición: 018 (Crear sala)
+Resumen: El usuario ingresa al panel de edición de la sala, el sistema muestra la información con opciones de editar, el usuario edita la información, el sistema refleja los cambios en los datos mostrados de la sala.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la sala que desea editar.
+2. El sistema muestra la información actual de la sala con opciones de edición.
+3. El usuario realiza los cambios necesarios.
+4. El sistema valida los cambios ingresados.
+5. El usuario confirma la edición.
+6. El sistema actualiza la sala y muestra la información modificada.
+
+Escenarios alternos:
+4. Si los cambios ingresados son inválidos, el sistema muestra un mensaje de error y solicita corrección.
+6. Si ocurre un error al actualizar la sala, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 024
+Caso de uso: Ver sala
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir visualizar la información de una sala.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de la sala, el sistema muestra la sala con su información, incluyendo proyecciones.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la sala que desea ver.
+2. El sistema muestra la información de la sala incluyendo proyecciones y datos relevantes.
+
+Escenarios alternos:
+2. Si la sala no existe o no está disponible, el sistema muestra un mensaje de error.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 025
+Caso de uso: Eliminar sala
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir eliminar una sala existente.
+Precondición: 018 (Crear sala)
+Resumen: El usuario ingresa al apartado de la sala, el sistema muestra la opción de eliminar, el usuario elimina la sala, el sistema confirma el éxito de la operación.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la sala que desea eliminar.
+2. El sistema muestra la opción de eliminar.
+3. El usuario confirma la eliminación de la sala.
+4. El sistema elimina la sala y confirma la operación.
+
+Escenarios alternos:
+3. Si la sala no puede eliminarse, el sistema muestra un mensaje de error.
+4. Si ocurre un error al eliminar la sala, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 026
+Caso de uso: Ver cine
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir visualizar la información de un cine.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado del cine, el sistema muestra información relacionada al cine seleccionado.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el cine que desea ver.
+2. El sistema muestra la información del cine seleccionado, incluyendo salas, ubicación y servicios.
+
+Escenarios alternos:
+2. Si el cine no existe o no está disponible, el sistema muestra un mensaje de error.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 027
+Caso de uso: Cambiar costo por día a cine
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir modificar el costo diario de un cine específico.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de cambiar costo por día a cine, el sistema muestra una opción para cambiar el precio, el usuario cambia el precio, el sistema refleja el nuevo precio en el cine.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de cambio de costo por día.
+2. El sistema muestra la lista de cines con el precio actual por día.
+3. El usuario selecciona el cine y modifica el costo por día.
+4. El sistema valida la información ingresada.
+5. El usuario confirma el cambio.
+6. El sistema actualiza el precio del cine y confirma el éxito de la operación.
+
+Escenarios alternos:
+4. Si el precio ingresado es inválido, el sistema muestra un mensaje de error y solicita corrección.
+6. Si ocurre un error al actualizar el precio, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 028
+Caso de uso: Cambiar costo global a cines
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir modificar el costo diario de todos los cines de manera global.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de cambiar el costo por día global a cines, el sistema muestra una opción para cambiar el precio, el usuario cambia el precio, el sistema confirma el éxito de la operación.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de cambio de costo global.
+2. El sistema muestra la opción de modificar el costo diario para todos los cines.
+3. El usuario ingresa el nuevo costo global.
+4. El sistema valida la información ingresada.
+5. El usuario confirma el cambio.
+6. El sistema actualiza el precio de todos los cines y confirma el éxito de la operación.
+
+Escenarios alternos:
+4. Si el precio ingresado es inválido, el sistema muestra un mensaje de error y solicita corrección.
+6. Si ocurre un error al actualizar los precios globales, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 029
+Caso de uso: Crear cine
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir registrar un nuevo cine en el sistema.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de crear cine, el sistema muestra opciones para ingresar información relacionada al nuevo cine, el usuario ingresa y confirma la información, el sistema muestra el cine creado.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la opción de crear cine.
+2. El sistema muestra campos para ingresar nombre, ubicación, servicios y otra información del cine.
+3. El usuario ingresa los datos requeridos.
+4. El sistema valida la información ingresada.
+5. El usuario confirma la creación del cine.
+6. El sistema guarda el cine y confirma el éxito de la operación.
+
+Escenarios alternos:
+4. Si los datos ingresados son inválidos o incompletos, el sistema muestra un mensaje de error.
+6. Si ocurre un error al guardar la información, el sistema notifica al usuario que el cine no pudo ser creado.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 030
+Caso de uso: Editar cine
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir modificar la información de un cine existente.
+Precondición: 029 (Crear cine)
+Resumen: El usuario ingresa al apartado de editar cine, el sistema muestra la información relacionada al cine con opciones para editarla, el usuario ingresa y confirma la nueva información, el sistema muestra el cine editado.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el cine que desea editar.
+2. El sistema muestra la información actual del cine con opciones de edición.
+3. El usuario realiza los cambios necesarios.
+4. El sistema valida la información ingresada.
+5. El usuario confirma la edición.
+6. El sistema actualiza la información del cine y confirma el éxito de la operación.
+
+Escenarios alternos:
+4. Si los datos ingresados son inválidos, el sistema muestra un mensaje de error y solicita corrección.
+6. Si ocurre un error al actualizar la información, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 031
+Caso de uso: Eliminar cine
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir eliminar un cine del sistema.
+Precondición: 029 (Crear cine)
+Resumen: El usuario ingresa al cine, el sistema muestra una opción de eliminar cine, el usuario confirma la eliminación del cine, el sistema muestra la lista de cines sin el recién eliminado.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el cine que desea eliminar.
+2. El sistema muestra la opción de eliminar cine.
+3. El usuario confirma la eliminación del cine.
+4. El sistema elimina el cine y actualiza la lista de cines.
+
+Escenarios alternos:
+3. Si el cine no puede eliminarse, el sistema muestra un mensaje de error.
+4. Si ocurre un error al eliminar el cine, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 032
+Caso de uso: Pagar costo por día de un cine
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir realizar el pago del costo diario de un cine.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de pagar costo relacionado al cine, el sistema muestra la deuda actual con la opción de pagarla, el usuario paga la deuda indicando la fecha de pago, el sistema confirma el éxito de la operación.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de pago del cine.
+2. El sistema muestra la deuda actual y la opción de pagar.
+3. El usuario ingresa la información de pago y la fecha correspondiente.
+4. El sistema valida la información ingresada.
+5. El usuario confirma el pago.
+6. El sistema registra el pago y confirma el éxito de la operación.
+
+Escenarios alternos:
+4. Si la información de pago es inválida, el sistema muestra un mensaje de error.
+6. Si ocurre un error al registrar el pago, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 033
+Caso de uso: Ver película
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir visualizar la información de una película.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de la película, el sistema muestra información relacionada a la película seleccionada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la película que desea ver.
+2. El sistema muestra la información de la película, incluyendo sinopsis, duración, género y clasificación.
+
+Escenarios alternos:
+2. Si la película no existe o no está disponible, el sistema muestra un mensaje de error.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 034
+Caso de uso: Buscar película
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir encontrar películas mediante nombre o filtros.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de buscar película, el sistema muestra opciones para buscar una película en base al nombre y filtros, el usuario ingresa los datos y busca la película, el sistema muestra las coincidencias encontradas.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de búsqueda de películas.
+2. El sistema muestra campos para nombre y filtros.
+3. El usuario ingresa los criterios de búsqueda.
+4. El sistema procesa la búsqueda y muestra las películas que coinciden con los criterios.
+
+Escenarios alternos:
+4. Si no hay coincidencias, el sistema muestra un mensaje indicando que no se encontraron películas.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 035
+Caso de uso: Calificar película
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario valorar una película mediante calificación.
+Precondición: 033 (Ver película)
+Resumen: El usuario ingresa al apartado de la película, el sistema muestra la película con la opción de calificarla, el usuario califica la película, el sistema muestra la película reflejando la nueva reseña.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la opción de calificar la película.
+2. El sistema muestra las opciones de calificación.
+3. El usuario ingresa la calificación deseada.
+4. El sistema registra la calificación y actualiza la información de la película.
+
+Escenarios alternos:
+3. Si la calificación ingresada es inválida, el sistema muestra un mensaje de error.
+4. Si ocurre un error al registrar la calificación, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 036
+Caso de uso: Crear película
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir registrar una nueva película en el sistema.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de crear película, el sistema muestra opciones para ingresar los datos de la nueva película, el usuario ingresa los datos y confirma la creación, el sistema muestra la película creada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la opción de crear película.
+2. El sistema muestra campos para ingresar nombre, sinopsis, duración, género, clasificación y demás información.
+3. El usuario ingresa los datos requeridos.
+4. El sistema valida la información ingresada.
+5. El usuario confirma la creación de la película.
+6. El sistema guarda la película y confirma el éxito de la operación.
+
+Escenarios alternos:
+4. Si los datos ingresados son inválidos o incompletos, el sistema muestra un mensaje de error.
+6. Si ocurre un error al guardar la película, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 037
+Caso de uso: Editar película
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir modificar la información de una película existente.
+Precondición: 036 (Crear película)
+Resumen: El usuario ingresa al apartado de editar película, el sistema muestra la información de la película con opciones para editarla, el usuario edita la información, el sistema muestra los datos editados de la película.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la película que desea editar.
+2. El sistema muestra la información actual de la película con opciones de edición.
+3. El usuario realiza los cambios necesarios.
+4. El sistema valida la información ingresada.
+5. El usuario confirma la edición.
+6. El sistema actualiza la información de la película y confirma el éxito de la operación.
+
+Escenarios alternos:
+4. Si los datos ingresados son inválidos, el sistema muestra un mensaje de error y solicita corrección.
+6. Si ocurre un error al actualizar la información, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 038
+Caso de uso: Eliminar película
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir eliminar una película del sistema.
+Precondición: 036 (Crear película)
+Resumen: El usuario ingresa al apartado de la película, el sistema muestra la opción de eliminar la película, el usuario confirma la eliminación, el sistema muestra la lista de películas sin la recién eliminada.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la película que desea eliminar.
+2. El sistema muestra la opción de eliminar película.
+3. El usuario confirma la eliminación.
+4. El sistema elimina la película y actualiza la lista de películas.
+
+Escenarios alternos:
+3. Si la película no puede eliminarse, el sistema muestra un mensaje de error.
+4. Si ocurre un error al eliminar la película, el sistema notifica al usuario que la operación no se completó.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 039
+Caso de uso: Comprar boleto
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario adquirir un boleto para una película en un cine y horario específicos.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de comprar boleto, el sistema muestra opciones para elegir cine, sala y horario, el usuario ingresa la información requerida, el sistema muestra el precio y la opción de pagar, el usuario realiza el pago, el sistema confirma el éxito de la operación.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de compra de boletos.
+2. El sistema muestra opciones para elegir cine, sala y horario disponibles.
+3. El usuario ingresa la información requerida.
+4. El sistema calcula y muestra el precio total del boleto.
+5. El usuario realiza el pago del boleto.
+6. El sistema confirma el éxito de la operación y emite el boleto.
+
+Escenarios alternos:
+5. Si el pago es rechazado o incompleto, el sistema muestra un mensaje de error y no emite el boleto.
+6. Si la sala o el horario seleccionados ya no están disponibles, el sistema solicita al usuario elegir otra opción.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 040
+Caso de uso: Ver boletos comprados
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario consultar todos los boletos que ha comprado.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de boletos comprados, el sistema muestra una lista de todos los boletos adquiridos por el usuario.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de boletos comprados.
+2. El sistema muestra la lista de boletos adquiridos por el usuario, incluyendo cine, sala, película, fecha y horario.
+
+Escenarios alternos:
+2. Si el usuario no ha comprado boletos, el sistema muestra un mensaje indicando que no hay boletos disponibles.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 041
+Caso de uso: Descargar boleto
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario descargar los boletos que ha comprado.
+Precondición: 040 (Ver boletos comprados)
+Resumen: El usuario ingresa al apartado de boletos comprados, el sistema muestra cada boleto con la opción de descargarlo, el usuario realiza la descarga.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona un boleto de la lista de boletos comprados.
+2. El sistema muestra la opción de descargar el boleto.
+3. El usuario confirma la descarga.
+4. El sistema genera el archivo del boleto y permite su descarga.
+
+Escenarios alternos:
+4. Si ocurre un error en la descarga, el sistema muestra un mensaje de error e indica que la operación no se completó.
+2. Si el boleto seleccionado ya no está disponible para descarga, el sistema notifica al usuario.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 042
+Caso de uso: Crear comentario a sala
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario agregar un comentario a una sala de cine.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de comentarios de la sala, el sistema muestra todos los comentarios con la opción de realizar uno, el usuario ingresa un comentario, el sistema refleja el comentario en la lista de comentarios.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la sala donde desea comentar.
+2. El sistema muestra los comentarios existentes y la opción de agregar uno.
+3. El usuario ingresa su comentario y lo envía.
+4. El sistema valida el contenido y agrega el comentario a la lista.
+5. El sistema confirma al usuario que el comentario fue agregado correctamente.
+
+Escenarios alternos:
+3. Si el usuario deja el comentario vacío, el sistema solicita ingresar texto antes de enviar.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 043
+Caso de uso: Crear comentario a película
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario agregar un comentario a una película.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de comentarios de la película, el sistema muestra todos los comentarios con la opción de realizar uno, el usuario ingresa un comentario, el sistema refleja el comentario en la lista de comentarios.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la película donde desea comentar.
+2. El sistema muestra los comentarios existentes y la opción de agregar uno.
+3. El usuario ingresa su comentario y lo envía.
+4. El sistema valida el contenido y agrega el comentario a la lista.
+5. El sistema confirma al usuario que el comentario fue agregado correctamente.
+
+Escenarios alternos:
+3. Si el usuario deja el comentario vacío, el sistema solicita ingresar texto antes de enviar.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 044
+Caso de uso: Editar comentario
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario modificar un comentario previamente publicado.
+Precondición: 001 (Iniciar sesión), 042 o 043 (Crear comentario)
+Resumen: El usuario ingresa al apartado de comentarios, el sistema muestra los comentarios del usuario entre la lista de comentarios con la opción de editarlos, el usuario edita un comentario, el sistema refleja los cambios en la lista de comentarios.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el comentario que desea editar.
+2. El sistema muestra el contenido del comentario con opción de edición.
+3. El usuario modifica el texto del comentario y lo envía.
+4. El sistema valida el contenido y actualiza el comentario.
+5. El sistema confirma que los cambios se realizaron correctamente.
+
+Escenarios alternos:
+2. Si el comentario seleccionado ya no existe, el sistema notifica al usuario.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 045
+Caso de uso: Ver comentarios
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario visualizar todos los comentarios de salas o películas.
+Precondición: Ninguna
+Resumen: El usuario ingresa al apartado de comentarios, el sistema muestra una lista de todos los comentarios.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de comentarios.
+2. El sistema muestra la lista de todos los comentarios disponibles, incluyendo autor, fecha y contenido.
+
+Escenarios alternos:
+2. Si no hay comentarios, el sistema muestra un mensaje indicando que no existen comentarios registrados.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 046
+Caso de uso: Eliminar comentario
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir al usuario eliminar un comentario que haya publicado.
+Precondición: 001 (Iniciar sesión), 042 o 043 (Crear comentario)
+Resumen: El usuario ingresa al apartado de comentarios, el sistema muestra los comentarios del usuario entre la lista de comentarios con la opción de eliminarlos, el usuario elimina un comentario, el sistema refleja los cambios en la lista de comentarios.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el comentario que desea eliminar.
+2. El sistema muestra la opción de eliminar el comentario.
+3. El usuario confirma la eliminación.
+4. El sistema elimina el comentario y actualiza la lista.
+5. El sistema confirma que el comentario fue eliminado correctamente.
+
+Escenarios alternos:
+3. Si el comentario no puede eliminarse, el sistema notifica al usuario y no realiza cambios.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 047
+Caso de uso: Crear categoría
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir al administrador crear una nueva categoría de películas.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de crear categoría, el sistema muestra opciones para ingresar la información de la nueva categoría, el usuario ingresa la información y confirma la creación, el sistema muestra la nueva categoría en la lista general.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la opción de crear categoría.
+2. El sistema muestra campos para ingresar el nombre y descripción de la categoría.
+3. El usuario completa la información requerida y confirma la creación.
+4. El sistema valida la información y agrega la categoría a la lista general.
+5. El sistema confirma que la categoría fue creada exitosamente.
+
+Escenarios alternos:
+3. Si algún campo obligatorio está vacío, el sistema solicita completarlo antes de continuar.
+4. Si la categoría ya existe, el sistema muestra un mensaje de error y no permite duplicar.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 048
+Caso de uso: Editar categoría
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir al administrador modificar una categoría existente.
+Precondición: 001 (Iniciar sesión), 047 (Crear categoría)
+Resumen: El usuario ingresa al apartado de editar una categoría, el sistema muestra la información de la categoría con la opción de editarla, el usuario confirma la edición, el sistema muestra la categoría con la información cambiada.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la categoría que desea editar.
+2. El sistema muestra la información de la categoría con campos editables.
+3. El usuario modifica la información y confirma la edición.
+4. El sistema valida los cambios y actualiza la categoría.
+5. El sistema confirma que la categoría fue editada correctamente.
+
+Escenarios alternos:
+3. Si el usuario deja campos obligatorios vacíos, el sistema solicita completarlos.
+4. Si la categoría ya existe con el nuevo nombre, el sistema muestra un mensaje de error y no actualiza.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 049
+Caso de uso: Eliminar categoría
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir al administrador eliminar una categoría existente.
+Precondición: 001 (Iniciar sesión), 047 (Crear categoría)
+Resumen: El usuario ingresa al listado de categorías, el sistema muestra cada categoría con la opción de eliminarla, el usuario confirma la eliminación de una categoría, el sistema muestra la lista de categorías sin la recién eliminada.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona la categoría que desea eliminar.
+2. El sistema muestra la opción de eliminar.
+3. El usuario confirma la eliminación.
+4. El sistema elimina la categoría y actualiza la lista.
+5. El sistema confirma que la categoría fue eliminada correctamente.
+
+Escenarios alternos:
+4. Si la categoría está asociada a películas, el sistema solicita confirmación adicional antes de eliminar.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 050
+Caso de uso: Ver categorías
+Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
+Propósito: Permitir a los usuarios visualizar todas las categorías de películas disponibles.
+Precondición: Ninguna
+Resumen: El usuario ingresa al apartado de categorías, el sistema muestra una lista de todas las categorías de películas disponibles.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de categorías.
+2. El sistema muestra la lista completa de categorías disponibles, incluyendo nombre y descripción.
+
+Escenarios alternos:
+2. Si no existen categorías registradas, el sistema muestra un mensaje indicando que no hay categorías disponibles.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 051
+Caso de uso: Ver reporte comentarios a salas
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir al administrador visualizar los comentarios realizados a las salas.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de comentarios a salas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de comentarios a salas.
+2. El sistema muestra los comentarios existentes con opciones de filtrado.
+3. El usuario selecciona filtros si lo desea.
+4. El sistema aplica los filtros y muestra la información actualizada.
+
+Escenarios alternos:
+3. Si no existen comentarios, el sistema muestra un mensaje indicando que no hay comentarios disponibles.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 052
+Caso de uso: Ver reporte películas proyectadas en salas
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir al administrador visualizar las películas proyectadas en las salas.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de películas proyectadas en salas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de películas proyectadas en salas.
+2. El sistema muestra la lista de películas proyectadas con opciones de filtrado.
+3. El usuario aplica los filtros deseados.
+4. El sistema muestra la información filtrada actualizada.
+
+Escenarios alternos:
+3. Si no hay películas proyectadas, el sistema muestra un mensaje indicando que no existen proyecciones registradas.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 053
+Caso de uso: Ver reporte calificaciones en salas
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir al administrador visualizar las calificaciones otorgadas a las salas.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de calificaciones en salas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de calificaciones en salas.
+2. El sistema muestra las calificaciones existentes con opciones de filtrado.
+3. El usuario aplica los filtros deseados.
+4. El sistema muestra la información filtrada actualizada.
+
+Escenarios alternos:
+3. Si no existen calificaciones registradas, el sistema muestra un mensaje indicando que no hay calificaciones disponibles.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 054
+Caso de uso: Ver reporte ventas de boletos
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir al administrador visualizar las ventas de boletos realizadas.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de ventas de boletos, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de ventas de boletos.
+2. El sistema muestra la lista de ventas registradas con opciones de filtrado.
+3. El usuario aplica los filtros deseados.
+4. El sistema muestra la información filtrada actualizada.
+
+Escenarios alternos:
+3. Si no existen ventas registradas, el sistema muestra un mensaje indicando que no hay ventas disponibles.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 055
+Caso de uso: Ver reporte ganancias de cines
+Actores: Administrador de Cines, Administrador del Sistema (Iniciadores)
+Propósito: Permitir visualizar las ganancias obtenidas por los cines.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de ganancias de cines, el sistema muestra la información del reporte con la opción de aplicar filtros, el usuario selecciona los filtros deseados, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de ganancias de cines.
+2. El sistema muestra las ganancias registradas con opciones de filtrado.
+3. El usuario aplica los filtros deseados.
+4. El sistema muestra la información filtrada actualizada.
+
+Escenarios alternos:
+3. Si no existen registros de ganancias, el sistema muestra un mensaje indicando que no hay información disponible.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 056
+Caso de uso: Ver reporte anuncios comprados
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir visualizar los anuncios comprados por los anunciantes.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de anuncios comprados, el sistema muestra la información del reporte con la opción de aplicar filtros, el usuario selecciona los filtros deseados, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de anuncios comprados.
+2. El sistema muestra la lista de anuncios comprados con opciones de filtrado.
+3. El usuario aplica los filtros deseados.
+4. El sistema muestra la información filtrada actualizada.
+
+Escenarios alternos:
+3. Si no existen anuncios comprados, el sistema muestra un mensaje indicando que no hay registros de anuncios.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 057
+Caso de uso: Ver reporte ganancias por anunciantes
+Actores: Administrador del Sistema (Iniciador)
+Propósito: Permitir visualizar las ganancias obtenidas por cada anunciante.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de ganancias por anunciantes, el sistema muestra la información del reporte con la opción de aplicar filtros, el usuario selecciona los filtros deseados, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de ganancias por anunciantes.
+2. El sistema muestra las ganancias de cada anunciante con opciones de filtrado.
+3. El usuario aplica los filtros deseados.
+4. El sistema muestra la información filtrada actualizada.
+
+Escenarios alternos:
+3. Si no existen registros de ganancias por anunciante, el sistema muestra un mensaje indicando que no hay información disponible.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 058
+Caso de uso: Ver reporte salas más populares
+Actores: Administrador de Cines, Administrador del Sistema (Iniciadores)
+Propósito: Permitir visualizar las salas más populares.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de salas más populares, el sistema muestra la información del reporte con la opción de aplicar filtros, el usuario selecciona los filtros deseados, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de salas más populares.
+2. El sistema muestra las salas con mayor popularidad con opciones de filtrado.
+3. El usuario aplica los filtros deseados.
+4. El sistema muestra la información filtrada actualizada.
+
+Escenarios alternos:
+3. Si no existen registros de popularidad de salas, el sistema muestra un mensaje indicando que no hay información disponible.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 059
+Caso de uso: Ver reporte salas más comentadas
+Actores: Administrador de Cines, Administrador del Sistema (Iniciadores)
+Propósito: Permitir visualizar las salas más comentadas por los usuarios.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de reporte de salas más comentadas, el sistema muestra la información del reporte con la opción de aplicar filtros, el usuario selecciona los filtros deseados, el sistema muestra la información filtrada.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de reporte de salas más comentadas.
+2. El sistema muestra las salas con mayor cantidad de comentarios con opciones de filtrado.
+3. El usuario aplica los filtros deseados.
+4. El sistema muestra la información filtrada actualizada.
+
+Escenarios alternos:
+3. Si no existen registros de comentarios, el sistema muestra un mensaje indicando que no hay información disponible.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 060
+Caso de uso: Exportar reporte
+Actores: Administrador del Sistema, Administrador de Cines (Iniciador)
+Propósito: Permitir exportar un reporte a un archivo.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado del reporte, el sistema muestra el reporte con la opción de exportarlo, el usuario confirma la exportación, el sistema genera y muestra el archivo exportado.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado del reporte a exportar.
+2. El sistema muestra la información del reporte con la opción de exportarlo.
+3. El usuario confirma la exportación.
+4. El sistema genera el archivo exportado y notifica al usuario.
+
+Escenarios alternos:
+3. Si ocurre un error durante la exportación, el sistema muestra un mensaje indicando que no se pudo exportar el reporte.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 061
+Caso de uso: Crear proyección
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir crear una nueva proyección de película en una sala específica.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de crear proyección, el sistema muestra opciones para elegir la sala, película y horario, el usuario ingresa la información requerida y confirma la creación, el sistema muestra la proyección creada en la lista de proyecciones.
+Tipo: Primario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de crear proyección.
+2. El sistema muestra opciones para elegir sala, película y horario.
+3. El usuario ingresa los datos requeridos y confirma la creación.
+4. El sistema muestra la proyección creada en la lista de proyecciones.
+
+Escenarios alternos:
+3. Si la sala o el horario seleccionado ya está ocupado, el sistema muestra un mensaje indicando el conflicto y solicita modificar los datos.
+4. Si los datos ingresados son inválidos, el sistema muestra un mensaje de error y permite corregirlos.
+
+---------------------------------------------------------------------------------------------------------------------------
+
+Número: 062
+Caso de uso: Editar proyección
+Actores: Administrador de Cines (Iniciador)
+Propósito: Permitir modificar la información de una proyección existente.
+Precondición: 001 (Iniciar sesión)
+Resumen: El usuario ingresa al apartado de editar proyección, el sistema muestra la información de la proyección con opciones de edición, el usuario realiza los cambios necesarios, el sistema actualiza la información y la muestra editada.
+Tipo: Secundario, Real
+
+Flujo principal:
+
+1. El usuario selecciona el apartado de editar proyección.
+2. El sistema muestra la información de la proyección con opciones para editarla.
+3. El usuario modifica la información disponible y confirma los cambios.
+4. El sistema actualiza la proyección y muestra la información editada.
+
+Escenarios alternos:
+3. Si los datos modificados generan un conflicto con otra proyección, el sistema muestra un mensaje de error y permite corregirlos.
+4. Si los datos ingresados son inválidos, el sistema muestra un mensaje de error y solicita corrección.
+
+---------------------------------------------------------------------------------------------------------------------------
+

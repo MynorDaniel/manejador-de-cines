@@ -377,7 +377,7 @@ Exportación
 
 Número: 060
 Caso de uso: Exportar reporte
-Actores: Administrador del Sistema
+Actores: Administrador del Sistema, Administrador de Cines
 Descripción: El usuario ingresa al apartado del reporte, el sistema muestra el reporte con la opción de exportarlo, el usuario confirma la exportación del reporte, el sistema muestra el reporte exportado
 Tipo: Primario
 
