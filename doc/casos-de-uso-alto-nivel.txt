@@ -61,12 +61,6 @@ Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de
 Descripción: El usuario ingresa a la cartera digital, el sistema muestra el saldo disponible con la opción de agregar saldo, el usuario ingresa el saldo, el sistema muestra la cartera actualizada
 Tipo: Secundario
 
-Número: 010
-Caso de uso: Ver movimientos de la cartera digital
-Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines
-Descripción: El usuario ingresa a la cartera digital, el sistema muestra las transacciones de la cartera
-Tipo: Secundario
-
 Anuncios
 
 Número: 011

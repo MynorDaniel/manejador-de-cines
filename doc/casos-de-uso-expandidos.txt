@@ -204,27 +204,6 @@ Escenarios alternos:
 
 ---------------------------------------------------------------------------------------------------------------------------
 
-Número: 010
-Caso de uso: Ver movimientos de la cartera digital
-Actores: Usuario Normal, Anunciante, Administrador del Sistema, Administrador de Cines (Iniciador)
-Propósito: Permitir al usuario visualizar el historial de transacciones de su cartera digital.
-Precondición: 001 (Iniciar sesión)
-Resumen: El usuario ingresa a la cartera digital, el sistema muestra las transacciones realizadas en la cartera.
-Tipo: Secundario, Real
-Referencias: 009 (Recargar cartera digital)
-
-Flujo principal:
-
-1. El usuario ingresa a la opción de ver movimientos de la cartera digital.
-2. El sistema carga y muestra la lista de transacciones con detalles como fecha, monto y tipo de operación.
-3. El usuario revisa las transacciones mostradas.
-
-Escenarios alternos:
-2. Si ocurre un error al cargar los movimientos, el sistema muestra un mensaje indicando que no se pudieron cargar las transacciones y sugiere intentar más tarde.
-2. Si no existen transacciones registradas, el sistema muestra un mensaje indicando que no hay movimientos disponibles.
-
----------------------------------------------------------------------------------------------------------------------------
-
 Número: 011
 Caso de uso: Comprar anuncio
 Actores: Anunciante (Iniciador)
