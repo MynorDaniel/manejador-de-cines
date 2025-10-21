@@ -1,0 +1,22 @@
+nav .nav-link {
+  color: #dcdcdc;
+  transition: all 0.2s ease-in-out;
+}
+
+nav .nav-link:hover {
+  color: #0d6efd;
+  transform: translateY(-2px);
+}
+
+.dropdown-menu-dark {
+  background-color: #2b2b2b;
+  border: none;
+}
+
+.dropdown-item:hover {
+  background-color: #3b3b3b;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}

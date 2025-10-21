@@ -1,0 +1,102 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card p-4 shadow" style="min-width: 320px; max-width: 420px; width: 100%;">
+    <h2 class="card-title text-center mb-4">Registrar Usuario</h2>
+    
+    <form [formGroup]="registrarUsuarioForm" (ngSubmit)="submit()">
+      
+      <!-- Nombre -->
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input
+          type="text"
+          class="form-control"
+          id="nombre"
+          placeholder="Nombre completo"
+          formControlName="nombre"
+        >
+        @if (registrarUsuarioForm.controls['nombre'].invalid && registrarUsuarioForm.controls['nombre'].dirty) {
+          <div class="text-danger small mt-1">
+            El nombre es obligatorio
+          </div>
+        }
+      </div>
+
+      <!-- Rol -->
+      <div class="mb-3">
+        <label for="rol" class="form-label">Rol</label>
+        <select
+          id="rol"
+          class="form-select"
+          formControlName="rol"
+        >
+          <option value="">Seleccione un rol</option>
+          <option value="CLIENTE">Cliente</option>
+          <option value="ANUNCIANTE">Anunciante</option>
+
+          @if(usuarioActualAdmin){
+            <option value="ADMINISTRADOR_SISTEMA">Administrador del Sistema</option>
+            <option value="ADMINISTRADOR_CINES">Administrador de Cines</option>
+          }
+          
+        </select>
+        @if (registrarUsuarioForm.controls['rol'].invalid && registrarUsuarioForm.controls['rol'].dirty) {
+          <div class="text-danger small mt-1">
+            Debe seleccionar un rol válido
+          </div>
+        }
+      </div>
+
+      <!-- Correo -->
+      <div class="mb-3">
+        <label for="correo" class="form-label">Correo electrónico</label>
+        <input
+          type="email"
+          class="form-control"
+          id="correo"
+          placeholder="correo@ejemplo.com"
+          formControlName="correo"
+        >
+        @if (registrarUsuarioForm.controls['correo'].invalid && registrarUsuarioForm.controls['correo'].dirty) {
+          <div class="text-danger small mt-1">
+            Ingrese un correo válido
+          </div>
+        }
+      </div>
+
+      <!-- Clave -->
+      <div class="mb-3">
+        <label for="clave" class="form-label">Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="clave"
+          formControlName="clave"
+        >
+        @if (registrarUsuarioForm.controls['clave'].invalid && registrarUsuarioForm.controls['clave'].dirty) {
+          <div class="text-danger small mt-1">
+            Ingrese una clave válida
+          </div>
+        }
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-success" [disabled]="!registrarUsuarioForm.valid">
+          Registrar
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

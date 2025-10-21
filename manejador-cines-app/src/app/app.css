@@ -1,0 +1,28 @@
+.app-footer {
+  background-color: #1e88e5;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: auto; /* asegura que se quede abajo si la página es corta */
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-links {
+  margin-top: 10px;
+}
+
+.footer-links a {
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #bbdefb;
+}

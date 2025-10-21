@@ -1,0 +1,155 @@
+<header class="border-bottom shadow-sm bg-dark text-light">
+  <div class="container-fluid d-flex justify-content-between align-items-center py-3 px-4">
+    <!-- Logo -->
+
+    @if (!usuario) {
+      <a routerLink="/" class="d-flex align-items-center text-light text-decoration-none">
+        <img src="cine.png" alt="Cines" width="40" height="32" class="me-2">
+        <span class="fs-4 fw-semibold">Manejador de Cines</span>
+      </a>
+    }@else{
+      <a routerLink="/home" class="d-flex align-items-center text-light text-decoration-none">
+        <img src="cine.png" alt="Cines" width="40" height="32" class="me-2">
+        <span class="fs-4 fw-semibold">Manejador de Cines</span>
+      </a>
+    }
+
+    <div class="d-flex align-items-center gap-4">
+
+      @if (!usuario) {
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-light" routerLink="/login">Iniciar sesión</button>
+          <button class="btn btn-primary" routerLink="/registro">Registrarse</button>
+        </div>
+      }
+
+      @if (usuario) {
+
+        <nav class="nav justify-content-center align-items-center">
+
+          <!-- TODOS -->
+
+          <div class="nav-item dropdown text-center">
+            <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown">
+              <i class="bi bi-building fs-4"></i><br>
+              <small>Cines</small>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark shadow">
+              <li><a class="dropdown-item" routerLink="/cines/ver-cines">Ver cines</a></li>
+
+              @if (usuario.rol === 'ADMINISTRADOR_CINES'){
+                <li><a class="dropdown-item" routerLink="/cines/crear-cine">Crear cine</a></li>
+                <li><a class="dropdown-item" routerLink="/cines/mis-cines">Ver mis cines</a></li>
+              }
+
+              @if (usuario.rol === 'ADMINISTRADOR_SISTEMA'){
+                <li><a class="dropdown-item" routerLink="/cines/costo-global-diario">Costo global diario</a></li>
+              }
+            </ul>
+          </div>
+
+          <a class="nav-link text-center text-light" routerLink="/boletos" title="Mis boletos">
+            <i class="bi bi-ticket-perforated fs-4"></i><br>
+            <small>Boletos</small>
+          </a>
+
+          <!-- ANUNCIANTE -->
+          @if (usuario.rol === 'ANUNCIANTE') {
+            <div class="nav-item dropdown text-center">
+              <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown">
+                <i class="bi bi-megaphone fs-4"></i><br>
+                <small>Anuncios</small>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                <li><a class="dropdown-item" routerLink="/anuncios/comprar">Comprar</a></li>
+                <li><a class="dropdown-item" routerLink="/anuncios/mis-anuncios">Ver mis anuncios</a></li>
+              </ul>
+            </div>
+          }
+
+          <!-- ADMINISTRADOR DE CINES -->
+          @if (usuario.rol === 'ADMINISTRADOR_CINES') {
+
+            <div class="nav-item dropdown text-center">
+              <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown">
+                <i class="bi bi-bar-chart-line fs-4"></i><br>
+                <small>Reportes</small>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark shadow">
+                <li><a class="dropdown-item" routerLink="/reportes/comentarios">Comentarios</a></li>
+                <li><a class="dropdown-item" routerLink="/reportes/peliculas">Películas proyectadas</a></li>
+                <li><a class="dropdown-item" routerLink="/reportes/calificaciones">Calificaciones</a></li>
+                <li><a class="dropdown-item" routerLink="/reportes/ventas">Ventas</a></li>
+              </ul>
+            </div>
+          }
+
+          <!-- ADMINISTRADOR SISTEMA -->
+          @if (usuario.rol === 'ADMINISTRADOR_SISTEMA') {
+            <div class="nav-item dropdown text-center">
+              <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown">
+                <i class="bi bi-people fs-4"></i><br>
+                <small>Usuarios</small>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark shadow">
+                <li><a class="dropdown-item" routerLink="/admin/usuarios/crear">Crear usuario</a></li>
+                <li><a class="dropdown-item" routerLink="/admin/usuarios">Ver usuarios</a></li>
+              </ul>
+            </div>
+
+            <div class="nav-item dropdown text-center">
+              <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown">
+                <i class="bi bi-megaphone fs-4"></i><br>
+                <small>Anuncios</small>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark shadow">
+                <li><a class="dropdown-item" routerLink="/admin/anuncios">Ver anuncios</a></li>
+                <li><a class="dropdown-item" routerLink="/admin/precios-tipo">Precio por tipo</a></li>
+                <li><a class="dropdown-item" routerLink="/admin/precios-vigencia">Precio por vigencia</a></li>
+              </ul>
+            </div>
+
+            <a class="nav-link text-center text-light" routerLink="/admin/crear-pelicula">
+              <i class="bi bi-camera-reels fs-4"></i><br>
+              <small>Crear película</small>
+            </a>
+
+            <a class="nav-link text-center text-light" routerLink="/admin/categorias">
+              <i class="bi bi-tags fs-4"></i><br>
+              <small>Categorías</small>
+            </a>
+
+            <div class="nav-item dropdown text-center">
+              <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown">
+                <i class="bi bi-graph-up fs-4"></i><br>
+                <small>Reportes</small>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-dark shadow">
+                <li><a class="dropdown-item" routerLink="/reportes/ganancias-cines">Ganancias cines</a></li>
+                <li><a class="dropdown-item" routerLink="/reportes/anuncios-comprados">Anuncios comprados</a></li>
+                <li><a class="dropdown-item" routerLink="/reportes/ganancias-anunciantes">Ganancias anunciantes</a></li>
+                <li><a class="dropdown-item" routerLink="/reportes/salas-populares">Salas populares</a></li>
+                <li><a class="dropdown-item" routerLink="/reportes/salas-comentadas">Salas comentadas</a></li>
+              </ul>
+            </div>
+          }
+
+          <a class="nav-link text-center text-light" routerLink="/cartera" title="Cartera digital">
+            <i class="bi bi-wallet2 fs-4"></i><br>
+            <small>Cartera</small>
+          </a>
+
+          <a class="nav-link text-center text-light" routerLink="/perfil" title="Perfil">
+            <i class="bi bi-person-circle fs-4"></i><br>
+            <small>Perfil</small>
+          </a>
+
+        </nav>
+
+        <button type="button" class="btn btn-outline-danger ms-3" (click)="logout()">
+          <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+        </button>
+      }
+    </div>
+  </div>
+</header>

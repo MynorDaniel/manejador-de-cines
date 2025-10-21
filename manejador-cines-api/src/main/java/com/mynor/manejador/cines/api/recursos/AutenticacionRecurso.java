@@ -5,13 +5,14 @@
 package com.mynor.manejador.cines.api.recursos;
 
 import com.mynor.manejador.cines.api.dtos.CredencialesEntradaDTO;
-import com.mynor.manejador.cines.api.dtos.UsuarioSalidaDTO;
-import com.mynor.manejador.cines.api.seguridad.ManejadorJWT;
+import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
+import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
 import com.mynor.manejador.cines.api.seguridad.TokenDTO;
 import com.mynor.manejador.cines.api.servicios.AutenticacionServicio;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import java.security.NoSuchAlgorithmException;
 
 /**
  *
@@ -29,12 +30,13 @@ public class AutenticacionRecurso {
         AutenticacionServicio autenticacionServicio = new AutenticacionServicio();
         
         try {
-            UsuarioSalidaDTO usuario = autenticacionServicio.iniciarSesion(credencialesDTO);
-            ManejadorJWT jwt = new ManejadorJWT();
-            TokenDTO token = jwt.generarToken(usuario);
+            credencialesDTO.validarEntrada();
+            TokenDTO token = autenticacionServicio.iniciarSesion(credencialesDTO);
             return Response.ok(token).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();
+        } catch (AccesoDeDatosException | NoSuchAlgorithmException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (UsuarioInvalidoException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
         }
     }
     

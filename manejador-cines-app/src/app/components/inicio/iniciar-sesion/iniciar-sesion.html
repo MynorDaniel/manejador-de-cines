@@ -1,0 +1,40 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card p-4 shadow" style="min-width: 320px; max-width: 400px; width: 100%;">
+    <h2 class="card-title text-center mb-4">Iniciar Sesión</h2>
+    
+    <form [formGroup]="iniciarSesionForm" (ngSubmit)="submit()">
+      <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input type="email" class="form-control" id="email" placeholder="correo@ejemplo.com" formControlName="correo">
+        @if (iniciarSesionForm.controls['correo'].invalid && iniciarSesionForm.controls['correo'].dirty) {
+            <div class="text-danger small mt-1">
+                Ingrese un correo válido
+            </div>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <input type="password" class="form-control" id="password" placeholder="Contraseña" formControlName="clave">
+        @if (iniciarSesionForm.controls['clave'].invalid && iniciarSesionForm.controls['clave'].dirty) {
+            <div class="text-danger small mt-1">
+                Ingrese una contraseña válida
+            </div>
+        }
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary" [disabled]="!iniciarSesionForm.valid">Iniciar sesión</button>
+      </div>
+    </form>
+
+  </div>
+</div>

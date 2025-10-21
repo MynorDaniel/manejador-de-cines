@@ -5,6 +5,8 @@
 package com.mynor.manejador.cines.api.bd;
 
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -20,4 +22,13 @@ public interface BaseDeDatos<E, F> {
     public E actualizar(E entidad) throws AccesoDeDatosException;
     public E eliminar(E entidad) throws AccesoDeDatosException;
     
+    default int obtenerLongitudRS(ResultSet rs) throws SQLException{
+        if (rs.last()) {
+            int longitud = rs.getRow();
+            rs.beforeFirst();
+            return longitud;
+        }else{
+            return 0;
+        }
+    }
 }

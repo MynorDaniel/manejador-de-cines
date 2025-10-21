@@ -4,46 +4,47 @@
  */
 package com.mynor.manejador.cines.api.filtros;
 
+import java.util.Optional;
+
 /**
  *
  * @author mynordma
  */
 public class FiltrosUsuario extends Filtros {
     
-    private Integer id;
-    private String correo;
-    private Boolean activado;
-    private String clave;
+    private Optional<Integer> id;
+    private Optional<String> correo;
+    private Optional<Boolean> activado;
 
-    public String getClave() {
-        return clave;
+    public FiltrosUsuario() {
+        this.id = Optional.empty();
+        this.correo = Optional.empty();
+        this.activado = Optional.empty();
     }
 
-    public void setClave(String clave) {
-        this.clave = clave;
-    }
-
-    public Integer getId() {
+    public Optional<Integer> getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Optional<Integer> id) {
         this.id = id;
     }
 
-    public String getCorreo() {
+    public Optional<String> getCorreo() {
         return correo;
     }
 
-    public void setCorreo(String correo) {
+    public void setCorreo(Optional<String> correo) {
         this.correo = correo;
     }
 
-    public Boolean getActivado() {
+    public Optional<Boolean> getActivado() {
         return activado;
     }
 
-    public void setActivado(Boolean activado) {
+    public void setActivado(Optional<Boolean> activado) {
         this.activado = activado;
     }
+
+    
 }
