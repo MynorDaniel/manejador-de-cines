@@ -92,8 +92,8 @@
                 <small>Usuarios</small>
               </a>
               <ul class="dropdown-menu dropdown-menu-dark shadow">
-                <li><a class="dropdown-item" routerLink="/admin/usuarios/crear">Crear usuario</a></li>
-                <li><a class="dropdown-item" routerLink="/admin/usuarios">Ver usuarios</a></li>
+                <li><a class="dropdown-item" routerLink="/registro">Crear usuario</a></li>
+                <li><a class="dropdown-item" routerLink="/usuarios">Ver usuarios</a></li>
               </ul>
             </div>
 
@@ -139,10 +139,19 @@
             <small>Cartera</small>
           </a>
 
-          <a class="nav-link text-center text-light" routerLink="/perfil" title="Perfil">
-            <i class="bi bi-person-circle fs-4"></i><br>
+          <a class="nav-link text-center text-light" [routerLink]="['/perfil', usuario.id]"  title="Perfil">
+  
+            @if (usuario && imagenUrl) {
+              <img [src]="imagenUrl" alt="Perfil" class="rounded-circle" width="32" height="32">
+            } 
+            @else {
+              <i class="bi bi-person-circle fs-4"></i>
+            }
+
+            <br>
             <small>Perfil</small>
           </a>
+
 
         </nav>
 

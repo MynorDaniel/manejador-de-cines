@@ -82,7 +82,7 @@ public class DataSourceBD {
         Properties properties = new Properties();
         String rutaActual = System.getProperty("user.dir");
         System.out.println(rutaActual);
-        String nombreArchivo = "bd.properties";
+        String nombreArchivo = "config.properties";
         
         try(FileReader fr = new FileReader(rutaActual + File.separator + nombreArchivo)){
             properties.load(fr);

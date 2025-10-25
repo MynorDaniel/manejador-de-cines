@@ -5,6 +5,7 @@
 package com.mynor.manejador.cines.api.servicios;
 
 import com.mynor.manejador.cines.api.bd.BaseDeDatos;
+import com.mynor.manejador.cines.api.bd.Transaccion;
 import com.mynor.manejador.cines.api.bd.UsuarioBD;
 import com.mynor.manejador.cines.api.dtos.CredencialesEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioSalidaDTO;
@@ -39,7 +40,13 @@ public class AutenticacionServicio {
         FiltrosUsuario filtros = new FiltrosUsuario();
         filtros.setCorreo(Optional.ofNullable(credencialesDTO.getCorreo()));
 
-        Usuario[] coincidencias = USUARIO_BD.leerCompleto(filtros);
+        Usuario[] coincidencias;
+        
+        try (Transaccion transaccion = new Transaccion()) {
+            coincidencias = USUARIO_BD.leerCompleto(filtros, transaccion.obtenerConexion());
+            transaccion.commit();
+        }
+
         
         if(coincidencias.length < 1) throw new UsuarioInvalidoException("Usuario no encontrado");
         

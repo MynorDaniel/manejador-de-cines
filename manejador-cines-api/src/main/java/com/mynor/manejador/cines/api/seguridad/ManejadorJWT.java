@@ -5,11 +5,17 @@
 package com.mynor.manejador.cines.api.seguridad;
 
 import com.mynor.manejador.cines.api.dtos.UsuarioSalidaDTO;
+import com.mynor.manejador.cines.api.excepciones.AutorizacionException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import javax.crypto.SecretKey;
 
 /**
  *
@@ -39,6 +45,35 @@ public class ManejadorJWT {
             .compact();
 
         return new TokenDTO(jwt, "Bearer", expiracion.getTime(), usuario);
+    }
+    
+    public CredencialesTokenDTO validarToken(String authHeader) throws AutorizacionException {
+        
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                throw new AutorizacionException("Sesión inválida");
+            }
+            
+            String token = authHeader.substring(7);
+            
+        try {
+            Claims claims = Jwts.parser()
+                .verifyWith((SecretKey) LLAVE)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+            
+            CredencialesTokenDTO credenciales = new CredencialesTokenDTO();
+            credenciales.setId((Integer) claims.get("id"));
+            credenciales.setCorreo((String) claims.get("correo"));
+
+            return credenciales;
+        } catch (ExpiredJwtException e) {
+            throw new AutorizacionException("Token expirado");
+        } catch (MalformedJwtException e) {
+            throw new AutorizacionException("Token malformado");
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new AutorizacionException("Error al validar el token");
+        }
     }
 
 }

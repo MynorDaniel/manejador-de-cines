@@ -7,13 +7,11 @@ import { Usuario } from '../models/usuario';
 })
 export class JwtService {
   
-  public getHeaders(): HttpHeaders {
+  public getHeaders(baseHeaders?: HttpHeaders): HttpHeaders {
     const tokenObject = sessionStorage.getItem('token');
     const token = tokenObject ? JSON.parse(tokenObject).token : null;
 
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
+    let headers = baseHeaders || new HttpHeaders();
 
     if (token) {
       headers = headers.set('Authorization', `Bearer ${token}`);

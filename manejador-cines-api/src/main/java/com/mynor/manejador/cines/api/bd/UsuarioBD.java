@@ -16,22 +16,15 @@ import java.sql.*;
  * @author mynordma
  */
 public class UsuarioBD implements BaseDeDatos<Usuario, FiltrosUsuario>{
-
-    private final DataSourceBD DS;
-    
-    public UsuarioBD(){
-        DS = DataSourceBD.obtenerInstancia();
-    }
     
     @Override
-    public Usuario crear(Usuario usuario) throws AccesoDeDatosException {
+    public Usuario crear(Usuario usuario, Connection conn) throws AccesoDeDatosException {
         String sql = """
             INSERT INTO Usuario (nombre, rol, correo, clave, imagen)
             VALUES (?, ?, ?, ?, ?)
         """;
 
-        try (Connection conn = DS.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setString(1, usuario.getNombre());
             ps.setString(2, usuario.getRol().name());
@@ -55,7 +48,7 @@ public class UsuarioBD implements BaseDeDatos<Usuario, FiltrosUsuario>{
     }
 
     @Override
-    public Usuario[] leer(FiltrosUsuario filtros) throws AccesoDeDatosException {
+    public Usuario[] leer(FiltrosUsuario filtros, Connection conn) throws AccesoDeDatosException {
         StringBuilder sql = new StringBuilder("""
             SELECT id, imagen, nombre, rol, correo, clave, activado
             FROM Usuario
@@ -74,8 +67,7 @@ public class UsuarioBD implements BaseDeDatos<Usuario, FiltrosUsuario>{
             }
         }
 
-        try (Connection conn = DS.getConnection();
-                PreparedStatement ps = conn.prepareStatement(sql.toString(), 
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString(), 
                 ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
 
             int index = 1;
@@ -124,7 +116,7 @@ public class UsuarioBD implements BaseDeDatos<Usuario, FiltrosUsuario>{
 
 
     @Override
-    public Usuario[] leerCompleto(FiltrosUsuario filtros) throws AccesoDeDatosException {
+    public Usuario[] leerCompleto(FiltrosUsuario filtros, Connection conn) throws AccesoDeDatosException {
         StringBuilder sql = new StringBuilder("""
             SELECT u.id, u.nombre, u.rol, u.correo, u.clave, u.activado,
                    i.id AS imagen_id, i.link AS imagen_link
@@ -145,8 +137,7 @@ public class UsuarioBD implements BaseDeDatos<Usuario, FiltrosUsuario>{
             }
         }
 
-        try (Connection conn = DS.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql.toString(),
+        try (PreparedStatement ps = conn.prepareStatement(sql.toString(),
                      ResultSet.TYPE_SCROLL_INSENSITIVE,
                      ResultSet.CONCUR_READ_ONLY)) {
 
@@ -194,23 +185,21 @@ public class UsuarioBD implements BaseDeDatos<Usuario, FiltrosUsuario>{
 
 
     @Override
-    public Usuario actualizar(Usuario usuario) throws AccesoDeDatosException {
+    public Usuario actualizar(Usuario usuario, Connection conn) throws AccesoDeDatosException {
         String sql = """
             UPDATE Usuario
-            SET imagen = ?, nombre = ?, rol = ?, correo = ?, clave = ?, activado = ?
+            SET imagen = ?, nombre = ?, correo = ?, clave = ?, activado = ?
             WHERE id = ?
         """;
 
-        try (Connection conn = DS.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, usuario.getImagen().getId());
             ps.setString(2, usuario.getNombre());
-            ps.setString(3, usuario.getRol().name());
-            ps.setString(4, usuario.getCorreo());
-            ps.setString(5, usuario.getClave());
-            ps.setBoolean(6, usuario.getActivado());
-            ps.setInt(7, usuario.getId());
+            ps.setString(3, usuario.getCorreo());
+            ps.setString(4, usuario.getClave());
+            ps.setBoolean(5, usuario.getActivado());
+            ps.setInt(6, usuario.getId());
 
             ps.executeUpdate();
             return usuario;
@@ -221,16 +210,13 @@ public class UsuarioBD implements BaseDeDatos<Usuario, FiltrosUsuario>{
     }
 
     @Override
-    public Usuario eliminar(Usuario usuario) throws AccesoDeDatosException {
-        String sql = "DELETE FROM Usuario WHERE id = ?";
-
-        try (Connection conn = DS.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
+    public Usuario eliminar(Usuario usuario, Connection conn) throws AccesoDeDatosException {
+        String sql = "UPDATE Usuario SET activado = 0 WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, usuario.getId());
             ps.executeUpdate();
+            usuario.setActivado(false);
             return usuario;
-
         } catch (SQLException e) {
             throw new AccesoDeDatosException(e.getMessage());
         }
