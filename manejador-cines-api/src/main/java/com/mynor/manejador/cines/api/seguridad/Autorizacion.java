@@ -7,6 +7,7 @@ package com.mynor.manejador.cines.api.seguridad;
 import com.mynor.manejador.cines.api.bd.BaseDeDatos;
 import com.mynor.manejador.cines.api.bd.Transaccion;
 import com.mynor.manejador.cines.api.bd.UsuarioBD;
+import com.mynor.manejador.cines.api.dtos.CarteraEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEditadoDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEntradaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
@@ -87,6 +88,14 @@ public class Autorizacion {
         
         if(!usuarioActual.getId().equals(id)) throw new AutorizacionException("Sin autorización");
     }
+
+    public void validarEditarCartera(CarteraEntradaDTO carteraDTO) throws AutorizacionException, AccesoDeDatosException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
+        
+        if(!usuarioActual.getId().equals(Integer.valueOf(carteraDTO.getUsuarioId()))) throw new AutorizacionException("Sin autorización");
+    }
+
     
     
 }

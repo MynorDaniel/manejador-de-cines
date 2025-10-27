@@ -54,6 +54,12 @@ CREATE TABLE CostoGlobalDiarioCines (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE CostoOcultacionAnuncios (
+    id INT AUTO_INCREMENT,
+    monto DECIMAL(10, 2) DEFAULT 1.00,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE Sala (
     id INT AUTO_INCREMENT,
     cine INT,
@@ -318,6 +324,17 @@ VALUES
     ('TEXTO', 2.00),
     ('TEXTO_IMAGEN', 4.00),
     ('TEXTO_VIDEO', 8.00);
+
+INSERT INTO CostoGlobalDiarioCines
+    (monto)
+VALUES
+    (1);
+
+INSERT INTO CostoOcultacionAnuncios
+    (monto)
+VALUES
+    (1);
+
 
 
 

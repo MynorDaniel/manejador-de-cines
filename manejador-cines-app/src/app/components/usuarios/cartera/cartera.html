@@ -1,0 +1,84 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-wallet2"></i> Mi Cartera
+          </h5>
+        </div>
+        <div class="card-body text-center">
+          @if (cartera) {
+            <h2 class="display-4 text-success">
+              Q{{ cartera.saldo }}
+            </h2>
+            <p class="text-muted">Saldo disponible</p>
+          } @else {
+            <p class="text-muted">Cargando saldo...</p>
+          }
+        </div>
+      </div>
+
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h5 class="mb-0">
+            <i class="bi bi-plus-circle"></i> Agregar Saldo
+          </h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="carteraForm" (ngSubmit)="agregarSaldo()">
+            <div class="mb-3">
+              <label for="monto" class="form-label">Monto a agregar</label>
+              <div class="input-group">
+                <span class="input-group-text">$</span>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="monto"
+                  placeholder="0.00"
+                  formControlName="monto"
+                  step="0.01"
+                  min="0.01"
+                >
+              </div>
+              @if (carteraForm.controls['monto'].invalid && carteraForm.controls['monto'].dirty) {
+                <div class="text-danger small mt-1">
+                  @if (carteraForm.controls['monto'].errors?.['required']) {
+                    El monto es obligatorio
+                  }
+                  @if (carteraForm.controls['monto'].errors?.['min']) {
+                    El monto debe ser mayor a 0
+                  }
+                  @if (carteraForm.controls['monto'].errors?.['pattern']) {
+                    Máximo de dos decimales
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="d-grid">
+              <button 
+                type="submit" 
+                class="btn btn-success"
+                [disabled]="!carteraForm.valid">
+                <i class="bi bi-cash-coin"></i> Agregar Saldo
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
