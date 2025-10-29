@@ -5,7 +5,6 @@
 package com.mynor.manejador.cines.api.dtos;
 
 import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -32,6 +31,7 @@ public class CarteraEntradaDTO extends Validador {
         this.saldo = saldo;
     }
     
+    @Override
     public void validarEntrada() throws UsuarioInvalidoException{
         if(!esEnteroPositivo(usuarioId)) throw new UsuarioInvalidoException("ID de imagen incorrecto");
         if(!montoValido(saldo)) throw new UsuarioInvalidoException("Monto incorrecto");

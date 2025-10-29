@@ -32,6 +32,7 @@ public class CredencialesEntradaDTO extends Validador {
         this.clave = clave;
     }
     
+    @Override
     public void validarEntrada() throws UsuarioInvalidoException {
         if(!correoValido(correo)) throw new UsuarioInvalidoException("Correo inválido");
         if(StringUtils.isBlank(clave)) throw new UsuarioInvalidoException("Clave inválida");

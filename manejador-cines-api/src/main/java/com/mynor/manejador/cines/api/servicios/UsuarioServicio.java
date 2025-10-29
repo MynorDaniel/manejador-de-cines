@@ -135,7 +135,7 @@ public class UsuarioServicio {
         }
     }
     
-    private Usuario leerPorId (Integer id) throws AccesoDeDatosException, UsuarioInvalidoException {
+    protected Usuario leerPorId (Integer id) throws AccesoDeDatosException, UsuarioInvalidoException {
         FiltrosUsuario filtros = new FiltrosUsuario();
         filtros.setId(Optional.ofNullable(id));
 

@@ -4,14 +4,15 @@
  */
 package com.mynor.manejador.cines.api.dtos;
 
-import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
+import com.mynor.manejador.cines.api.excepciones.EntidadInvalidaException;
+import com.mynor.manejador.cines.api.excepciones.VideoInvalidoException;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author mynordma
  */
-public class ImagenEntradaDTO extends Validador {
+public class VideoDTO extends Validador {
     
     private String id;
     private String link;
@@ -31,10 +32,9 @@ public class ImagenEntradaDTO extends Validador {
     public void setLink(String link) {
         this.link = link;
     }
-    
+
     @Override
-    public void validarEntrada() throws UsuarioInvalidoException{
-        if(!esEnteroPositivo(id)) throw new UsuarioInvalidoException("ID de imagen incorrecto");
-        if(StringUtils.isBlank(link)) throw new UsuarioInvalidoException("Link de imagen incorrecto");
+    public void validarEntrada() throws EntidadInvalidaException {
+        if(StringUtils.isBlank(link)) throw new VideoInvalidoException("Enlace del video no existe");
     }
 }

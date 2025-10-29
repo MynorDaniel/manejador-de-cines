@@ -8,7 +8,7 @@ package com.mynor.manejador.cines.api.excepciones;
  *
  * @author mynordma
  */
-public class AnuncioInvalidoException extends Exception {
+public class AnuncioInvalidoException extends EntidadInvalidaException {
 
     public AnuncioInvalidoException(String message) {
         super(message);

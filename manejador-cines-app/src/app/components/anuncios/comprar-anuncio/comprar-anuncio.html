@@ -1,0 +1,184 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-megaphone"></i> Comprar Anuncio
+          </h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="anuncioForm" (ngSubmit)="comprarAnuncio()">
+            
+            <!-- Vigencia -->
+            <div class="mb-3">
+              <label for="vigencia" class="form-label">Vigencia (días)</label>
+              <select 
+                class="form-select" 
+                id="vigencia" 
+                formControlName="vigencia">
+                <option value="">Selecciona vigencia</option>
+                @for (vigencia of vigencias; track vigencia.dias) {
+                  <option [value]="vigencia.dias">
+                    {{ vigencia.dias }} días - Q{{ vigencia.monto }}
+                  </option>
+                }
+              </select>
+              @if (anuncioForm.controls['vigencia'].invalid && anuncioForm.controls['vigencia'].dirty) {
+                <div class="text-danger small mt-1">
+                  La vigencia es obligatoria
+                </div>
+              }
+              @if (cargandoVigencias) {
+                <div class="text-muted small mt-1">
+                  <i class="spinner-border spinner-border-sm"></i> Cargando vigencias...
+                </div>
+              }
+            </div>
+
+            <!-- Tipo de Anuncio -->
+            <div class="mb-3">
+              <label for="tipo" class="form-label">Tipo de Anuncio</label>
+              <select 
+                class="form-select" 
+                id="tipo" 
+                formControlName="tipo"
+                (change)="onTipoChange()">
+                <option value="">Selecciona tipo</option>
+                @for (tipo of tipos; track tipo.tipo) {
+                  <option [value]="tipo.tipo">
+                    {{ formatearTipo(tipo.tipo) }} - Q{{ tipo.monto }}
+                  </option>
+                }
+              </select>
+              @if (anuncioForm.controls['tipo'].invalid && anuncioForm.controls['tipo'].dirty) {
+                <div class="text-danger small mt-1">
+                  El tipo es obligatorio
+                </div>
+              }
+              @if (cargandoTipos) {
+                <div class="text-muted small mt-1">
+                  <i class="spinner-border spinner-border-sm"></i> Cargando tipos...
+                </div>
+              }
+            </div>
+
+            <!-- Texto del Anuncio -->
+            <div class="mb-3">
+              <label for="texto" class="form-label">Texto del Anuncio</label>
+              <textarea
+                class="form-control"
+                id="texto"
+                rows="4"
+                placeholder="Escribe el contenido de tu anuncio..."
+                formControlName="texto"
+                maxlength="500"
+              ></textarea>
+              <div class="form-text">
+                {{ anuncioForm.controls['texto'].value?.length || 0 }}/500 caracteres
+              </div>
+              @if (anuncioForm.controls['texto'].invalid && anuncioForm.controls['texto'].dirty) {
+                <div class="text-danger small mt-1">
+                  Texto inválido
+                </div>
+              }
+            </div>
+
+            <!-- Imagen -->
+            @if (tipoSeleccionado === 'TEXTO_IMAGEN') {
+              <div class="mb-3">
+                <label for="imagen" class="form-label">
+                  <i class="bi bi-image"></i> Imagen del Anuncio
+                </label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="imagen"
+                  accept="image/png, image/jpeg, image/jpg, image/gif"
+                  (change)="onImagenSeleccionada($event)"
+                >
+                @if (imagenSeleccionada) {
+                  <div class="mt-2">
+                    <img 
+                      [src]="imagenPreview" 
+                      alt="Vista previa" 
+                      class="img-thumbnail"
+                      style="max-height: 200px;"
+                    >
+                    <button 
+                      type="button" 
+                      class="btn btn-sm btn-danger ms-2"
+                      (click)="eliminarImagen()">
+                      <i class="bi bi-trash"></i> Eliminar
+                    </button>
+                  </div>
+                }
+                @if (errorImagen) {
+                  <div class="text-danger small mt-1">
+                    {{ errorImagen }}
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Video -->
+            @if (tipoSeleccionado === 'TEXTO_VIDEO') {
+              <div class="mb-3">
+                <label for="videoLink" class="form-label">
+                  <i class="bi bi-camera-video"></i> Link del Video
+                </label>
+                <input
+                  type="url"
+                  class="form-control"
+                  id="videoLink"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  formControlName="videoLink"
+                >
+                <div class="form-text">
+                  Ingresa el enlace del video
+                </div>
+                @if (anuncioForm.controls['videoLink']?.invalid && anuncioForm.controls['videoLink']?.touched) {
+                  <div class="text-danger small mt-1">
+                    Ingresa un link válido
+                  </div>
+                }
+              </div>
+            }
+
+            <hr class="my-4">
+
+            <!-- Componente Pago -->
+            <app-pago-form
+              [monto]="calcularMontoTotal()"
+              [anuncioForm]="anuncioForm"
+              (pagoData)="onPagoDataChange($event)">
+            </app-pago-form>
+
+            <hr class="my-4">
+
+            <div class="d-grid">
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg"
+                [disabled]="!anuncioForm.valid || !pagoValido">
+                <i class="bi bi-cart-check"></i> Comprar Anuncio
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

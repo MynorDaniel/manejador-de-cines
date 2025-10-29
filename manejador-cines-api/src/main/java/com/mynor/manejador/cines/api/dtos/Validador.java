@@ -4,7 +4,9 @@
  */
 package com.mynor.manejador.cines.api.dtos;
 
+import com.mynor.manejador.cines.api.excepciones.EntidadInvalidaException;
 import com.mynor.manejador.cines.api.modelo.Rol;
+import com.mynor.manejador.cines.api.modelo.TipoAnuncio;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -14,7 +16,9 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author mynordma
  */
-public class Validador {
+public abstract class Validador {
+    
+    public abstract void validarEntrada() throws EntidadInvalidaException;
     
     protected boolean fechaValida(String fechaStr){
         try {
@@ -68,6 +72,17 @@ public class Validador {
 
         try {
             Rol.valueOf(rol);
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+    
+    protected boolean tipoAnuncioValido(String tipo){
+        if (StringUtils.isBlank(tipo)) return false;
+
+        try {
+            TipoAnuncio.valueOf(tipo);
             return true;
         } catch (IllegalArgumentException e) {
             return false;

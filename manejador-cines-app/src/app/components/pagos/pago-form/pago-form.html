@@ -1,0 +1,34 @@
+<div class="card bg-light">
+  <div class="card-body">
+    <h5 class="card-title">Pago</h5>
+    <form [formGroup]="pagoForm" (ngSubmit)="emitirPago()">
+      <div class="mb-3">
+        <label class="form-label">Monto a pagar</label>
+        <div class="input-group">
+          <span class="input-group-text">Q</span>
+          <input 
+            type="text" 
+            class="form-control" 
+            [value]="monto" 
+            disabled
+          >
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="fecha" class="form-label">Fecha de Pago</label>
+        <input 
+          type="date" 
+          class="form-control" 
+          id="fecha"
+          formControlName="fecha"
+        >
+        @if (pagoForm.controls['fecha'].invalid && pagoForm.controls['fecha'].touched) {
+          <div class="text-danger small mt-1">
+            La fecha es obligatoria
+          </div>
+        }
+      </div>
+    </form>
+  </div>
+</div>

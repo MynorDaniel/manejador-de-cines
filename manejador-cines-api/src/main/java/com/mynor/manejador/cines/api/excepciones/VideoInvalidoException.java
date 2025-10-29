@@ -8,9 +8,9 @@ package com.mynor.manejador.cines.api.excepciones;
  *
  * @author mynordma
  */
-public class ImagenInvalidaException extends EntidadInvalidaException {
-
-    public ImagenInvalidaException(String message) {
+public class VideoInvalidoException extends EntidadInvalidaException {
+    
+    public VideoInvalidoException(String message) {
         super(message);
     }
     

@@ -7,6 +7,7 @@ import { Perfil } from './components/usuarios/perfil/perfil';
 import { Usuarios } from './components/usuarios/usuarios/usuarios';
 import { EditarUsuario } from './components/usuarios/editar-usuario/editar-usuario';
 import { Cartera } from './components/usuarios/cartera/cartera';
+import { ComprarAnuncio } from './components/anuncios/comprar-anuncio/comprar-anuncio';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -16,5 +17,6 @@ export const routes: Routes = [
     {path: 'perfil/:id', component: Perfil},
     {path: 'usuarios', component: Usuarios},
     {path: 'editar-usuario', component: EditarUsuario},
-    {path: 'cartera', component: Cartera}
+    {path: 'cartera', component: Cartera},
+    {path: 'comprar-anuncio', component: ComprarAnuncio}
 ];

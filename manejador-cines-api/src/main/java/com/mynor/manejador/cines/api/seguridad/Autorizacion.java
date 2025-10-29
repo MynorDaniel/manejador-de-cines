@@ -7,6 +7,7 @@ package com.mynor.manejador.cines.api.seguridad;
 import com.mynor.manejador.cines.api.bd.BaseDeDatos;
 import com.mynor.manejador.cines.api.bd.Transaccion;
 import com.mynor.manejador.cines.api.bd.UsuarioBD;
+import com.mynor.manejador.cines.api.dtos.AnuncioEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.CarteraEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEditadoDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEntradaDTO;
@@ -94,6 +95,23 @@ public class Autorizacion {
         Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
         
         if(!usuarioActual.getId().equals(Integer.valueOf(carteraDTO.getUsuarioId()))) throw new AutorizacionException("Sin autorización");
+    }
+
+    /**
+     * El usuario debe ser un anunciante
+     * El usuario del pago debe corresponder al usuario actual
+     * @param anuncioDTO
+     * @throws AutorizacionException
+     * @throws AccesoDeDatosException 
+     */
+    public void validarComprarAnuncio(AnuncioEntradaDTO anuncioDTO) throws AutorizacionException, AccesoDeDatosException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
+        
+        boolean coincideId = usuarioActual.getId().equals(Integer.valueOf(anuncioDTO.getPago().getIdUsuario()));
+        boolean esAnunciante = usuarioActual.getRol() == Rol.ANUNCIANTE;
+        
+        if(!coincideId || !esAnunciante) throw new AutorizacionException("Sin autorización para crear este anuncio");
     }
 
     

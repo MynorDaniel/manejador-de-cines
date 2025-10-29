@@ -5,7 +5,6 @@
 package com.mynor.manejador.cines.api.dtos;
 
 import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -54,6 +53,7 @@ public class UsuarioEditadoDTO extends Validador {
      * Todos los campos no pueden ser nulos se hayan editado o no, a excepcion de la clave
      * @throws UsuarioInvalidoException 
      */
+    @Override
     public void validarEntrada() throws UsuarioInvalidoException {
         if(!correoValido(correo)) throw new UsuarioInvalidoException("Correo inválido");
         
