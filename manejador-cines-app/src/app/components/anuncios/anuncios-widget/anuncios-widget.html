@@ -1,0 +1,38 @@
+<div class="row row-cols-1 g-3">
+  @for (anuncio of anuncios; track anuncio.id) {
+    <div class="col">
+      <div
+        class="card shadow-sm"
+        [ngClass]="{
+          'w-auto h-auto p-2 text-only': anuncio.tipo === 'TEXTO',
+          'h-100': anuncio.tipo !== 'TEXTO'
+        }"
+      >
+        <!-- Imagen -->
+        @if (anuncio.tipo === 'TEXTO_IMAGEN' && mediaMap.has(anuncio.id!)) {
+          <img
+            [src]="mediaMap.get(anuncio.id!)"
+            class="card-img-top"
+            alt="Anuncio imagen"
+          >
+        }
+
+        <!-- Video -->
+        @if (anuncio.tipo === 'TEXTO_VIDEO' && mediaMap.has(anuncio.id!)) {
+          <div class="ratio ratio-16x9">
+            <iframe
+              [src]="mediaMap.get(anuncio.id!)"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+        }
+
+        <!-- Texto -->
+        <div class="card-body text-center p-2">
+          <p class="card-text m-0">{{ anuncio.texto }}</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

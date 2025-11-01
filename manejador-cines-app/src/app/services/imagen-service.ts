@@ -21,4 +21,5 @@ export class ImagenService {
     formData.append('file', imagen, imagen.name);
     return this.http.post<Imagen>(this.URL, formData);
   }
+  
 }

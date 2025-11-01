@@ -1,0 +1,121 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h4 class="mb-0">
+        <i class="bi bi-megaphone-fill"></i> Anuncios
+      </h4>
+    </div>
+    <div class="card-body">
+      
+      @if (cargando) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2 text-muted">Cargando anuncios...</p>
+        </div>
+      }
+
+      @if (!cargando && !errorMsg && anuncios.length === 0) {
+        <div class="alert alert-info text-center">
+          <i class="bi bi-info-circle"></i> No hay anuncios registrados.
+        </div>
+      }
+
+      @if (!cargando && !errorMsg && anuncios.length > 0) {
+        <div class="table-responsive">
+          <table class="table table-hover table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Tipo</th>
+                <th>Texto</th>
+                <th>Vigencia</th>
+                <th>ID Usuario</th>
+                <th>Fecha Pago</th>
+                <th>Monto</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (anuncio of anuncios; track anuncio.id) {
+                <tr>
+                  <td>{{ anuncio.id }}</td>
+                  <td>
+                    <span class="badge bg-primary">
+                      {{ anuncio.tipo }}
+                    </span>
+                  </td>
+                  <td>
+                    <span 
+                      [title]="anuncio.texto"
+                      class="d-inline-block text-truncate"
+                      style="max-width: 250px;">
+                      {{ anuncio.texto }}
+                    </span>
+                  </td>
+                  <td>{{ anuncio.vigencia }} días</td>
+
+                  @if(anuncio.pago){
+                    <td>{{ anuncio.pago.idUsuario }}</td>
+                    <td>{{ anuncio.pago.fecha }}</td>
+                    <td>Q{{ anuncio.pago.monto | number:'1.2-2' }}</td>
+                  }
+                  
+                  <td>
+                    @if (anuncio.activado) {
+                      <span class="badge bg-success">
+                        <i class="bi bi-check-circle"></i> Activado
+                      </span>
+                    } @else {
+                      <span class="badge bg-secondary">
+                        <i class="bi bi-x-circle"></i> Desactivado
+                      </span>
+                    }
+                  </td>
+                  <td>
+                    @if (anuncio.activado) {
+                    <button
+                      class="me-2 btn btn-sm btn-warning"
+                      (click)="confirmarCambioEstado(anuncio)"
+                      [disabled]="procesando === anuncio.id">
+                      
+                      @if (procesando === anuncio.id) {
+                        <span class="spinner-border spinner-border-sm"></span>
+                      } @else {
+                        <i class="bi bi-toggle-off"></i>
+                      }
+                      Desactivar
+                    </button>
+                  }
+
+
+                    @if (propios && anuncio.activado) {
+                      <button class="btn btn-sm btn-info text-white" (click)="editarAnuncio(anuncio)">
+                        <i class="bi bi-pencil-square"></i> Editar
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

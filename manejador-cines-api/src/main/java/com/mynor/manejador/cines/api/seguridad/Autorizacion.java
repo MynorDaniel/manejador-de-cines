@@ -14,8 +14,10 @@ import com.mynor.manejador.cines.api.dtos.UsuarioEntradaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.excepciones.AutorizacionException;
 import com.mynor.manejador.cines.api.filtros.FiltrosUsuario;
+import com.mynor.manejador.cines.api.modelo.Anuncio;
 import com.mynor.manejador.cines.api.modelo.Rol;
 import com.mynor.manejador.cines.api.modelo.Usuario;
+import com.mynor.manejador.cines.api.servicios.AnuncioServicio;
 import java.util.Optional;
 
 /**
@@ -112,6 +114,27 @@ public class Autorizacion {
         boolean esAnunciante = usuarioActual.getRol() == Rol.ANUNCIANTE;
         
         if(!coincideId || !esAnunciante) throw new AutorizacionException("Sin autorización para crear este anuncio");
+    }
+
+    public void valdidarEditarAnuncio(AnuncioEntradaDTO anuncioDTO) throws AutorizacionException, AccesoDeDatosException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
+        
+        AnuncioServicio anuncioServicio = new AnuncioServicio();
+        Anuncio anuncio = anuncioServicio.leerPorId(Integer.valueOf(anuncioDTO.getId()));
+        
+        if(usuarioActual.getRol() != Rol.ADMINISTRADOR_SISTEMA){
+            if(!usuarioActual.getId().equals(anuncio.getPago().getUsuario().getId())) throw new AutorizacionException("Sin autorización para editar este anuncio");
+        }
+    }
+
+    public void validarAdminSistema() throws AutorizacionException, AccesoDeDatosException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
+        
+        boolean esAdminSistema = usuarioActual.getRol() == Rol.ADMINISTRADOR_SISTEMA;
+        
+        if(!esAdminSistema) throw new AutorizacionException("Sin autorización");
     }
 
     

@@ -16,6 +16,8 @@ export class IniciarSesion {
   router:Router = inject(Router);
   errorMsg: string | null = null;
 
+
+
   iniciarSesionForm:FormGroup = new FormGroup({
     correo: new FormControl('', [Validators.required, Validators.email, Validators.max(350)]),
     clave: new FormControl('', [Validators.required])

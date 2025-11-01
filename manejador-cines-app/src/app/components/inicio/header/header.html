@@ -62,7 +62,7 @@
               </a>
               <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                 <li><a class="dropdown-item" routerLink="/comprar-anuncio">Comprar</a></li>
-                <li><a class="dropdown-item" routerLink="/anuncios/mis-anuncios">Ver mis anuncios</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/ver-anuncios', true]">Ver mis anuncios</a></li>
               </ul>
             </div>
           }
@@ -103,9 +103,9 @@
                 <small>Anuncios</small>
               </a>
               <ul class="dropdown-menu dropdown-menu-dark shadow">
-                <li><a class="dropdown-item" routerLink="/admin/anuncios">Ver anuncios</a></li>
-                <li><a class="dropdown-item" routerLink="/admin/precios-tipo">Precio por tipo</a></li>
-                <li><a class="dropdown-item" routerLink="/admin/precios-vigencia">Precio por vigencia</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/ver-anuncios', false]">Ver anuncios</a></li>
+                <li><a class="dropdown-item" routerLink="/precios-tipo-anuncio">Precio por tipo</a></li>
+                <li><a class="dropdown-item" routerLink="/precios-vigencia-anuncio">Precio por vigencia</a></li>
               </ul>
             </div>
 

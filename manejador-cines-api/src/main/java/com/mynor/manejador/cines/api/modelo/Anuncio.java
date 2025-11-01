@@ -17,6 +17,11 @@ public class Anuncio {
     private Boolean activado;
     private Pago pago;
     private Integer idMedia;
+    
+    public void calcularMonto(Double precioTipo, Double precioVigencia) {
+        Double monto = precioTipo + precioVigencia;
+        pago.setMonto(monto);
+    }
 
     public Integer getIdMedia() {
         return idMedia;
@@ -73,4 +78,5 @@ public class Anuncio {
     public void setPago(Pago pago) {
         this.pago = pago;
     }
+    
 }

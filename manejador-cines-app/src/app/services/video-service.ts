@@ -11,9 +11,9 @@ export class VideoService {
 
   URL = 'http://localhost:8080/manejador-cines-api/api/v1/videos';
 
-  //public obtenerImagen(id: number): Observable<Blob> {
-    //return this.http.get(`${this.URL}/${id}`, { responseType: 'blob' });
-  //}
+  public obtenerVideo(id: number): Observable<Video> {
+    return this.http.get<Video>(`${this.URL}/${id}`);
+  }
 
   public subirVideo(video: Video):Observable<Video>{
     return this.http.post<Video>(this.URL, video);

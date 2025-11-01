@@ -45,4 +45,23 @@ public class VideoRecurso {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
+    
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerVideo(@PathParam("id") String id) {
+        
+        VideoServicio videoServicio = new VideoServicio();
+        
+        try {
+            
+            VideoDTO video = videoServicio.obtenerPorId(Integer.valueOf(id));
+            
+            return Response.ok(video).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        }catch (EntidadInvalidaException | NumberFormatException e){
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
 }

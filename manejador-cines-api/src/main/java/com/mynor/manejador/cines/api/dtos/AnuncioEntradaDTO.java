@@ -20,6 +20,24 @@ public class AnuncioEntradaDTO extends Validador {
     private String texto;
     private PagoEntradaDTO pago;
     private String idMedia;
+    private String activado;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getActivado() {
+        return activado;
+    }
+
+    public void setActivado(String activado) {
+        this.activado = activado;
+    }
 
     public String getVigencia() {
         return vigencia;
@@ -75,5 +93,17 @@ public class AnuncioEntradaDTO extends Validador {
 
     private boolean esSoloTexto(String tipo) {
         return TipoAnuncio.TEXTO.name().equals(tipo);
+    }
+    
+    public void validarEdicion() throws EntidadInvalidaException {
+        if(StringUtils.isBlank(texto)) throw new AnuncioInvalidoException("Texto no puede ir vacío");
+        
+        if(!esSoloTexto(tipo)){
+            if(!esEnteroPositivo(idMedia)) throw new AnuncioInvalidoException("Id del contenido no es un entero positivo");
+        }
+        
+        if(!esBoolean(activado)) throw new AnuncioInvalidoException("Estado del anuncio inválido");
+        
+        if(!esEnteroPositivo(id)) throw new AnuncioInvalidoException("Id no es un entero positivo");
     }
 }

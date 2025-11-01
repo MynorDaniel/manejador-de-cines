@@ -1,10 +1,14 @@
+body{
+  background-color: black;
+}
+
 .app-footer {
   background-color: #1e88e5;
   color: white;
   padding: 20px;
   text-align: center;
   font-size: 0.9rem;
-  margin-top: auto; /* asegura que se quede abajo si la página es corta */
+  margin-top: auto;
 }
 
 .footer-content {

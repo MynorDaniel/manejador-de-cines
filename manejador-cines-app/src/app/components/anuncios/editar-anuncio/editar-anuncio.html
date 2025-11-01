@@ -1,0 +1,102 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-megaphone"></i> Editar Anuncio
+          </h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="anuncioForm" (ngSubmit)="editarAnuncio()">
+
+            <!-- Texto del Anuncio -->
+            <div class="mb-3">
+              <label for="texto" class="form-label">Texto del Anuncio</label>
+              <textarea
+                class="form-control"
+                id="texto"
+                rows="4"
+                placeholder="Escribe el contenido de tu anuncio..."
+                formControlName="texto"
+                maxlength="500"
+              ></textarea>
+              @if (anuncioForm.controls['texto'].invalid && anuncioForm.controls['texto'].dirty) {
+                <div class="text-danger small mt-1">
+                  Texto inválido
+                </div>
+              }
+            </div>
+
+            <!-- Imagen -->
+            @if (anuncio!.tipo === 'TEXTO_IMAGEN') {
+              <div class="mb-3">
+                <label for="imagen" class="form-label">
+                  <i class="bi bi-image"></i> Imagen del Anuncio
+                </label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="imagen"
+                  accept="image/png, image/jpeg, image/jpg, image/gif"
+                  (change)="onImagenSeleccionada($event)"
+                >
+              </div>
+            }
+
+            <!-- Video -->
+            @if (anuncio!.tipo === 'TEXTO_VIDEO') {
+              <div class="mb-3">
+                <label for="videoLink" class="form-label">
+                  <i class="bi bi-camera-video"></i> Link del Video
+                </label>
+                <input
+                  type="url"
+                  class="form-control"
+                  id="videoLink"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  formControlName="videoLink"
+                >
+                <div class="form-text">
+                  Ingresa el enlace del video
+                </div>
+                @if (anuncioForm.controls['videoLink']?.invalid && anuncioForm.controls['videoLink']?.touched) {
+                  <div class="text-danger small mt-1">
+                    Ingresa un link válido
+                  </div>
+                }
+              </div>
+            }
+
+            <hr class="my-4">
+
+            
+
+            <hr class="my-4">
+
+            <div class="d-grid">
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg"
+                [disabled]="!anuncioForm.valid">
+                <i class="bi bi-cart-check"></i> Editar Anuncio
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

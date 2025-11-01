@@ -20,6 +20,16 @@ public abstract class Validador {
     
     public abstract void validarEntrada() throws EntidadInvalidaException;
     
+    protected boolean esBoolean(String cadena) {
+        if (StringUtils.isBlank(cadena)) {
+            return false;
+        }
+
+        String valor = cadena.trim().toLowerCase();
+        return valor.equals("true") || valor.equals("false");
+    }
+
+    
     protected boolean fechaValida(String fechaStr){
         try {
             LocalDate.parse(fechaStr);

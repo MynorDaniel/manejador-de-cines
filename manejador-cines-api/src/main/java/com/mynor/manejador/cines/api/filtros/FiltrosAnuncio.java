@@ -20,6 +20,9 @@ public class FiltrosAnuncio extends Filtros {
     private Optional<Integer> idUsuario;
     private Optional<LocalDate> fechaInicial;
     private Optional<LocalDate> fechaFinal;
+    private Optional<Integer> limite;
+    private Optional<Boolean> activado;
+    private Optional<Boolean> vigente;
 
     public FiltrosAnuncio() {
         this.id = Optional.empty();
@@ -28,6 +31,33 @@ public class FiltrosAnuncio extends Filtros {
         this.idUsuario = Optional.empty();
         this.fechaInicial = Optional.empty();
         this.fechaFinal = Optional.empty();
+        this.limite = Optional.empty();
+        this.activado = Optional.empty();
+        this.vigente = Optional.empty();
+    }
+
+    public Optional<Boolean> getVigente() {
+        return vigente;
+    }
+
+    public void setVigente(Optional<Boolean> vigente) {
+        this.vigente = vigente;
+    }
+
+    public Optional<Boolean> getActivado() {
+        return activado;
+    }
+
+    public void setActivado(Optional<Boolean> activado) {
+        this.activado = activado;
+    }
+
+    public Optional<Integer> getLimite() {
+        return limite;
+    }
+
+    public void setLimite(Optional<Integer> limite) {
+        this.limite = limite;
     }
 
     public Optional<Integer> getId() {

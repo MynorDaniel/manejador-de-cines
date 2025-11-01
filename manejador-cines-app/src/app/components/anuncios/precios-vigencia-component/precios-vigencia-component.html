@@ -1,0 +1,123 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-success text-white">
+      <h4 class="mb-0">
+        <i class="bi bi-calendar-check-fill"></i> Editar Precios de Vigencias
+      </h4>
+    </div>
+    <div class="card-body">
+
+      @if (cargandoVigencias) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2 text-muted">Cargando vigencias...</p>
+        </div>
+      }
+
+      @if (!cargandoVigencias) {
+        <form [formGroup]="vigenciaForm" (ngSubmit)="editarPrecio()">
+          
+          <div class="mb-4">
+            <label for="vigenciaSelect" class="form-label fw-bold">
+              Selecciona la vigencia
+            </label>
+            <select 
+              class="form-select form-select-lg" 
+              id="vigenciaSelect"
+              formControlName="dias"
+              (change)="onVigenciaChange()">
+              <option value="">-- Selecciona una vigencia --</option>
+              @for (vigencia of vigencias; track vigencia.dias) {
+                <option [value]="vigencia.dias">
+                  {{ vigencia.dias }} días
+                </option>
+              }
+            </select>
+            @if (vigenciaForm.controls['dias'].invalid && vigenciaForm.controls['dias'].touched) {
+              <div class="text-danger small mt-1">
+                Debes seleccionar una vigencia
+              </div>
+            }
+          </div>
+
+          @if (vigenciaSeleccionada) {
+            <div class="alert alert-info mb-4">
+              <div class="row align-items-center">
+                <div class="col-md-6">
+                  <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i> Precio Actual
+                  </h5>
+                  <small class="text-muted">{{ vigenciaSeleccionada.dias }} días de vigencia</small>
+                </div>
+                <div class="col-md-6 text-md-end">
+                  <h3 class="mb-0 text-success">
+                    Q{{ montoActual | number:'1.2-2' }}
+                  </h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="nuevoMonto" class="form-label fw-bold">
+                Nuevo Monto (Q)
+              </label>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text">Q</span>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="nuevoMonto"
+                  placeholder="0.00"
+                  formControlName="monto"
+                  step="0.01"
+                  min="0.01"
+                >
+              </div>
+              @if (vigenciaForm.controls['monto'].invalid && vigenciaForm.controls['monto'].touched) {
+                <div class="text-danger small mt-1">
+                  @if (vigenciaForm.controls['monto'].errors?.['required']) {
+                    El monto es obligatorio
+                  }
+                  @if (vigenciaForm.controls['monto'].errors?.['min']) {
+                    El monto debe ser mayor a 0
+                  }
+                </div>
+              }
+            </div>
+
+            <div class="d-grid gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-success btn-lg"
+                [disabled]="!vigenciaForm.valid || procesando">
+                @if (procesando) {
+                  <span class="spinner-border spinner-border-sm me-2"></span>
+                  Guardando...
+                } @else {
+                  <i class="bi bi-pencil-square me-2"></i>
+                  Actualizar Precio
+                }
+              </button>
+            </div>
+          }
+
+        </form>
+      }
+
+    </div>
+  </div>
+</div>

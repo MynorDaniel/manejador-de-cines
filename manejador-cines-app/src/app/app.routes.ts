@@ -8,6 +8,10 @@ import { Usuarios } from './components/usuarios/usuarios/usuarios';
 import { EditarUsuario } from './components/usuarios/editar-usuario/editar-usuario';
 import { Cartera } from './components/usuarios/cartera/cartera';
 import { ComprarAnuncio } from './components/anuncios/comprar-anuncio/comprar-anuncio';
+import { AnunciosComponent } from './components/anuncios/anuncios-component/anuncios-component';
+import { EditarAnuncio } from './components/anuncios/editar-anuncio/editar-anuncio';
+import { PreciosTipoComponent } from './components/anuncios/precios-tipo-component/precios-tipo-component';
+import { PreciosVigenciaComponent } from './components/anuncios/precios-vigencia-component/precios-vigencia-component';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -18,5 +22,9 @@ export const routes: Routes = [
     {path: 'usuarios', component: Usuarios},
     {path: 'editar-usuario', component: EditarUsuario},
     {path: 'cartera', component: Cartera},
-    {path: 'comprar-anuncio', component: ComprarAnuncio}
+    {path: 'comprar-anuncio', component: ComprarAnuncio},
+    {path: 'ver-anuncios/:propios', component: AnunciosComponent},
+    {path: 'editar-anuncio', component: EditarAnuncio},
+    {path: 'precios-tipo-anuncio', component: PreciosTipoComponent},
+    {path: 'precios-vigencia-anuncio', component: PreciosVigenciaComponent}
 ];

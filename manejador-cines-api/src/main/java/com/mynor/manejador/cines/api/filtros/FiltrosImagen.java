@@ -15,6 +15,15 @@ public class FiltrosImagen {
     private Optional<Integer> id;
     private Optional<String> link;
     private Optional<Boolean> ultimoId;
+    private Optional<Integer> idAnuncio;
+
+    public Optional<Integer> getIdAnuncio() {
+        return idAnuncio;
+    }
+
+    public void setIdAnuncio(Optional<Integer> idAnuncio) {
+        this.idAnuncio = idAnuncio;
+    }
 
     public Optional<Boolean> getUltimoId() {
         return ultimoId;
@@ -28,6 +37,7 @@ public class FiltrosImagen {
         this.ultimoId = Optional.empty();
         this.id = Optional.empty();
         this.link = Optional.empty();
+        this.idAnuncio = Optional.empty();
     }
 
     public Optional<Integer> getId() {

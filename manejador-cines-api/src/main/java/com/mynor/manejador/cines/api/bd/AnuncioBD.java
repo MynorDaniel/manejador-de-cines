@@ -181,14 +181,18 @@ public class AnuncioBD implements BaseDeDatos<Anuncio, FiltrosAnuncio> {
                 u.rol as usuario_rol,
                 u.correo as usuario_correo,
                 u.clave as usuario_clave,
-                u.activado as usuario_activado
+                u.activado as usuario_activado,
+                ai.imagen as imagen_id,
+                av.video as video_id
             FROM Anuncio a
             LEFT JOIN PagoAnuncio pa ON a.id = pa.anuncio
             LEFT JOIN Pago p ON pa.pago = p.id
             LEFT JOIN Usuario u ON p.usuario = u.id
+            LEFT JOIN AnuncioImagen ai ON a.id = ai.anuncio
+            LEFT JOIN AnuncioVideo av ON a.id = av.anuncio
             WHERE 1=1
         """);
-        
+
         if (filtros != null) {
             if (filtros.getId().isPresent()) {
                 sql.append(" AND a.id = ?");
@@ -202,6 +206,12 @@ public class AnuncioBD implements BaseDeDatos<Anuncio, FiltrosAnuncio> {
             if (filtros.getIdUsuario().isPresent()) {
                 sql.append(" AND p.usuario = ?");
             }
+            if (filtros.getActivado().isPresent()) {
+                sql.append(" AND a.activado = ?");
+            }
+            if (filtros.getVigente().isPresent()) {
+                sql.append(" AND DATE_ADD(p.fecha, INTERVAL a.vigencia DAY) >= CURDATE()");
+            }
             if (filtros.getFechaInicial().isPresent() && filtros.getFechaFinal().isPresent()) {
                 sql.append(" AND p.fecha BETWEEN ? AND ?");
             } else if (filtros.getFechaInicial().isPresent()) {
@@ -210,10 +220,14 @@ public class AnuncioBD implements BaseDeDatos<Anuncio, FiltrosAnuncio> {
                 sql.append(" AND p.fecha <= ?");
             }
         }
-        
+
+        if (filtros != null && filtros.getLimite().isPresent()) {
+            sql.append(" ORDER BY RAND() LIMIT ?");
+        }
+
         try (PreparedStatement ps = conn.prepareStatement(sql.toString(),
                 ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
-            
+
             int index = 1;
             if (filtros != null) {
                 if (filtros.getId().isPresent()) {
@@ -228,6 +242,9 @@ public class AnuncioBD implements BaseDeDatos<Anuncio, FiltrosAnuncio> {
                 if (filtros.getIdUsuario().isPresent()) {
                     ps.setInt(index++, filtros.getIdUsuario().get());
                 }
+                if (filtros.getActivado().isPresent()) {
+                    ps.setBoolean(index++, filtros.getActivado().get());
+                }
                 if (filtros.getFechaInicial().isPresent() && filtros.getFechaFinal().isPresent()) {
                     ps.setDate(index++, Date.valueOf(filtros.getFechaInicial().get()));
                     ps.setDate(index++, Date.valueOf(filtros.getFechaFinal().get()));
@@ -236,47 +253,67 @@ public class AnuncioBD implements BaseDeDatos<Anuncio, FiltrosAnuncio> {
                 } else if (filtros.getFechaFinal().isPresent()) {
                     ps.setDate(index++, Date.valueOf(filtros.getFechaFinal().get()));
                 }
+
+                if (filtros.getLimite().isPresent()) {
+                    ps.setInt(index++, filtros.getLimite().get());
+                }
             }
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 int total = obtenerLongitudRS(rs);
                 Anuncio[] anuncios = new Anuncio[total];
                 int i = 0;
-                
+
                 while (rs.next()) {
                     Anuncio anuncio = new Anuncio();
                     anuncio.setId(rs.getInt("id"));
                     anuncio.setVigencia(rs.getInt("vigencia"));
-                    anuncio.setTipo(TipoAnuncio.valueOf(rs.getString("tipo")));
+
+                    TipoAnuncio tipo = TipoAnuncio.valueOf(rs.getString("tipo"));
+                    anuncio.setTipo(tipo);
                     anuncio.setTexto(rs.getString("texto"));
                     anuncio.setActivado(rs.getBoolean("activado"));
-                    
+
+                    switch (tipo) {
+                        case TEXTO_IMAGEN -> {
+                            Integer imagenId = rs.getObject("imagen_id", Integer.class);
+                            anuncio.setIdMedia(imagenId);
+                        }
+                        case TEXTO_VIDEO -> {
+                            Integer videoId = rs.getObject("video_id", Integer.class);
+                            anuncio.setIdMedia(videoId);
+                        }
+                        case TEXTO -> {
+                            anuncio.setIdMedia(null);
+                        }
+                    }
+
                     if (rs.getObject("pago_id") != null) {
                         Pago pago = new Pago();
                         pago.setId(rs.getInt("pago_id"));
                         pago.setFecha(rs.getDate("pago_fecha").toLocalDate());
                         pago.setMonto(rs.getDouble("pago_monto"));
-                        
+
                         if (rs.getObject("usuario_id") != null) {
                             Usuario usuario = new Usuario();
                             usuario.setId(rs.getInt("usuario_id"));
-                            
+
                             Imagen img = new Imagen();
                             img.setId(rs.getInt("usuario_imagen"));
                             usuario.setImagen(img);
-                            
+
                             usuario.setNombre(rs.getString("usuario_nombre"));
                             usuario.setRol(Rol.valueOf(rs.getString("usuario_rol")));
                             usuario.setCorreo(rs.getString("usuario_correo"));
                             usuario.setClave(rs.getString("usuario_clave"));
                             usuario.setActivado(rs.getBoolean("usuario_activado"));
-                            
+
                             pago.setUsuario(usuario);
                         }
-                        
+
                         anuncio.setPago(pago);
                     }
-                    
+
                     anuncios[i++] = anuncio;
                 }
                 return anuncios;
@@ -290,20 +327,37 @@ public class AnuncioBD implements BaseDeDatos<Anuncio, FiltrosAnuncio> {
     public Anuncio actualizar(Anuncio entidad, Connection conn) throws AccesoDeDatosException {
         String sql = """
             UPDATE Anuncio 
-            SET vigencia = ?, tipo = ?, texto = ?, activado = ?
+            SET texto = ?, activado = ?
             WHERE id = ?
         """;
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, entidad.getVigencia());
-            ps.setString(2, entidad.getTipo().name());
-            ps.setString(3, entidad.getTexto());
-            ps.setBoolean(4, entidad.getActivado());
-            ps.setInt(5, entidad.getId());
+            ps.setString(1, entidad.getTexto());
+            ps.setBoolean(2, entidad.getActivado());
+            ps.setInt(3, entidad.getId());
             ps.executeUpdate();
-            return entidad;
         } catch (SQLException e) {
             throw new AccesoDeDatosException(e.getMessage());
         }
+
+        if (entidad.getIdMedia() != null) {
+            String sqlMedia = switch (entidad.getTipo()) {
+                case TEXTO_IMAGEN -> "UPDATE AnuncioImagen SET imagen = ? WHERE anuncio = ?";
+                case TEXTO_VIDEO -> "UPDATE AnuncioVideo SET video = ? WHERE anuncio = ?";
+                case TEXTO -> null;
+            };
+
+            if (sqlMedia != null) {
+                try (PreparedStatement ps = conn.prepareStatement(sqlMedia)) {
+                    ps.setInt(1, entidad.getIdMedia());
+                    ps.setInt(2, entidad.getId());
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    throw new AccesoDeDatosException(e.getMessage());
+                }
+            }
+        }
+
+        return entidad;
     }
 
     @Override
