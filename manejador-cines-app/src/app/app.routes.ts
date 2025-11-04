@@ -12,6 +12,7 @@ import { AnunciosComponent } from './components/anuncios/anuncios-component/anun
 import { EditarAnuncio } from './components/anuncios/editar-anuncio/editar-anuncio';
 import { PreciosTipoComponent } from './components/anuncios/precios-tipo-component/precios-tipo-component';
 import { PreciosVigenciaComponent } from './components/anuncios/precios-vigencia-component/precios-vigencia-component';
+import { CrearCineComponent } from './components/cines/crear-cine-component/crear-cine-component';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -26,5 +27,6 @@ export const routes: Routes = [
     {path: 'ver-anuncios/:propios', component: AnunciosComponent},
     {path: 'editar-anuncio', component: EditarAnuncio},
     {path: 'precios-tipo-anuncio', component: PreciosTipoComponent},
-    {path: 'precios-vigencia-anuncio', component: PreciosVigenciaComponent}
+    {path: 'precios-vigencia-anuncio', component: PreciosVigenciaComponent},
+    {path: 'crear-cine', component: CrearCineComponent}
 ];

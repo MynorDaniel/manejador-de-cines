@@ -55,9 +55,9 @@ CREATE TABLE CostoGlobalDiarioCines (
 );
 
 CREATE TABLE CostoOcultacionAnuncios (
-    id INT AUTO_INCREMENT,
+    dias INT,
     monto DECIMAL(10, 2) DEFAULT 1.00,
-    PRIMARY KEY (id)
+    PRIMARY KEY (dias)
 );
 
 CREATE TABLE Sala (
@@ -331,9 +331,10 @@ VALUES
     (1);
 
 INSERT INTO CostoOcultacionAnuncios
-    (monto)
+    (dias, monto)
 VALUES
-    (1);
+    (7, 10),
+    (30, 35),;
 
 
 

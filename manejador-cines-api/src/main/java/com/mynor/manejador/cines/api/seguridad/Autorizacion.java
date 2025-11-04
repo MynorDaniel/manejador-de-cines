@@ -8,16 +8,20 @@ import com.mynor.manejador.cines.api.bd.BaseDeDatos;
 import com.mynor.manejador.cines.api.bd.Transaccion;
 import com.mynor.manejador.cines.api.bd.UsuarioBD;
 import com.mynor.manejador.cines.api.dtos.AnuncioEntradaDTO;
+import com.mynor.manejador.cines.api.dtos.BloqueoAnunciosCineDTO;
 import com.mynor.manejador.cines.api.dtos.CarteraEntradaDTO;
+import com.mynor.manejador.cines.api.dtos.CineDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEditadoDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEntradaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.excepciones.AutorizacionException;
 import com.mynor.manejador.cines.api.filtros.FiltrosUsuario;
 import com.mynor.manejador.cines.api.modelo.Anuncio;
+import com.mynor.manejador.cines.api.modelo.Cine;
 import com.mynor.manejador.cines.api.modelo.Rol;
 import com.mynor.manejador.cines.api.modelo.Usuario;
 import com.mynor.manejador.cines.api.servicios.AnuncioServicio;
+import com.mynor.manejador.cines.api.servicios.CineServicio;
 import java.util.Optional;
 
 /**
@@ -135,6 +139,43 @@ public class Autorizacion {
         boolean esAdminSistema = usuarioActual.getRol() == Rol.ADMINISTRADOR_SISTEMA;
         
         if(!esAdminSistema) throw new AutorizacionException("Sin autorización");
+    }
+
+    public void validarCrearCine(CineDTO cineDTO) throws AutorizacionException, AccesoDeDatosException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
+        
+        Rol rolUsuarioActual = usuarioActual.getRol();
+        
+        if(rolUsuarioActual != Rol.ADMINISTRADOR_CINES) throw new AutorizacionException("Sin autorización para crear cines");
+        
+        cineDTO.setIdUsuarioCreador(String.valueOf(usuarioActual.getId()));
+        
+    }
+
+    public void validarEditarCine(CineDTO cineDTO) throws AutorizacionException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        
+        if(!credencialesUsuarioActual.getId().equals(Integer.valueOf(cineDTO.getIdUsuarioCreador()))) throw new AutorizacionException("Sin autorización para editar este cine");
+    }
+
+    public void validarBloqueoAnuncios(BloqueoAnunciosCineDTO bloqueoDTO) throws AccesoDeDatosException, AutorizacionException {
+        validarCreadorDeCine(Integer.valueOf(bloqueoDTO.getIdCine()));
+    }
+
+    public Integer validarPagoCine(Integer idCine) throws AutorizacionException, AccesoDeDatosException {
+        return validarCreadorDeCine(idCine);
+    }
+    
+    public Integer validarCreadorDeCine(Integer idCine) throws AutorizacionException, AccesoDeDatosException{
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        
+        CineServicio servicio = new CineServicio();
+        Cine cine = servicio.leerCinePorId(idCine);
+        
+        if(!cine.getUsuarioCreador().getId().equals(credencialesUsuarioActual.getId())) throw new AutorizacionException("No puedes modificar este cine");
+        
+        return credencialesUsuarioActual.getId();
     }
 
     

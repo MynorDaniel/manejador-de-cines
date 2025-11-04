@@ -52,7 +52,7 @@ public class CarteraServicio {
         }
     }
 
-    private Cartera leerModeloPorId(Integer id) throws AccesoDeDatosException, UsuarioInvalidoException {
+    public Cartera leerModeloPorId(Integer id) throws AccesoDeDatosException, UsuarioInvalidoException {
         try(Transaccion t = new Transaccion()){
             FiltrosCartera filtros = new FiltrosCartera();
             filtros.setIdUsuario(Optional.ofNullable(id));

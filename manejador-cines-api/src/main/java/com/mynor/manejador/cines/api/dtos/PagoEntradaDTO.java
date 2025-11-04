@@ -14,9 +14,18 @@ import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
  */
 public class PagoEntradaDTO extends Validador {
     
+    private String id;
     private String idUsuario;
     private String fecha;
     private String monto;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getIdUsuario() {
         return idUsuario;
