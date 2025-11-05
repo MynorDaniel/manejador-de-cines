@@ -1,0 +1,50 @@
+<div class="container mt-4">
+  <h4 class="mb-4 text-center">Cines del usuario</h4>
+
+  @if (cargando) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2">Cargando cines...</p>
+    </div>
+  } @else if (!cines || cines.length === 0) {
+    <div class="alert alert-info text-center">
+      No se encontraron cines asociados a este usuario.
+    </div>
+  } @else {
+    <table class="table table-striped table-bordered shadow-sm">
+      <thead class="table-primary text-center">
+        <tr>
+          <th>Nombre</th>
+          <th>Ubicación</th>
+          <th>Activado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="align-middle text-center">
+        @for (cine of cines; track cine.id) {
+          <tr>
+            <td>{{ cine.nombre }}</td>
+            <td>{{ cine.ubicacion }}</td>
+            <td>
+              <span
+                class="badge"
+                [class.bg-success]="cine.activado === 'true'"
+                [class.bg-danger]="cine.activado !== 'true'"
+              >
+                {{ cine.activado === 'true' ? 'Sí' : 'No' }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-outline-primary"
+                (click)="verCine(cine)"
+              >
+                <i class="bi bi-eye"></i> Ver
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

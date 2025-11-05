@@ -1,0 +1,74 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="container mt-5">
+  <h4 class="mb-4 text-center text-primary">Editar Cine</h4>
+
+  @if (cargando) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando datos del cine...</p>
+    </div>
+  } @else if (!cine) {
+    <div class="alert alert-danger text-center">
+      No se encontró el cine solicitado.
+    </div>
+  } @else {
+    <form
+      [formGroup]="cineForm"
+      (ngSubmit)="guardarCambios()"
+      class="p-4 border rounded shadow-sm bg-light"
+    >
+      <div class="mb-3">
+        <label for="nombre" class="form-label">Nombre</label>
+        <input
+          id="nombre"
+          type="text"
+          class="form-control"
+          formControlName="nombre"
+        />
+        @if (cineForm.get('nombre')?.invalid && cineForm.get('nombre')?.touched) {
+          <small class="text-danger">El nombre es obligatorio.</small>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="ubicacion" class="form-label">Ubicación</label>
+        <input
+          id="ubicacion"
+          type="text"
+          class="form-control"
+          formControlName="ubicacion"
+        />
+        @if (cineForm.get('ubicacion')?.invalid && cineForm.get('ubicacion')?.touched) {
+          <small class="text-danger">La ubicación es obligatoria.</small>
+        }
+      </div>
+
+      <div class="mb-3">
+        <label for="activado" class="form-label">Estado</label>
+        <select id="activado" class="form-select" formControlName="activado">
+          <option value="true">Activo</option>
+          <option value="false">Inactivo</option>
+        </select>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4">
+        <button type="submit" class="btn btn-primary" [disabled]="cineForm.invalid">
+          <i class="bi bi-save"></i> Guardar Cambios
+        </button>
+      </div>
+    </form>
+  }
+</div>

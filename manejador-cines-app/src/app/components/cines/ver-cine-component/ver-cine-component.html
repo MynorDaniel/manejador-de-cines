@@ -1,0 +1,79 @@
+<div class="container mt-5">
+  @if (cargando) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando información del cine...</p>
+    </div>
+  } @else if (!cine) {
+    <div class="alert alert-danger text-center my-5">
+      No se encontró información del cine.
+    </div>
+  } @else {
+    <div class="card shadow-lg mb-5">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="card-title text-primary mb-3">{{ cine.nombre }}</h3>
+            <p class="card-text mb-2">
+              <strong>Ubicación:</strong> {{ cine.ubicacion }}
+            </p>
+            <p class="card-text mb-2">
+              <strong>Fecha de creación:</strong> {{ cine.fechaCreacion }}
+            </p>
+            <p class="card-text">
+              <strong>Activado:</strong>
+              <span
+                class="badge"
+                [class.bg-success]="cine.activado === 'true'"
+                [class.bg-danger]="cine.activado !== 'true'"
+              >
+                {{ cine.activado === 'true' ? 'Sí' : 'No' }}
+              </span>
+            </p>
+          </div>
+
+          @if (idCreador === usuarioActual.id) {
+            <button
+              class="btn btn-outline-warning btn-sm"
+              (click)="editarCine(cine)"
+            >
+              <i class="bi bi-pencil"></i> Editar
+            </button>
+
+            @if(!cine.bloqueoActivo){
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="bloquearAnuncios(cine)"
+              >
+                <i class="bi bi-ban"></i> Bloquear anuncios
+              </button>
+            }
+
+            <button class="btn btn-success" (click)="abrirModalPago()">
+              Pagar Costo Diario
+            </button>
+          }
+
+          @if (usuarioActual.rol === 'ADMINISTRADOR_SISTEMA') {
+            <button class="btn btn-info" (click)="cambiarCostoDiario()">
+              Cambiar Costo Diario
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-5 pb-5">
+      <h5 class="text-muted text-center mt-4">Proyecciones</h5>
+    </div>
+  }
+</div>
+
+@if (mostrarModalPago && cine && cine.id) {
+  <app-pagar-costo-component 
+    [idCine]="+cine.id" 
+    (cerrar)="cerrarModalPago($event)">
+  </app-pagar-costo-component>
+}

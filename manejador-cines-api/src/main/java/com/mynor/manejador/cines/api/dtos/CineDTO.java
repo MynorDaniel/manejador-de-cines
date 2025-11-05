@@ -19,6 +19,16 @@ public class CineDTO extends Validador {
     private String ubicacion;
     private String activado;
     private String fechaCreacion;
+    private Boolean bloqueoActivo;
+    private String fechaUltimoCambioDeCosto;
+
+    public String getFechaUltimoCambioDeCosto() {
+        return fechaUltimoCambioDeCosto;
+    }
+
+    public void setFechaUltimoCambioDeCosto(String fechaUltimoCambioDeCosto) {
+        this.fechaUltimoCambioDeCosto = fechaUltimoCambioDeCosto;
+    }
     
     @Override
     public void validarEntrada() throws EntidadInvalidaException {
@@ -31,6 +41,14 @@ public class CineDTO extends Validador {
         if(!esBoolean(activado)) throw new CineInvalidoException("Estado del cine inválido");
         if(!esEnteroPositivo(idUsuarioCreador)) throw new CineInvalidoException("Id del usuario inválido");
         if(!esEnteroPositivo(id)) throw new CineInvalidoException("Id del cine inválido");
+    }
+
+    public Boolean getBloqueoActivo() {
+        return bloqueoActivo;
+    }
+
+    public void setBloqueoActivo(Boolean bloqueoActivo) {
+        this.bloqueoActivo = bloqueoActivo;
     }
 
     public String getFechaCreacion() {

@@ -13,6 +13,13 @@ import { EditarAnuncio } from './components/anuncios/editar-anuncio/editar-anunc
 import { PreciosTipoComponent } from './components/anuncios/precios-tipo-component/precios-tipo-component';
 import { PreciosVigenciaComponent } from './components/anuncios/precios-vigencia-component/precios-vigencia-component';
 import { CrearCineComponent } from './components/cines/crear-cine-component/crear-cine-component';
+import { VerCinesComponent } from './components/cines/ver-cines-component/ver-cines-component';
+import { VerCineComponent } from './components/cines/ver-cine-component/ver-cine-component';
+import { MisCinesComponent } from './components/cines/mis-cines-component/mis-cines-component';
+import { EditarCineComponent } from './components/cines/editar-cine-component/editar-cine-component';
+import { BloqueoAnunciosComponent } from './components/cines/bloqueo-anuncios-component/bloqueo-anuncios-component';
+import { CostoDiarioComponent } from './components/cines/costo-diario-component/costo-diario-component';
+import { CostoGlobalComponent } from './components/cines/costo-global-component/costo-global-component';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -28,5 +35,12 @@ export const routes: Routes = [
     {path: 'editar-anuncio', component: EditarAnuncio},
     {path: 'precios-tipo-anuncio', component: PreciosTipoComponent},
     {path: 'precios-vigencia-anuncio', component: PreciosVigenciaComponent},
-    {path: 'crear-cine', component: CrearCineComponent}
+    {path: 'crear-cine', component: CrearCineComponent},
+    {path: 'ver-cines', component: VerCinesComponent},
+    {path: 'ver-cine/:id', component: VerCineComponent},
+    {path: 'mis-cines', component: MisCinesComponent},
+    {path: 'editar-cine/:id', component: EditarCineComponent},
+    {path: 'bloqueo-anuncios/:id', component: BloqueoAnunciosComponent},
+    {path: 'costo-diario/:id', component: CostoDiarioComponent},
+    {path: 'costo-global', component: CostoGlobalComponent}
 ];

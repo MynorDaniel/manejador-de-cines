@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TipoAnuncio } from '../models/tipo-anuncio';
 import { VigenciaAnuncio } from '../models/vigencia-anuncio';
@@ -12,6 +12,12 @@ export class AnuncioService {
   http = inject(HttpClient);
   
   URL = 'http://localhost:8080/manejador-cines-api/api/v1/anuncios';
+
+  mostrarAnuncios = signal(true);
+
+  setMostrarAnuncios(valor: boolean) {
+    this.mostrarAnuncios.set(valor);
+  }
   
   public verPreciosDeTipos() : Observable<TipoAnuncio[]> {
     return this.http.get<TipoAnuncio[]>(this.URL + '/precios/tipos');

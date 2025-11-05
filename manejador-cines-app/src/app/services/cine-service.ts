@@ -39,10 +39,6 @@ export class CineService {
     return this.http.post<void>(this.URL + '/bloqueo-anuncios', bloqueo);
   }
 
-  public verBloqueoAnuncios(idCine: number) : Observable<BloqueoAnunciosCine> {
-    return this.http.get<BloqueoAnunciosCine>(this.URL + '/bloqueo-anuncios/' + idCine);
-  }
-
   public crearCostoDiario(costoDiario:CostoDiarioCine) : Observable<void> {
     return this.http.post<void>(this.URL + '/costo-diario', costoDiario);
   }

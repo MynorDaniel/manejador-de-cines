@@ -1,0 +1,57 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="container mt-5">
+  <div class="card shadow-lg spinner-border-sm">
+    <div class="card-body p-4">
+      <h4 class="card-title text-primary mb-3 text-center">
+        Confirmar bloqueo de anuncios
+      </h4>
+
+      <p class="text-muted text-center">
+        Este bloqueo detendrá los anuncios en el cine durante
+        <strong>30 días</strong>.
+      </p>
+
+      <hr />
+
+      <div class="mb-3">
+        <p><strong>ID del cine:</strong> {{ bloqueo.idCine }}</p>
+        <p><strong>Usuario:</strong> {{ bloqueo.pago.idUsuario }}</p>
+        <p><strong>Fecha del pago:</strong> {{ bloqueo.pago.fecha }}</p>
+        <p><strong>Monto:</strong> Q{{ bloqueo.pago.monto }}</p>
+        <p><strong>Días de bloqueo:</strong> {{ bloqueo.dias }}</p>
+      </div>
+
+      <div class="text-center mt-4">
+        <button
+          class="btn btn-danger px-4"
+          (click)="confirmarBloqueo()"
+          [disabled]="procesando"
+        >
+          @if (procesando) {
+            <span class="spinner-border spinner-border-sm"></span>
+          } @else {
+            <i class="bi bi-shield-exclamation"></i> Confirmar bloqueo
+          }
+        </button>
+
+        <button
+          class="btn btn-outline-secondary ms-2 px-4"
+          (click)="router.navigate(['/cines', idCine])"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

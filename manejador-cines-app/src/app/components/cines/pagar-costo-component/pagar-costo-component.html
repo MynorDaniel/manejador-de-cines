@@ -1,0 +1,57 @@
+<div class="modal-backdrop" (click)="cancelar()"></div>
+<div class="modal-dialog" (click)="$event.stopPropagation()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Pagar Costo Diario</h4>
+      <button type="button" class="btn-close" (click)="cancelar()"></button>
+    </div>
+    <div class="modal-body">
+      @if (cargandoDeuda) {
+        <div class="text-center my-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2">Consultando deuda...</p>
+        </div>
+      } @else if (errorDeuda) {
+        <div class="alert alert-danger">
+          {{ errorDeuda }}
+        </div>
+      } @else if (deuda) {
+        <div class="alert alert-info">
+          <h5><strong>Deuda Total:</strong></h5>
+          <h3 class="mb-0">${{ deuda.monto | number:'1.2-2' }}</h3>
+      
+        </div>
+        <p class="text-muted">
+          Al confirmar el pago, se descontará este monto de tu cartera.
+        </p>
+      }
+      
+      @if (errorPago) {
+        <div class="alert alert-danger mt-3">
+          {{ errorPago }}
+        </div>
+      }
+    </div>
+    <div class="modal-footer">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="cancelar()"
+        [disabled]="procesandoPago">
+        Cancelar
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-primary" 
+        (click)="confirmarPago()"
+        [disabled]="procesandoPago || cargandoDeuda || !deuda">
+        @if (procesandoPago) {
+          <span class="spinner-border spinner-border-sm me-2"></span>
+        }
+        Confirmar Pago
+      </button>
+    </div>
+  </div>
+</div>

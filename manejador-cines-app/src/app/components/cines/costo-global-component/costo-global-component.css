@@ -1,0 +1,18 @@
+.card {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+input[type="number"] {
+  font-size: 1.2rem;
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+  color: #0c5460;
+}
+
+.alert-info h5 {
+  font-size: 1.3rem;
+}

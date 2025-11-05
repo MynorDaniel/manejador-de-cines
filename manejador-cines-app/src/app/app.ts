@@ -19,6 +19,8 @@ export class App {
 
   anuncioService = inject(AnuncioService);
 
+  mostrarAnuncios = this.anuncioService.mostrarAnuncios;
+
   anunciosIzquierda: AnuncioI[] = [];
   anunciosDerecha: AnuncioI[] = [];
 

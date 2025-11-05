@@ -1,0 +1,78 @@
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-success text-white">
+      <h3 class="mb-0">Cambiar Costo Global Diario</h3>
+    </div>
+    <div class="card-body p-4">
+      @if (cargandoCosto) {
+        <div class="text-center my-3">
+          <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+          <p class="mt-2">Cargando costo actual...</p>
+        </div>
+      } @else if (costoActual) {
+        <div class="alert alert-info mb-4">
+          <h5 class="mb-0">
+            <strong>Costo Global Actual:</strong> ${{ costoActual | number:'1.2-2' }}
+          </h5>
+          <small class="text-muted">Este es el costo base que se aplica a todos los cines</small>
+        </div>
+      }
+
+      @if (mensajeError) {
+        <div class="alert alert-danger">
+          {{ mensajeError }}
+        </div>
+      }
+
+      <form [formGroup]="costoGlobalForm" (ngSubmit)="guardarCosto()">
+        <div class="mb-4">
+          <label for="monto" class="form-label fw-bold">Nuevo Costo Global ($)</label>
+          <input 
+            type="number" 
+            class="form-control form-control-lg" 
+            id="monto" 
+            formControlName="monto"
+            placeholder="Ingrese el nuevo monto"
+            min="0.01"
+            step="0.01"
+            [class.is-invalid]="monto?.invalid && monto?.touched"
+            [disabled]="cargando">
+          @if (monto?.invalid && monto?.touched) {
+            <div class="invalid-feedback">
+              @if (monto?.errors?.['required']) {
+                El monto es obligatorio
+              }
+              @if (monto?.errors?.['min']) {
+                El monto debe ser mayor a 0
+              }
+            </div>
+          }
+          <small class="form-text text-muted">
+            Este costo se aplicará globalmente a todos los cines diariamente.
+          </small>
+        </div>
+
+        <div class="d-flex gap-2 justify-content-end">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="cancelar()"
+            [disabled]="cargando">
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-success" 
+            [disabled]="cargando || costoGlobalForm.invalid">
+            @if (cargando) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            Actualizar Costo Global
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

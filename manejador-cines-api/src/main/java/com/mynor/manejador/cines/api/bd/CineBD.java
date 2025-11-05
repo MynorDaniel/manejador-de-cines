@@ -127,7 +127,7 @@ public class CineBD implements BaseDeDatos<Cine, FiltrosCine> {
                 sql.append(" AND c.activado = ?");
             }
             if (filtros.getIdUsuario().isPresent()) {
-                sql.append(" AND usuario_id = ?");
+                sql.append(" AND u.id = ?");
             }
         }
         

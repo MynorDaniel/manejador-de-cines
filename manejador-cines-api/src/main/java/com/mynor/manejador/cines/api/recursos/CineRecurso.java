@@ -169,28 +169,6 @@ public class CineRecurso {
         }
     }
     
-    @GET
-    @Path("bloqueo-anuncios/{idCine}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response verBloqueoDeAnunciosEnCine(@HeaderParam("Authorization") String authHeader, @PathParam("idCine")  String idCine) {
-        
-        CineServicio servicio = new CineServicio();
-        
-        try {
-            
-            Autorizacion autorizacion = new Autorizacion(authHeader);
-            autorizacion.validarSesion();
-            
-            BloqueoAnunciosCineDTO ultimoBloqueo = servicio.verUltimoBloqueoDeAnuncios(Integer.valueOf(idCine));
-            
-            return Response.ok(ultimoBloqueo).build();
-        } catch (AccesoDeDatosException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-        } catch (AutorizacionException ex) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
-        }
-    }
-    
     @POST
     @Path("costo-diario")
     @Consumes(MediaType.APPLICATION_JSON)

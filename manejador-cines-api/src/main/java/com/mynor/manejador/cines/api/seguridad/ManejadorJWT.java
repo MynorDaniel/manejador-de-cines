@@ -31,7 +31,7 @@ public class ManejadorJWT {
             "correo", usuario.getCorreo()
         );
 
-        long tiempoExpiracion = 2 * 1000 * 60 * 60;
+        long tiempoExpiracion = 5 * 1000 * 60 * 60;
         Date ahora = new Date();
         Date expiracion = new Date(ahora.getTime() + tiempoExpiracion);
 

@@ -5,4 +5,6 @@ export interface Cine {
   ubicacion: string;
   activado?: string;
   fechaCreacion: string;
+  bloqueoActivo?: boolean;
+  fechaUltimoCambioDeCosto: string;
 }

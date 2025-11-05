@@ -1,0 +1,89 @@
+<div class="container mt-5">
+  <div class="card shadow-lg">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Crear Costo Diario</h3>
+    </div>
+    <div class="card-body p-4">
+      @if (nombreCine) {
+        <div class="alert alert-info">
+          <strong>Cine:</strong> {{ nombreCine }}
+        </div>
+      }
+
+      @if (mensajeError) {
+        <div class="alert alert-danger">
+          {{ mensajeError }}
+        </div>
+      }
+
+      <form [formGroup]="costoDiarioForm" (ngSubmit)="guardarCosto()">
+        <div class="mb-3">
+          <label for="fechaCambio" class="form-label fw-bold">Fecha de Cambio</label>
+          <input 
+            type="date" 
+            class="form-control" 
+            id="fechaCambio" 
+            formControlName="fechaCambio"
+            [class.is-invalid]="fechaCambio?.invalid && fechaCambio?.touched"
+            [disabled]="cargando">
+          @if (fechaCambio?.invalid && fechaCambio?.touched) {
+            <div class="invalid-feedback">
+              @if (fechaCambio?.errors?.['required']) {
+                La fecha de cambio es obligatoria
+              }
+            </div>
+          }
+          <small class="form-text text-muted">
+            Fecha a partir de la cual aplica este costo.
+          </small>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-bold">Fecha de cambio anterior: {{ fechaCambioAnterior | date:'shortDate' }}</label>
+        </div>
+
+        <div class="mb-4">
+          <label for="monto" class="form-label fw-bold">Monto por Día ($)</label>
+          <input 
+            type="number" 
+            class="form-control form-control-lg" 
+            id="monto" 
+            formControlName="monto"
+            min="0.01"
+            step="0.01"
+            [class.is-invalid]="monto?.invalid && monto?.touched"
+            [disabled]="cargando">
+          @if (monto?.invalid && monto?.touched) {
+            <div class="invalid-feedback">
+              @if (monto?.errors?.['required']) {
+                El monto es obligatorio
+              }
+              @if (monto?.errors?.['min']) {
+                El monto debe ser mayor a 0
+              }
+            </div>
+          }
+        </div>
+
+        <div class="d-flex gap-2 justify-content-end">
+          <button 
+            type="button" 
+            class="btn btn-secondary" 
+            (click)="cancelar()"
+            [disabled]="cargando">
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="cargando || costoDiarioForm.invalid">
+            @if (cargando) {
+              <span class="spinner-border spinner-border-sm me-2"></span>
+            }
+            Crear Costo Diario
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

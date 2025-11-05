@@ -1,21 +1,21 @@
 <app-header/>
-
-<div class="container-fluid">
+<div class="container-fluid" style="flex: 1;">
   <div class="row">
+    @if (mostrarAnuncios(); as mostrar) {
       <aside class="col-lg-2 d-none d-lg-block p-3 bg-light">
-        <app-anuncios-widget [anuncios]="anunciosIzquierda" />
+        <app-anuncios-widget [anuncios]="anunciosIzquierda"></app-anuncios-widget>
       </aside>
-    
+    } 
 
-    <main class="col-lg-8">
-      <router-outlet />
+    <main [class]="mostrarAnuncios() ? 'col-lg-8' : 'col-lg-12'">
+      <router-outlet></router-outlet>
     </main>
 
-    <aside class="col-lg-2 d-none d-lg-block p-3 bg-light">
-    <app-anuncios-widget [anuncios]="anunciosDerecha" />
-    </aside>
-    
+    @if (mostrarAnuncios(); as mostrar) {
+      <aside class="col-lg-2 d-none d-lg-block p-3 bg-light">
+        <app-anuncios-widget [anuncios]="anunciosDerecha"></app-anuncios-widget>
+      </aside>
+    }
   </div>
 </div>
-
 <app-footer />

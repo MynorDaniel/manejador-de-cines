@@ -17,13 +17,11 @@ import com.mynor.manejador.cines.api.dtos.BloqueoAnunciosCineDTO;
 import com.mynor.manejador.cines.api.dtos.CineDTO;
 import com.mynor.manejador.cines.api.dtos.CostoDiarioCineDTO;
 import com.mynor.manejador.cines.api.dtos.CostoGlobalCinesDTO;
-import com.mynor.manejador.cines.api.dtos.PagoEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.PagoSalidaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.excepciones.CineInvalidoException;
 import com.mynor.manejador.cines.api.excepciones.EntidadInvalidaException;
 import com.mynor.manejador.cines.api.excepciones.PagoInvalidoException;
-import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
 import com.mynor.manejador.cines.api.filtros.FiltrosBloqueoAnunciosCine;
 import com.mynor.manejador.cines.api.filtros.FiltrosCartera;
 import com.mynor.manejador.cines.api.filtros.FiltrosCine;
@@ -116,15 +114,23 @@ public class CineServicio {
 
     public CineDTO[] verCines() throws AccesoDeDatosException {
         Cine[] cines = leerTodosLosCines();
-        return Arrays.stream(cines).map(cine -> {
+        CineDTO[] cinesDTO = Arrays.stream(cines).map(cine -> {
             CineDTO cineDTO = new CineDTO();
             cineDTO.setActivado(String.valueOf(cine.getActivado()));
             cineDTO.setId(String.valueOf(cine.getId()));
             cineDTO.setIdUsuarioCreador(String.valueOf(cine.getUsuarioCreador().getId()));
             cineDTO.setNombre(cine.getNombre());
             cineDTO.setUbicacion(cine.getUbicacion());
+            cineDTO.setBloqueoActivo(cineTieneBloqueoActivo(cine.getId()));
+            try {
+                cineDTO.setFechaUltimoCambioDeCosto(verUltimoCambioDeCosto(cine.getId()).getFechaCambio().toString());
+            } catch (AccesoDeDatosException ex) {
+                System.getLogger(CineServicio.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
             return cineDTO;
         }).toArray(CineDTO[]::new);
+        
+        return cinesDTO;
     }
     
     private Cine[] leerTodosLosCines() throws AccesoDeDatosException{
@@ -145,6 +151,9 @@ public class CineServicio {
         cineDTO.setIdUsuarioCreador(String.valueOf(cine.getUsuarioCreador().getId()));
         cineDTO.setNombre(cine.getNombre());
         cineDTO.setUbicacion(cine.getUbicacion());
+        cineDTO.setBloqueoActivo(cineTieneBloqueoActivo(cine.getId()));
+        cineDTO.setFechaUltimoCambioDeCosto(verUltimoCambioDeCosto(cine.getId()).getFechaCambio().toString());
+       
         return cineDTO;
         
     }
@@ -169,6 +178,12 @@ public class CineServicio {
             cineDTO.setIdUsuarioCreador(String.valueOf(cine.getUsuarioCreador().getId()));
             cineDTO.setNombre(cine.getNombre());
             cineDTO.setUbicacion(cine.getUbicacion());
+            cineDTO.setBloqueoActivo(cineTieneBloqueoActivo(cine.getId()));
+            try {
+                cineDTO.setFechaUltimoCambioDeCosto(verUltimoCambioDeCosto(cine.getId()).getFechaCambio().toString());
+            } catch (AccesoDeDatosException ex) {
+                System.getLogger(CineServicio.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
             return cineDTO;
         }).toArray(CineDTO[]::new);
     }
@@ -203,7 +218,10 @@ public class CineServicio {
         Cine cine = new Cine();
         cine.setId(Integer.valueOf(bloqueoDTO.getIdCine()));
         
+        if(cineTieneBloqueoActivo(cine.getId())) throw new CineInvalidoException("Ya tienes bloqueados los anuncios");
+        
         bloqueo.setCine(cine);
+        bloqueo.setDias(30); // cambiar
         
         Usuario usuario = new Usuario();
         usuario.setId(Integer.valueOf(bloqueoDTO.getPago().getIdUsuario()));
@@ -302,6 +320,8 @@ public class CineServicio {
         Double montoPagado = calcularMontoPagado(idCine);
         Double deudaReal = deudaTotal - montoPagado;
         
+        if(deudaReal == 0) throw new PagoInvalidoException("No tienes pagos pendientes");
+        
         Cine cine = new Cine();
         cine.setId(idCine);
         
@@ -316,6 +336,8 @@ public class CineServicio {
         CarteraServicio carteraServicio = new CarteraServicio();
         Cartera cartera = carteraServicio.leerModeloPorId(usuario.getId());
         cartera.setSaldo(cartera.getSaldo() - deudaReal);
+        
+        if(cartera.getSaldo() < pago.getMonto()) throw new PagoInvalidoException("Saldo insuficiente");
         
         PagoCine pagoCine = new PagoCine();
         pagoCine.setCine(cine);
@@ -335,26 +357,22 @@ public class CineServicio {
 
     private Double calcularDeudaTotal(Integer idCine) throws AccesoDeDatosException {
         CostoDiarioCine[] costos = leerCostosPorCine(idCine);
-        
         Double deuda = 0.0;
-        
+
         for (int i = 0; i < costos.length; i++) {
             CostoDiarioCine costo = costos[i];
-            CostoDiarioCine costoSiguiente;
-            
             LocalDate fechaCambio = costo.getFechaCambio();
             LocalDate fechaCambioSiguiente = LocalDate.now();
-            
-            if(costos[i+1] != null){
-                costoSiguiente = costos[i+1];
-                fechaCambioSiguiente = costoSiguiente.getFechaCambio();
+
+            if(i + 1 < costos.length && costos[i + 1] != null){
+                fechaCambioSiguiente = costos[i + 1].getFechaCambio();
             }
-            
-            for (LocalDate fecha = fechaCambio; !fecha.isAfter(fechaCambioSiguiente); fecha = fecha.plusDays(1)) {
+
+            for (LocalDate fecha = fechaCambio; fecha.isBefore(fechaCambioSiguiente); fecha = fecha.plusDays(1)) {
                 deuda += costo.getMonto();
             }
         }
-        
+
         return deuda;
     }
 
@@ -386,31 +404,31 @@ public class CineServicio {
         }
     }
 
-    public BloqueoAnunciosCineDTO verUltimoBloqueoDeAnuncios(Integer idCine) throws AccesoDeDatosException {
+    public Optional<BloqueoAnunciosCine> verUltimoBloqueoDeAnuncios(Integer idCine) throws AccesoDeDatosException {
         BloqueoAnunciosCine[] bloqueos = leerBloqueosPorCine(idCine);
 
         return Arrays.stream(bloqueos)
-            .max(Comparator.comparing(bloqueo -> bloqueo.getPago().getId()))
-            .map(bloqueo -> {
-                BloqueoAnunciosCineDTO dto = new BloqueoAnunciosCineDTO();
-                dto.setIdCine(bloqueo.getCine().getId().toString());
-                
-                PagoEntradaDTO pago = new PagoEntradaDTO();
-                pago.setId(bloqueo.getPago().getId().toString());
-                
-                dto.setPago(pago);
-                dto.setDias(bloqueo.getDias().toString());
-                return dto;
-            })
-            .orElseThrow(() -> new AccesoDeDatosException("No hay bloqueos"));
+            .max(Comparator.comparing(bloqueo -> bloqueo.getPago().getId()));
     }
 
+    public CostoDiarioCine verUltimoCambioDeCosto(Integer idCine) throws AccesoDeDatosException {
+        CostoDiarioCine[] costos = leerCostosPorCine(idCine);
+
+        Optional<CostoDiarioCine> costo = Arrays.stream(costos)
+            .max(Comparator.comparing(c -> c.getId()));
+        
+        if(!costo.isPresent()) throw new AccesoDeDatosException("No hay costos relacionados a este cine");
+        
+        return costo.get();
+        
+    }
+    
     private BloqueoAnunciosCine[] leerBloqueosPorCine(Integer idCine) throws AccesoDeDatosException {
         FiltrosBloqueoAnunciosCine filtros = new FiltrosBloqueoAnunciosCine();
         filtros.setIdCine(Optional.ofNullable(idCine));
         
         try(Transaccion t = new Transaccion()){
-            BloqueoAnunciosCine[] bloqueos = BLOQUEO_BD.leer(filtros, t.obtenerConexion());
+            BloqueoAnunciosCine[] bloqueos = BLOQUEO_BD.leerCompleto(filtros, t.obtenerConexion());
             t.commit();
             return bloqueos;
         }
@@ -433,6 +451,27 @@ public class CineServicio {
         pago.setMonto(deudaReal.toString());
         
         return pago;
+    }
+
+    private boolean cineTieneBloqueoActivo(Integer id) {
+        try {
+            Optional<BloqueoAnunciosCine> ultimoBloqueo = verUltimoBloqueoDeAnuncios(id);
+            
+            if(!ultimoBloqueo.isPresent()) return false;
+            
+            BloqueoAnunciosCine bloqueo = ultimoBloqueo.get();
+            
+            Integer dias = bloqueo.getDias();
+            LocalDate fechaPago = bloqueo.getPago().getFecha();
+            LocalDate hoy = LocalDate.now();
+            
+            LocalDate fechaVencimiento = fechaPago.plusDays(dias);
+            
+            return !hoy.isAfter(fechaVencimiento);
+        } catch (AccesoDeDatosException ex) {
+            return false;
+        }
+        
     }
     
 }
