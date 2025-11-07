@@ -19,9 +19,6 @@
             <p class="card-text mb-2">
               <strong>Ubicación:</strong> {{ cine.ubicacion }}
             </p>
-            <p class="card-text mb-2">
-              <strong>Fecha de creación:</strong> {{ cine.fechaCreacion }}
-            </p>
             <p class="card-text">
               <strong>Activado:</strong>
               <span
@@ -34,33 +31,67 @@
             </p>
           </div>
 
-          @if (idCreador === usuarioActual.id) {
-            <button
-              class="btn btn-outline-warning btn-sm"
-              (click)="editarCine(cine)"
+          <div class="d-flex gap-2 align-items-start">
+            <!-- Botón Ver Salas visible para todos -->
+            <button 
+              class="btn btn-outline-primary" 
+              type="button"
+              (click)="verSalas(cine)"
             >
-              <i class="bi bi-pencil"></i> Editar
+              <i class="bi bi-door-open"></i> Ver Salas
             </button>
 
-            @if(!cine.bloqueoActivo){
-              <button
-                class="btn btn-outline-danger btn-sm"
-                (click)="bloquearAnuncios(cine)"
-              >
-                <i class="bi bi-ban"></i> Bloquear anuncios
-              </button>
+            <!-- Dropdown de opciones solo para creador o admin sistema -->
+            @if (idCreador === usuarioActual.id || usuarioActual.rol === 'ADMINISTRADOR_SISTEMA') {
+              <div class="dropdown">
+                <button 
+                  class="btn btn-outline-secondary" 
+                  type="button" 
+                  id="dropdownMenuButton" 
+                  data-bs-toggle="dropdown" 
+                  aria-expanded="false"
+                >
+                  <i class="bi bi-three-dots-vertical"></i>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                  @if (idCreador === usuarioActual.id) {
+                    <li>
+                      <a class="dropdown-item" (click)="crearSala(cine)">
+                        <i class="bi bi-plus-circle"></i> Crear Sala
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" (click)="editarCine(cine)">
+                        <i class="bi bi-pencil"></i> Editar
+                      </a>
+                    </li>
+                    @if(!cine.bloqueoActivo){
+                      <li>
+                        <a class="dropdown-item" (click)="bloquearAnuncios(cine)">
+                          <i class="bi bi-ban"></i> Bloquear anuncios
+                        </a>
+                      </li>
+                    }
+                    <li>
+                      <a class="dropdown-item" (click)="abrirModalPago()">
+                        <i class="bi bi-credit-card"></i> Pagar Costo Diario
+                      </a>
+                    </li>
+                  }
+                  @if (usuarioActual.rol === 'ADMINISTRADOR_SISTEMA') {
+                    @if (idCreador === usuarioActual.id) {
+                      <li><hr class="dropdown-divider"></li>
+                    }
+                    <li>
+                      <a class="dropdown-item" (click)="cambiarCostoDiario()">
+                        <i class="bi bi-cash-stack"></i> Cambiar Costo Diario
+                      </a>
+                    </li>
+                  }
+                </ul>
+              </div>
             }
-
-            <button class="btn btn-success" (click)="abrirModalPago()">
-              Pagar Costo Diario
-            </button>
-          }
-
-          @if (usuarioActual.rol === 'ADMINISTRADOR_SISTEMA') {
-            <button class="btn btn-info" (click)="cambiarCostoDiario()">
-              Cambiar Costo Diario
-            </button>
-          }
+          </div>
         </div>
       </div>
     </div>

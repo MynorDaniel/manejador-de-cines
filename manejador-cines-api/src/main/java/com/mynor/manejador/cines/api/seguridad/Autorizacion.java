@@ -9,8 +9,10 @@ import com.mynor.manejador.cines.api.bd.Transaccion;
 import com.mynor.manejador.cines.api.bd.UsuarioBD;
 import com.mynor.manejador.cines.api.dtos.AnuncioEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.BloqueoAnunciosCineDTO;
+import com.mynor.manejador.cines.api.dtos.CalificacionSalaDTO;
 import com.mynor.manejador.cines.api.dtos.CarteraEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.CineDTO;
+import com.mynor.manejador.cines.api.dtos.SalaDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEditadoDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEntradaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
@@ -120,7 +122,7 @@ public class Autorizacion {
         if(!coincideId || !esAnunciante) throw new AutorizacionException("Sin autorización para crear este anuncio");
     }
 
-    public void valdidarEditarAnuncio(AnuncioEntradaDTO anuncioDTO) throws AutorizacionException, AccesoDeDatosException {
+    public void validarEditarAnuncio(AnuncioEntradaDTO anuncioDTO) throws AutorizacionException, AccesoDeDatosException {
         credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
         Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
         
@@ -176,6 +178,30 @@ public class Autorizacion {
         if(!cine.getUsuarioCreador().getId().equals(credencialesUsuarioActual.getId())) throw new AutorizacionException("No puedes modificar este cine");
         
         return credencialesUsuarioActual.getId();
+    }
+
+    public void validarAdminCines() throws AutorizacionException, AccesoDeDatosException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
+        
+        boolean esAdminCines = usuarioActual.getRol() == Rol.ADMINISTRADOR_CINES;
+        
+        if(!esAdminCines) throw new AutorizacionException("Sin autorización");
+    }
+
+    public void validarEdicionDeSala(SalaDTO salaDTO) throws AutorizacionException, AccesoDeDatosException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        
+        CineServicio cineServicio = new CineServicio();
+        Cine cine = cineServicio.leerCinePorId(Integer.valueOf(salaDTO.getIdCine()));
+        
+        if(!cine.getUsuarioCreador().getId().equals(credencialesUsuarioActual.getId())) throw new AutorizacionException("No puedes modificar este cine");
+        
+    }
+
+    public void validarEliminarCalificacion(CalificacionSalaDTO calificacionDTO) throws AutorizacionException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        if(!credencialesUsuarioActual.getId().equals(Integer.valueOf(calificacionDTO.getIdUsuario()))) throw new AutorizacionException("No puedes modificar esta calificacion");
     }
 
     

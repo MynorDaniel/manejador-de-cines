@@ -1,0 +1,73 @@
+@if(errorMsg != null){
+  <div class="alert alert-danger text-center" role="alert">
+    {{errorMsg}}
+  </div>
+}
+
+@if(infoMsg != null){
+  <div class="alert alert-success text-center" role="alert">
+    {{infoMsg}}
+  </div>
+}
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Crear Nueva Sala</h3>
+        </div>
+        <div class="card-body">
+          
+          <form [formGroup]="salaForm" (ngSubmit)="crearSala()">
+            
+            <div class="mb-3">
+              <label for="filasAsientos" class="form-label">Número de Filas</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                id="filasAsientos"
+                formControlName="filasAsientos"
+                placeholder="Ingrese el número de filas"
+                min="1"
+              >
+              @if (salaForm.get('filasAsientos')?.invalid && salaForm.get('filasAsientos')?.touched) {
+                <div class="text-danger mt-1">
+                  <small>El número de filas es requerido y debe ser mayor a 0</small>
+                </div>
+              }
+            </div>
+            
+            <div class="mb-3">
+              <label for="columnasAsientos" class="form-label">Número de Columnas</label>
+              <input 
+                type="number" 
+                class="form-control" 
+                id="columnasAsientos"
+                formControlName="columnasAsientos"
+                placeholder="Ingrese el número de columnas"
+                min="1"
+              >
+              @if (salaForm.get('columnasAsientos')?.invalid && salaForm.get('columnasAsientos')?.touched) {
+                <div class="text-danger mt-1">
+                  <small>El número de columnas es requerido y debe ser mayor a 0</small>
+                </div>
+              }
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="salaForm.invalid"
+              >
+                <i class="bi bi-plus-circle"></i> Crear Sala
+              </button>
+            </div>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

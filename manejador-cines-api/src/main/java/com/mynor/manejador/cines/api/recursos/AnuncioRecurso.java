@@ -170,7 +170,7 @@ public class AnuncioRecurso {
         try {
                         
             Autorizacion autorizacion = new Autorizacion(authHeader);
-            autorizacion.valdidarEditarAnuncio(anuncioDTO);
+            autorizacion.validarEditarAnuncio(anuncioDTO);
             
             anuncioServicio.editarAnuncio(anuncioDTO);
             

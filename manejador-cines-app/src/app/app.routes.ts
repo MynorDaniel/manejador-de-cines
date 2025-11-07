@@ -20,6 +20,10 @@ import { EditarCineComponent } from './components/cines/editar-cine-component/ed
 import { BloqueoAnunciosComponent } from './components/cines/bloqueo-anuncios-component/bloqueo-anuncios-component';
 import { CostoDiarioComponent } from './components/cines/costo-diario-component/costo-diario-component';
 import { CostoGlobalComponent } from './components/cines/costo-global-component/costo-global-component';
+import { CrearSalaComponent } from './components/salas/crear-sala-component/crear-sala-component';
+import { VerSalasComponent } from './components/salas/ver-salas-component/ver-salas-component';
+import { VerSalaComponent } from './components/salas/ver-sala-component/ver-sala-component';
+import { EditarSalaComponent } from './components/salas/editar-sala-component/editar-sala-component';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -42,5 +46,10 @@ export const routes: Routes = [
     {path: 'editar-cine/:id', component: EditarCineComponent},
     {path: 'bloqueo-anuncios/:id', component: BloqueoAnunciosComponent},
     {path: 'costo-diario/:id', component: CostoDiarioComponent},
-    {path: 'costo-global', component: CostoGlobalComponent}
+    {path: 'costo-global', component: CostoGlobalComponent},
+    {path: 'crear-sala/:idCine', component: CrearSalaComponent},
+    {path: 'ver-salas/:idCine', component: VerSalasComponent},
+    {path: 'ver-salas', component: VerSalasComponent},
+    {path: 'ver-sala/:id', component: VerSalaComponent},
+    {path: 'editar-sala/:id', component: EditarSalaComponent}
 ];

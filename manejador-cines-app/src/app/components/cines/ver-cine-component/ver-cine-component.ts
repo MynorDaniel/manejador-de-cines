@@ -73,4 +73,12 @@ export class VerCineComponent {
       this.ngOnInit();
     }
   }
+
+  crearSala(cine: Cine) {
+    this.router.navigate(['/crear-sala', cine.id]);
+  }
+
+  verSalas(cine: Cine) {
+    this.router.navigate(['/ver-salas', cine.id]);
+  }
 }

@@ -1,6 +1,5 @@
 <header class="border-bottom shadow-sm bg-dark text-light">
   <div class="container-fluid d-flex justify-content-between align-items-center py-3 px-4">
-    <!-- Logo -->
 
     @if (!usuario) {
       <a routerLink="/" class="d-flex align-items-center text-light text-decoration-none">
@@ -47,6 +46,11 @@
               }
             </ul>
           </div>
+
+          <a class="nav-link text-center text-light" routerLink="/ver-salas" title="Ver todas las salas">
+            <i class="bi bi-door-open fs-4"></i><br>
+            <small>Salas</small>
+          </a>
 
           <a class="nav-link text-center text-light" routerLink="/boletos" title="Mis boletos">
             <i class="bi bi-ticket-perforated fs-4"></i><br>
