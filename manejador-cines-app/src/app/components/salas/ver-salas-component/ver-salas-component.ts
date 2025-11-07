@@ -3,6 +3,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Sala } from '../../../models/sala';
 import { SalaService } from '../../../services/sala-service';
 import { CommonModule } from '@angular/common';
+import { AnuncioService } from '../../../services/anuncio-service';
+import { CineService } from '../../../services/cine-service';
 
 @Component({
   selector: 'app-ver-salas-component',
@@ -15,6 +17,8 @@ export class VerSalasComponent implements OnInit {
   salaService = inject(SalaService);
   route = inject(ActivatedRoute);
   router = inject(Router);
+  cineService = inject(CineService);
+  anuncioService = inject(AnuncioService);
   
   salas: Sala[] = [];
   cargando = true;
@@ -28,6 +32,19 @@ export class VerSalasComponent implements OnInit {
         next: (salas) => {
           this.salas = salas;
           this.cargando = false;
+
+          this.cineService.verCine(Number(this.idCine)).subscribe({
+            next: (cine) => {
+              console.log("cine en salas: ", cine);
+              
+              if (cine.bloqueoActivo != undefined) {
+                this.anuncioService.setMostrarAnuncios(!cine.bloqueoActivo);
+              }
+            },
+            error: (err) => {
+              console.error('Error al cargar cine:', err);
+            }
+          });
         },
         error: (err) => {
           console.error('Error al cargar salas del cine:', err);
@@ -46,6 +63,10 @@ export class VerSalasComponent implements OnInit {
         }
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.anuncioService.setMostrarAnuncios(true);
   }
   
   obtenerTextoBooleano(valor?: string): string {

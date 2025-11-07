@@ -24,6 +24,9 @@ import { CrearSalaComponent } from './components/salas/crear-sala-component/crea
 import { VerSalasComponent } from './components/salas/ver-salas-component/ver-salas-component';
 import { VerSalaComponent } from './components/salas/ver-sala-component/ver-sala-component';
 import { EditarSalaComponent } from './components/salas/editar-sala-component/editar-sala-component';
+import { CrearPeliculaComponent } from './components/peliculas/crear-pelicula-component/crear-pelicula-component';
+import { VerPeliculaComponent } from './components/peliculas/ver-pelicula-component/ver-pelicula-component';
+import { EditarPeliculaComponent } from './components/peliculas/editar-pelicula-component/editar-pelicula-component';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -51,5 +54,8 @@ export const routes: Routes = [
     {path: 'ver-salas/:idCine', component: VerSalasComponent},
     {path: 'ver-salas', component: VerSalasComponent},
     {path: 'ver-sala/:id', component: VerSalaComponent},
-    {path: 'editar-sala/:id', component: EditarSalaComponent}
+    {path: 'editar-sala/:id', component: EditarSalaComponent},
+    {path: 'crear-pelicula', component: CrearPeliculaComponent},
+    {path: 'ver-pelicula/:id', component: VerPeliculaComponent},
+    {path: 'editar-pelicula/:id', component: EditarPeliculaComponent}
 ];

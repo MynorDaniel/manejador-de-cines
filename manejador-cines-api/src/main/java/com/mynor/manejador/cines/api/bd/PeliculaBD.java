@@ -183,6 +183,7 @@ public class PeliculaBD implements BaseDeDatos<Pelicula, FiltrosPelicula> {
             return entidad;
             
         } catch (SQLException e) {
+            System.out.println(e.getMessage());
             throw new AccesoDeDatosException("Error al eliminar película");
         }
     }

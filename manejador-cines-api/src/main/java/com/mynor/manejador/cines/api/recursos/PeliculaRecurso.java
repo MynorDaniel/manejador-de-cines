@@ -4,13 +4,16 @@
  */
 package com.mynor.manejador.cines.api.recursos;
 
-import com.mynor.manejador.cines.api.dtos.CalificacionSalaDTO;
-import com.mynor.manejador.cines.api.dtos.SalaDTO;
+import com.mynor.manejador.cines.api.dtos.CalificacionDTO;
+import com.mynor.manejador.cines.api.dtos.CategoriaDTO;
+import com.mynor.manejador.cines.api.dtos.ClasificacionDTO;
+import com.mynor.manejador.cines.api.dtos.FiltrosPeliculasDTO;
+import com.mynor.manejador.cines.api.dtos.PeliculaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.excepciones.AutorizacionException;
 import com.mynor.manejador.cines.api.excepciones.EntidadInvalidaException;
 import com.mynor.manejador.cines.api.seguridad.Autorizacion;
-import com.mynor.manejador.cines.api.servicios.SalaServicio;
+import com.mynor.manejador.cines.api.servicios.PeliculaServicio;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
 
@@ -18,23 +21,23 @@ import jakarta.ws.rs.core.*;
  *
  * @author mynordma
  */
-@Path("salas")
-public class SalaRecurso {
+@Path("peliculas")
+public class PeliculaRecurso {
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response crearSala(@HeaderParam("Authorization") String authHeader, SalaDTO salaDTO) {
+    public Response crearPelicula(@HeaderParam("Authorization") String authHeader, PeliculaDTO peliculaDTO) {
         
-        SalaServicio servicio = new SalaServicio();
+        PeliculaServicio servicio = new PeliculaServicio();
         
         try {
             
-            salaDTO.validarEntrada();
+            peliculaDTO.validarEntrada();
             
             Autorizacion autorizacion = new Autorizacion(authHeader);
-            autorizacion.validarAdminCines();
+            autorizacion.validarAdminSistema();
             
-            servicio.crearSala(salaDTO);
+            servicio.crearPelicula(peliculaDTO);
             
             return Response.ok().build();
         } catch (AccesoDeDatosException e) {
@@ -48,93 +51,69 @@ public class SalaRecurso {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response verSalas(@HeaderParam("Authorization") String authHeader) {
-        
-        SalaServicio servicio = new SalaServicio();
-        
+    public Response verPeliculas(
+        @HeaderParam("Authorization") String authHeader,
+        @QueryParam("id") String id,
+        @QueryParam("titulo") String titulo,
+        @QueryParam("idCategoria") String idCategoria
+    ) {
+
+        PeliculaServicio servicio = new PeliculaServicio();
+
         try {
-            
             Autorizacion autorizacion = new Autorizacion(authHeader);
             Integer idUsuario = autorizacion.validarSesion().getId();
-            
-            SalaDTO[] salas = servicio.verSalas(idUsuario);
-            
-            return Response.ok(salas).build();
+
+            FiltrosPeliculasDTO filtros = new FiltrosPeliculasDTO();
+            filtros.setId(id);
+            filtros.setTitulo(titulo);
+            filtros.setIdCategoria(idCategoria);
+
+            PeliculaDTO[] peliculas = servicio.verPeliculas(idUsuario, filtros);
+
+            return Response.ok(peliculas).build();
         } catch (AccesoDeDatosException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         } catch (AutorizacionException ex) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
-        } catch (EntidadInvalidaException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
     }
     
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response verSala(@HeaderParam("Authorization") String authHeader, @PathParam("id") String id) {
+    public Response verPelicula(@HeaderParam("Authorization") String authHeader, @PathParam("id") String id) {
         
-        SalaServicio servicio = new SalaServicio();
+        PeliculaServicio servicio = new PeliculaServicio();
         
         try {
-            
             Autorizacion autorizacion = new Autorizacion(authHeader);
             Integer idUsuario = autorizacion.validarSesion().getId();
             
-            SalaDTO sala = servicio.verSala(Integer.valueOf(id), idUsuario);
+            PeliculaDTO pelicula = servicio.verPelicula(idUsuario, id);
             
-            return Response.ok(sala).build();
+            return Response.ok(pelicula).build();
         } catch (AccesoDeDatosException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         } catch (AutorizacionException ex) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
-        } catch (NumberFormatException ex){
-            return Response.status(Response.Status.BAD_REQUEST).entity("Id inválido").build();
-        } catch (EntidadInvalidaException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-        }
-    }
-    
-    @GET
-    @Path("cine/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response verSalasPorCine(@HeaderParam("Authorization") String authHeader, @PathParam("id") String id) {
-        
-        SalaServicio servicio = new SalaServicio();
-        
-        try {
-            
-            Autorizacion autorizacion = new Autorizacion(authHeader);
-            Integer idUsuario = autorizacion.validarSesion().getId();
-            
-            SalaDTO[] salas = servicio.verSalasPorCine(Integer.valueOf(id), idUsuario);
-            
-            return Response.ok(salas).build();
-        } catch (AccesoDeDatosException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
-        } catch (AutorizacionException ex) {
-            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
-        } catch (NumberFormatException ex){
-            return Response.status(Response.Status.BAD_REQUEST).entity("Id inválido").build();
-        } catch (EntidadInvalidaException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
     }
     
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response editarSala(@HeaderParam("Authorization") String authHeader, SalaDTO salaDTO) {
+    public Response editarPelicula(@HeaderParam("Authorization") String authHeader, PeliculaDTO peliculaDTO) {
         
-        SalaServicio servicio = new SalaServicio();
+        PeliculaServicio servicio = new PeliculaServicio();
         
         try {
             
-            salaDTO.validarEdicion();
+            peliculaDTO.validarEdicion();
             
             Autorizacion autorizacion = new Autorizacion(authHeader);
-            autorizacion.validarEdicionDeSala(salaDTO);
+            autorizacion.validarAdminSistema();
             
-            servicio.editarSala(salaDTO);
+            servicio.editarPelicula(peliculaDTO);
             
             return Response.ok().build();
         } catch (AccesoDeDatosException e) {
@@ -146,12 +125,35 @@ public class SalaRecurso {
         } 
     }
     
-    @PUT
-    @Path("calificacion")
+    /*@DELETE
+    @Path("{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response calificarSala(@HeaderParam("Authorization") String authHeader, CalificacionSalaDTO calificacionDTO) {
+    public Response eliminarPelicula(@HeaderParam("Authorization") String authHeader, @PathParam("id") String id) {
+    
+    PeliculaServicio servicio = new PeliculaServicio();
+    
+    try {
+    Autorizacion autorizacion = new Autorizacion(authHeader);
+    autorizacion.validarAdminSistema();
+    
+    servicio.eliminarPelicula(Integer.valueOf(id));
+    
+    return Response.ok().build();
+    } catch (AccesoDeDatosException e) {
+    return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+    } catch (AutorizacionException ex) {
+    return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+    } catch (NumberFormatException ex) {
+    return Response.status(Response.Status.BAD_REQUEST).entity("Id inválido").build();
+    }
+    }*/
+    
+    @POST
+    @Path("calificacion/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response calificarPelicula(@HeaderParam("Authorization") String authHeader, CalificacionDTO calificacionDTO, @PathParam("id") String id) {
         
-        SalaServicio servicio = new SalaServicio();
+        PeliculaServicio servicio = new PeliculaServicio();
         
         try {
             
@@ -160,9 +162,7 @@ public class SalaRecurso {
             Autorizacion autorizacion = new Autorizacion(authHeader);
             Integer idUsuario = autorizacion.validarSesion().getId();
             
-            calificacionDTO.setIdUsuario(idUsuario.toString());
-            
-            servicio.cambiarCalificacion(calificacionDTO);
+            servicio.cambiarCalificacion(calificacionDTO, id, idUsuario);
             
             return Response.ok().build();
         } catch (AccesoDeDatosException e) {
@@ -174,29 +174,45 @@ public class SalaRecurso {
         } 
     }
     
-    @DELETE
-    @Path("calificacion")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response eliminarCalificacion(@HeaderParam("Authorization") String authHeader, CalificacionSalaDTO calificacionDTO) {
+    @GET
+    @Path("clasificaciones")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verClasificaciones(@HeaderParam("Authorization") String authHeader) {
         
-        SalaServicio servicio = new SalaServicio();
+        PeliculaServicio servicio = new PeliculaServicio();
         
         try {
-            
-            calificacionDTO.validarEliminacion();
-            
             Autorizacion autorizacion = new Autorizacion(authHeader);
-            autorizacion.validarEliminarCalificacion(calificacionDTO);
+            autorizacion.validarSesion();
             
-            servicio.eliminarCalificacion(calificacionDTO);
+            ClasificacionDTO[] clasificaciones = servicio.verClasificaciones();
             
-            return Response.ok().build();
+            return Response.ok(clasificaciones).build();
         } catch (AccesoDeDatosException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         } catch (AutorizacionException ex) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
-        } catch (EntidadInvalidaException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
-        } 
+        }
+    }
+    
+    @GET
+    @Path("categorias")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verCategorias(@HeaderParam("Authorization") String authHeader) {
+        
+        PeliculaServicio servicio = new PeliculaServicio();
+        
+        try {
+            Autorizacion autorizacion = new Autorizacion(authHeader);
+            autorizacion.validarSesion();
+            
+            CategoriaDTO[] categorias = servicio.verCategorias();
+            
+            return Response.ok(categorias).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
+        } catch (AutorizacionException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        }
     }
 }

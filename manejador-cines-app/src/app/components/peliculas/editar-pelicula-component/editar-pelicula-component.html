@@ -1,0 +1,297 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 class="card-title mb-4">
+            <i class="bi bi-pencil-square"></i> Editar Película
+          </h3>
+          
+          @if (errorMsg) {
+            <div class="alert alert-danger alert-dismissible fade show">
+              <i class="bi bi-exclamation-triangle"></i> {{ errorMsg }}
+              <button type="button" class="btn-close" (click)="errorMsg = null"></button>
+            </div>
+          }
+          
+          @if (infoMsg) {
+            <div class="alert alert-info alert-dismissible fade show">
+              <i class="bi bi-info-circle"></i> {{ infoMsg }}
+              <button type="button" class="btn-close" (click)="infoMsg = null"></button>
+            </div>
+          }
+          
+          @if (cargando) {
+            <div class="text-center my-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+              <p class="mt-3">Cargando información de la película...</p>
+            </div>
+          } @else {
+            
+            <form [formGroup]="peliculaForm" (ngSubmit)="editarPelicula()">
+              
+              <div class="mb-3">
+                <label for="imagen" class="form-label">
+                  <i class="bi bi-image"></i> Imagen de la Película
+                </label>
+                <input
+                  type="file"
+                  id="imagen"
+                  class="form-control"
+                  (change)="onImagenSeleccionada($event)"
+                  accept="image/png, image/jpeg, image/gif"
+                >
+                
+                @if (imagenPreview) {
+                  <div class="text-center mt-3">
+                    <img
+                      [src]="imagenPreview"
+                      alt="Vista previa"
+                      class="img-thumbnail"
+                      style="max-width: 300px; max-height: 400px; object-fit: cover;"
+                    >
+                  </div>
+                }
+                
+                <small class="text-muted d-block mt-2">
+                  @if (imagenSeleccionada) {
+                    <i class="bi bi-check-circle text-success"></i> 
+                    Nueva imagen seleccionada: {{ imagenSeleccionada.name }}
+                  } @else {
+                    <i class="bi bi-info-circle"></i> 
+                    Seleccione una nueva imagen para reemplazar la actual (opcional)
+                  }
+                </small>
+              </div>
+              
+              <div class="mb-3">
+                <label for="clasificacion" class="form-label">
+                  <i class="bi bi-star"></i> Clasificación *
+                </label>
+                <select 
+                  id="clasificacion" 
+                  class="form-select" 
+                  formControlName="clasificacion"
+                  [class.is-invalid]="peliculaForm.get('clasificacion')?.invalid && peliculaForm.get('clasificacion')?.touched"
+                >
+                  <option value="">Seleccione una clasificación</option>
+                  @for (clasificacion of clasificaciones; track clasificacion.codigo) {
+                    <option [value]="clasificacion.codigo">
+                      {{ clasificacion.codigo }} - {{ clasificacion.descripcion }}
+                    </option>
+                  }
+                </select>
+                @if (peliculaForm.get('clasificacion')?.invalid && peliculaForm.get('clasificacion')?.touched) {
+                  <div class="invalid-feedback d-block">
+                    La clasificación es requerida
+                  </div>
+                }
+              </div>
+              
+              <div class="mb-3">
+                <label for="titulo" class="form-label">
+                  <i class="bi bi-card-heading"></i> Título *
+                </label>
+                <input 
+                  type="text" 
+                  id="titulo" 
+                  class="form-control" 
+                  formControlName="titulo"
+                  placeholder="Ingrese el título de la película"
+                  [class.is-invalid]="peliculaForm.get('titulo')?.invalid && peliculaForm.get('titulo')?.touched"
+                >
+                @if (peliculaForm.get('titulo')?.invalid && peliculaForm.get('titulo')?.touched) {
+                  <div class="invalid-feedback d-block">
+                    El título es requerido (máximo 200 caracteres)
+                  </div>
+                }
+              </div>
+              
+              <div class="mb-3">
+                <label for="sinopsis" class="form-label">
+                  <i class="bi bi-text-paragraph"></i> Sinopsis *
+                </label>
+                <textarea 
+                  id="sinopsis" 
+                  class="form-control" 
+                  formControlName="sinopsis"
+                  rows="4"
+                  placeholder="Ingrese la sinopsis de la película"
+                  [class.is-invalid]="peliculaForm.get('sinopsis')?.invalid && peliculaForm.get('sinopsis')?.touched"
+                ></textarea>
+                @if (peliculaForm.get('sinopsis')?.invalid && peliculaForm.get('sinopsis')?.touched) {
+                  <div class="invalid-feedback d-block">
+                    La sinopsis es requerida
+                  </div>
+                }
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="fechaEstreno" class="form-label">
+                    <i class="bi bi-calendar-event"></i> Fecha de Estreno *
+                  </label>
+                  <input 
+                    type="date" 
+                    id="fechaEstreno" 
+                    class="form-control" 
+                    formControlName="fechaEstreno"
+                    [class.is-invalid]="peliculaForm.get('fechaEstreno')?.invalid && peliculaForm.get('fechaEstreno')?.touched"
+                  >
+                  @if (peliculaForm.get('fechaEstreno')?.invalid && peliculaForm.get('fechaEstreno')?.touched) {
+                    <div class="invalid-feedback d-block">
+                      La fecha de estreno es requerida
+                    </div>
+                  }
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="duracion" class="form-label">
+                    <i class="bi bi-clock"></i> Duración (minutos) *
+                  </label>
+                  <input 
+                    type="number" 
+                    id="duracion" 
+                    class="form-control" 
+                    formControlName="duracion"
+                    placeholder="Ej: 120"
+                    min="1"
+                    [class.is-invalid]="peliculaForm.get('duracion')?.invalid && peliculaForm.get('duracion')?.touched"
+                  >
+                  @if (peliculaForm.get('duracion')?.invalid && peliculaForm.get('duracion')?.touched) {
+                    <div class="invalid-feedback d-block">
+                      La duración es requerida (mínimo 1 minuto)
+                    </div>
+                  }
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="director" class="form-label">
+                  <i class="bi bi-person-video3"></i> Director *
+                </label>
+                <input 
+                  type="text" 
+                  id="director" 
+                  class="form-control" 
+                  formControlName="director"
+                  placeholder="Ingrese el nombre del director"
+                  [class.is-invalid]="peliculaForm.get('director')?.invalid && peliculaForm.get('director')?.touched"
+                >
+                @if (peliculaForm.get('director')?.invalid && peliculaForm.get('director')?.touched) {
+                  <div class="invalid-feedback d-block">
+                    El director es requerido (máximo 200 caracteres)
+                  </div>
+                }
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">
+                  <i class="bi bi-people"></i> Reparto *
+                </label>
+                
+                @for (actor of actores.controls; track $index; let i = $index) {
+                  <div class="input-group mb-2">
+                    <span class="input-group-text">Actor {{ i + 1 }}</span>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      [formControl]="$any(actor)"
+                      placeholder="Nombre del actor (sin comas)"
+                      [class.is-invalid]="actor.invalid && actor.touched"
+                    >
+                    @if (actores.length > 1) {
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-danger" 
+                        (click)="eliminarActor(i)"
+                      >
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    }
+                  </div>
+                  @if (actor.invalid && actor.touched) {
+                    <div class="text-danger small mb-2">
+                      @if (actor.hasError('required')) {
+                        El nombre del actor es requerido
+                      }
+                      @if (actor.hasError('contieneCommas')) {
+                        No se permiten comas en el nombre
+                      }
+                    </div>
+                  }
+                }
+                
+                <button 
+                  type="button" 
+                  class="btn btn-outline-primary btn-sm" 
+                  (click)="agregarActor()"
+                >
+                  <i class="bi bi-plus-circle"></i> Agregar Actor
+                </button>
+              </div>
+              
+              <!-- Categorías -->
+              <div class="mb-3">
+                <label class="form-label">
+                  <i class="bi bi-tags"></i> Categorías *
+                </label>
+                <div class="d-flex flex-wrap gap-2">
+                  @for (categoria of categorias; track categoria.id) {
+                    <div class="form-check">
+                      <input 
+                        type="checkbox" 
+                        class="btn-check" 
+                        [id]="'categoria-' + categoria.id"
+                        [checked]="estaSeleccionada(categoria)"
+                        (change)="toggleCategoria(categoria)"
+                      >
+                      <label 
+                        class="btn btn-outline-primary" 
+                        [for]="'categoria-' + categoria.id"
+                      >
+                        {{ categoria.nombre }}
+                      </label>
+                    </div>
+                  }
+                </div>
+                @if (categoriasSeleccionadas.length === 0) {
+                  <small class="text-muted d-block mt-2">
+                    Seleccione al menos una categoría
+                  </small>
+                }
+                @if (categoriasSeleccionadas.length > 0) {
+                  <small class="text-success d-block mt-2">
+                    <i class="bi bi-check-circle"></i> 
+                    {{ categoriasSeleccionadas.length }} categoría(s) seleccionada(s)
+                  </small>
+                }
+              </div>
+              
+              <div class="d-flex gap-2 justify-content-end">
+                <button 
+                  type="button" 
+                  class="btn btn-secondary" 
+                  [routerLink]="['/ver-pelicula', pelicula?.id]"
+                >
+                  <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+                <button 
+                  type="submit" 
+                  class="btn btn-primary"
+                  [disabled]="peliculaForm.invalid || categoriasSeleccionadas.length === 0"
+                >
+                  <i class="bi bi-save"></i> Guardar Cambios
+                </button>
+              </div>
+              
+            </form>
+            
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

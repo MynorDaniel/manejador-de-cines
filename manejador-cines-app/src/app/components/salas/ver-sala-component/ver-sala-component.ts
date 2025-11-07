@@ -6,6 +6,9 @@ import { CommonModule } from '@angular/common';
 import { JwtService } from '../../../services/jwt-service';
 import { Usuario } from '../../../models/usuario';
 import { Calificacion } from '../../../models/calificacion';
+import { AnuncioService } from '../../../services/anuncio-service';
+import { CineService } from '../../../services/cine-service';
+import { Cine } from '../../../models/cine';
 
 @Component({
   selector: 'app-ver-sala-component',
@@ -23,6 +26,10 @@ export class VerSalaComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
   jwtService = inject(JwtService);
+
+  cineService = inject(CineService);
+  anuncioService = inject(AnuncioService);
+  cine?: Cine;
   
   sala?: Sala;
   cargando = true;
@@ -30,6 +37,12 @@ export class VerSalaComponent implements OnInit {
   
   ngOnInit(): void {
     this.cargarSala();
+
+    
+  }
+
+  ngOnDestroy() {
+    this.anuncioService.setMostrarAnuncios(true);
   }
   
   cargarSala(): void {
@@ -42,6 +55,20 @@ export class VerSalaComponent implements OnInit {
           console.log(sala);
           
           this.cargando = false;
+
+          this.cineService.verCine(Number(this.sala?.idCine)).subscribe({
+            next: (cine) => {
+              this.cine = cine;
+              console.log("cine en sala: ", this.cine);
+              
+              if (cine.bloqueoActivo != undefined) {
+                this.anuncioService.setMostrarAnuncios(!cine.bloqueoActivo);
+              }
+            },
+            error: (err) => {
+              console.error('Error al cargar cine:', err);
+            }
+          });
         },
         error: (err) => {
           this.errorMsg = err.error || 'Error al cargar la sala';

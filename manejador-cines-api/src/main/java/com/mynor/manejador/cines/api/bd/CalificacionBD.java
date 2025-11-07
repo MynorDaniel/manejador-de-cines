@@ -11,6 +11,7 @@ import com.mynor.manejador.cines.api.modelo.Imagen;
 import com.mynor.manejador.cines.api.modelo.Rol;
 import com.mynor.manejador.cines.api.modelo.Usuario;
 import java.sql.*;
+import java.util.Optional;
 
 /**
  *
@@ -192,6 +193,48 @@ public class CalificacionBD implements BaseDeDatos<Calificacion, FiltrosCalifica
             return entidad;
         } catch (SQLException e) {
             throw new AccesoDeDatosException("Error al eliminar calificación");
+        }
+    }
+    
+    public void crearCalificacionPelicula(Integer idCalificacion, Integer idPelicula, Connection conn) throws AccesoDeDatosException{
+        String sql = "INSERT INTO CalificacionPelicula (calificacion, pelicula) VALUES (?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idCalificacion);
+            stmt.setInt(2, idPelicula);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            throw new AccesoDeDatosException("Error al crear la calificacion");
+        }
+    }
+
+    public Optional<Calificacion> leerCalificacionPelicula(Integer idUsuario, Integer idPelicula, Connection conn) {
+        String sql = "SELECT c.id, c.usuario, c.valor, c.fecha " +
+                     "FROM Calificacion c " +
+                     "INNER JOIN CalificacionPelicula cp ON c.id = cp.calificacion " +
+                     "WHERE c.usuario = ? AND cp.pelicula = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idUsuario);
+            stmt.setInt(2, idPelicula);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Calificacion calificacion = new Calificacion();
+                    calificacion.setId(rs.getInt("id"));
+                    calificacion.setValor(rs.getInt("valor"));
+                    calificacion.setFecha(rs.getDate("fecha").toLocalDate());
+
+                    Usuario usuario = new Usuario();
+                    usuario.setId(rs.getInt("usuario"));
+                    calificacion.setUsuario(usuario);
+
+                    return Optional.of(calificacion);
+                }
+
+                return Optional.empty();
+            }
+        } catch (SQLException ex) {
+            return Optional.empty();
         }
     }
 }
