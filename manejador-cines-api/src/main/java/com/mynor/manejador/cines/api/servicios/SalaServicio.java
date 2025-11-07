@@ -207,7 +207,7 @@ public class SalaServicio {
         }
     }
     
-    private Sala leerPorId(Integer id) throws AccesoDeDatosException{
+    public Sala leerPorId(Integer id) throws AccesoDeDatosException{
         FiltrosSala filtros = new FiltrosSala();
         filtros.setId(Optional.ofNullable(id));
         
@@ -221,7 +221,7 @@ public class SalaServicio {
         }
     }
     
-    private Sala[] leerPorCine(Integer idCine) throws AccesoDeDatosException{
+    protected Sala[] leerPorCine(Integer idCine) throws AccesoDeDatosException{
         FiltrosSala filtros = new FiltrosSala();
         filtros.setIdCine(Optional.ofNullable(idCine));
         

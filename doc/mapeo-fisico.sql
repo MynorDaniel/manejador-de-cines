@@ -108,6 +108,7 @@ CREATE TABLE Proyeccion (
     pelicula INT,
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
+    precio DECIMAL(10, 2) DEFAULT(30.00),
     PRIMARY KEY (id),
     CONSTRAINT fk_sala_proyeccion FOREIGN KEY (sala) REFERENCES Sala (id),
     CONSTRAINT fk_pelicula_proyeccion FOREIGN KEY (pelicula) REFERENCES Pelicula (id)

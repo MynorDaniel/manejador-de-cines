@@ -45,14 +45,17 @@ public class DataSourceBD {
             p.setTestOnReturn(false);
             p.setValidationInterval(30000);
             p.setTimeBetweenEvictionRunsMillis(30000);
-            p.setMaxActive(100);
-            p.setInitialSize(10);
+            p.setMaxActive(200);
+            p.setInitialSize(20);
             p.setMaxWait(10000);
-            p.setRemoveAbandonedTimeout(60);
+            p.setRemoveAbandonedTimeout(30);
             p.setMinEvictableIdleTimeMillis(30000);
             p.setMinIdle(10);
             p.setLogAbandoned(true);
             p.setRemoveAbandoned(true);
+            p.setMaxActive(140);
+            p.setInitialSize(10);
+            p.setMinIdle(5);
             p.setJdbcInterceptors(
                     "org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;"
                     + "org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer");

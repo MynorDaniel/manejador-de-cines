@@ -10,16 +10,16 @@ import java.util.Optional;
  *
  * @author mynordma
  */
-public class FiltrosProyeccion extends Filtros {
+public class FiltrosBoleto extends Filtros {
     
     private Optional<Integer> id;
+    private Optional<Integer> idUsuario;
     private Optional<Integer> idSala;
-    private Optional<Integer> idPelicula;
     
-    public FiltrosProyeccion(){
+    public FiltrosBoleto(){
         id = Optional.empty();
+        idUsuario = Optional.empty();
         idSala = Optional.empty();
-        idPelicula = Optional.empty();
     }
 
     public Optional<Integer> getId() {
@@ -30,19 +30,19 @@ public class FiltrosProyeccion extends Filtros {
         this.id = id;
     }
 
+    public Optional<Integer> getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Optional<Integer> idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
     public Optional<Integer> getIdSala() {
         return idSala;
     }
 
     public void setIdSala(Optional<Integer> idSala) {
         this.idSala = idSala;
-    }
-
-    public Optional<Integer> getIdPelicula() {
-        return idPelicula;
-    }
-
-    public void setIdPelicula(Optional<Integer> idPelicula) {
-        this.idPelicula = idPelicula;
     }
 }

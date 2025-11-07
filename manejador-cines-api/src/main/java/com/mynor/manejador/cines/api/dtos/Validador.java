@@ -28,7 +28,6 @@ public abstract class Validador {
         String valor = cadena.trim().toLowerCase();
         return valor.equals("true") || valor.equals("false");
     }
-
     
     protected boolean fechaValida(String fechaStr){
         try {

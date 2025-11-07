@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CineService } from '../../../services/cine-service';
 import { Cine } from '../../../models/cine';
+import { Proyeccion } from '../../../models/proyeccion';
 import { JwtService } from '../../../services/jwt-service';
 import { Usuario } from '../../../models/usuario';
 import { AnuncioService } from '../../../services/anuncio-service';
@@ -10,7 +11,7 @@ import { PagarCostoComponent } from '../pagar-costo-component/pagar-costo-compon
 
 @Component({
   selector: 'app-ver-cine-component',
-  imports: [CommonModule, PagarCostoComponent],
+  imports: [CommonModule, PagarCostoComponent, RouterLink],
   templateUrl: './ver-cine-component.html',
   styleUrl: './ver-cine-component.css'
 })
@@ -49,6 +50,18 @@ export class VerCineComponent {
 
   ngOnDestroy() {
     this.anuncioService.setMostrarAnuncios(true);
+  }
+
+  crearProyeccion(cine: Cine) {
+    this.router.navigate(['/crear-proyeccion', cine.id]);
+  }
+
+  editarProyeccion(proyeccion: Proyeccion) {
+    this.router.navigate(['/editar-proyeccion', proyeccion.id]);
+  }
+
+  comprarBoleto(proyeccion: Proyeccion) {
+    this.router.navigate(['/comprar-boleto', proyeccion.id]);
   }
 
   editarCine(cine: Cine) {

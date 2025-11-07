@@ -12,6 +12,7 @@ import com.mynor.manejador.cines.api.dtos.BloqueoAnunciosCineDTO;
 import com.mynor.manejador.cines.api.dtos.CalificacionSalaDTO;
 import com.mynor.manejador.cines.api.dtos.CarteraEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.CineDTO;
+import com.mynor.manejador.cines.api.dtos.ProyeccionDTO;
 import com.mynor.manejador.cines.api.dtos.SalaDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEditadoDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEntradaDTO;
@@ -21,9 +22,11 @@ import com.mynor.manejador.cines.api.filtros.FiltrosUsuario;
 import com.mynor.manejador.cines.api.modelo.Anuncio;
 import com.mynor.manejador.cines.api.modelo.Cine;
 import com.mynor.manejador.cines.api.modelo.Rol;
+import com.mynor.manejador.cines.api.modelo.Sala;
 import com.mynor.manejador.cines.api.modelo.Usuario;
 import com.mynor.manejador.cines.api.servicios.AnuncioServicio;
 import com.mynor.manejador.cines.api.servicios.CineServicio;
+import com.mynor.manejador.cines.api.servicios.SalaServicio;
 import java.util.Optional;
 
 /**
@@ -202,6 +205,18 @@ public class Autorizacion {
     public void validarEliminarCalificacion(CalificacionSalaDTO calificacionDTO) throws AutorizacionException {
         credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
         if(!credencialesUsuarioActual.getId().equals(Integer.valueOf(calificacionDTO.getIdUsuario()))) throw new AutorizacionException("No puedes modificar esta calificacion");
+    }
+
+    public void validarCrearProyeccion(ProyeccionDTO proyeccionDTO) throws AutorizacionException, AccesoDeDatosException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        
+        SalaServicio salaServicio = new SalaServicio();
+        Sala sala = salaServicio.leerPorId(Integer.valueOf(proyeccionDTO.getIdSala()));
+        
+        CineServicio cineServicio = new CineServicio();
+        Cine cine = cineServicio.leerCinePorId(sala.getCine().getId());
+        
+        if(!cine.getUsuarioCreador().getId().equals(credencialesUsuarioActual.getId())) throw new AutorizacionException("No puedes modificar este cine");
     }
 
     

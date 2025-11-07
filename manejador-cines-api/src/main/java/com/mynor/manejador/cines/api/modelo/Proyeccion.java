@@ -18,6 +18,15 @@ public class Proyeccion {
     private Pelicula pelicula;
     private LocalDate fecha;
     private LocalTime hora;
+    private Double precio;
+
+    public Double getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
 
     public Integer getId() {
         return id;

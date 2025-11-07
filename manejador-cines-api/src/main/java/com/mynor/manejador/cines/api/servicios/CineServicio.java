@@ -18,6 +18,7 @@ import com.mynor.manejador.cines.api.dtos.CineDTO;
 import com.mynor.manejador.cines.api.dtos.CostoDiarioCineDTO;
 import com.mynor.manejador.cines.api.dtos.CostoGlobalCinesDTO;
 import com.mynor.manejador.cines.api.dtos.PagoSalidaDTO;
+import com.mynor.manejador.cines.api.dtos.ProyeccionDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.excepciones.CineInvalidoException;
 import com.mynor.manejador.cines.api.excepciones.EntidadInvalidaException;
@@ -29,6 +30,7 @@ import com.mynor.manejador.cines.api.filtros.FiltrosCostoDiarioCine;
 import com.mynor.manejador.cines.api.filtros.FiltrosCostoGlobalCines;
 import com.mynor.manejador.cines.api.filtros.FiltrosPago;
 import com.mynor.manejador.cines.api.filtros.FiltrosPagoCine;
+import com.mynor.manejador.cines.api.filtros.FiltrosProyeccion;
 import com.mynor.manejador.cines.api.modelo.BloqueoAnunciosCine;
 import com.mynor.manejador.cines.api.modelo.Cartera;
 import com.mynor.manejador.cines.api.modelo.Cine;
@@ -36,10 +38,13 @@ import com.mynor.manejador.cines.api.modelo.CostoDiarioCine;
 import com.mynor.manejador.cines.api.modelo.CostoGlobalCines;
 import com.mynor.manejador.cines.api.modelo.Pago;
 import com.mynor.manejador.cines.api.modelo.PagoCine;
+import com.mynor.manejador.cines.api.modelo.Proyeccion;
+import com.mynor.manejador.cines.api.modelo.Sala;
 import com.mynor.manejador.cines.api.modelo.Usuario;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.Optional;
 
 /**
@@ -127,6 +132,14 @@ public class CineServicio {
             } catch (AccesoDeDatosException ex) {
                 System.getLogger(CineServicio.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
+            try {
+                Optional<ProyeccionDTO[]> proyecciones = proyeccionesPorCine(cine.getId());
+                if(proyecciones.isPresent()){
+                    cineDTO.setProyecciones(proyecciones.get());
+                }
+            } catch (AccesoDeDatosException ex) {
+                System.getLogger(CineServicio.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
             return cineDTO;
         }).toArray(CineDTO[]::new);
         
@@ -153,7 +166,11 @@ public class CineServicio {
         cineDTO.setUbicacion(cine.getUbicacion());
         cineDTO.setBloqueoActivo(cineTieneBloqueoActivo(cine.getId()));
         cineDTO.setFechaUltimoCambioDeCosto(verUltimoCambioDeCosto(cine.getId()).getFechaCambio().toString());
-       
+        Optional<ProyeccionDTO[]> proyecciones = proyeccionesPorCine(cine.getId());
+        if(proyecciones.isPresent()){
+            System.out.println("P: " + proyecciones.get()[0].getId());
+            cineDTO.setProyecciones(proyecciones.get());
+        }
         return cineDTO;
         
     }
@@ -181,6 +198,14 @@ public class CineServicio {
             cineDTO.setBloqueoActivo(cineTieneBloqueoActivo(cine.getId()));
             try {
                 cineDTO.setFechaUltimoCambioDeCosto(verUltimoCambioDeCosto(cine.getId()).getFechaCambio().toString());
+            } catch (AccesoDeDatosException ex) {
+                System.getLogger(CineServicio.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+            try {
+                Optional<ProyeccionDTO[]> proyecciones = proyeccionesPorCine(cine.getId());
+                if(proyecciones.isPresent()){
+                    cineDTO.setProyecciones(proyecciones.get());
+                }
             } catch (AccesoDeDatosException ex) {
                 System.getLogger(CineServicio.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
@@ -472,6 +497,41 @@ public class CineServicio {
             return false;
         }
         
+    }
+    
+    private Optional<ProyeccionDTO[]> proyeccionesPorCine(Integer idCine) throws AccesoDeDatosException {
+        SalaServicio salaServicio = new SalaServicio();
+        Sala[] salas = salaServicio.leerPorCine(idCine);
+
+        if (salas.length == 0) {
+            return Optional.empty();
+        }
+
+        ProyeccionServicio proyeccionServicio = new ProyeccionServicio();
+        LinkedList<ProyeccionDTO> proyeccionesDTO = new LinkedList<>();
+
+        for (Sala sala : salas) {
+            Proyeccion[] proyeccionesSala = proyeccionServicio.leerPorSala(sala.getId());
+            if(proyeccionesSala != null){
+                for (Proyeccion proyeccion : proyeccionesSala) {
+                    ProyeccionDTO dto = new ProyeccionDTO();
+                    dto.setId(proyeccion.getId().toString());
+                    dto.setIdSala(proyeccion.getSala().getId().toString());
+                    dto.setIdPelicula(proyeccion.getPelicula().getId().toString());
+                    dto.setFecha(proyeccion.getFecha().toString());
+                    dto.setHora(proyeccion.getHora().toString());
+                    proyeccionesDTO.add(dto);
+                    System.out.println("Proyeccion: " + proyeccion.getId());
+                }
+            }
+            
+        }
+
+        if (proyeccionesDTO.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(proyeccionesDTO.toArray(ProyeccionDTO[]::new));
     }
     
 }

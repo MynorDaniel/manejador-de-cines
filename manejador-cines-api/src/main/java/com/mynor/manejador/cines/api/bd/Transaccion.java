@@ -49,9 +49,8 @@ public class Transaccion implements AutoCloseable {
             throw new AccesoDeDatosException(ex.getMessage());
         } finally {
             try {
-                try (CONN) {
-                    CONN.setAutoCommit(true);
-                }
+                CONN.setAutoCommit(true);
+                CONN.close();
             } catch (SQLException ex) {
                 throw new AccesoDeDatosException(ex.getMessage());
             }

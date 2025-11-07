@@ -1,3 +1,5 @@
+import { Proyeccion } from "./proyeccion";
+
 export interface Cine {
   id?: string;
   idUsuarioCreador?: string;
@@ -7,4 +9,5 @@ export interface Cine {
   fechaCreacion: string;
   bloqueoActivo?: boolean;
   fechaUltimoCambioDeCosto: string;
+  proyecciones?: Proyeccion[];
 }

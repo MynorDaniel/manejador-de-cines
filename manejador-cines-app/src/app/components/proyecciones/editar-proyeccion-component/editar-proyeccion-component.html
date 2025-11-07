@@ -1,0 +1,162 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-body">
+          <h3 class="card-title mb-4">
+            <i class="bi bi-pencil-square"></i> Editar Proyección
+          </h3>
+          
+          @if (errorMsg) {
+            <div class="alert alert-danger alert-dismissible fade show">
+              <i class="bi bi-exclamation-triangle"></i> {{ errorMsg }}
+              <button type="button" class="btn-close" (click)="errorMsg = null"></button>
+            </div>
+          }
+          
+          @if (infoMsg) {
+            <div class="alert alert-success alert-dismissible fade show">
+              <i class="bi bi-check-circle"></i> {{ infoMsg }}
+              <button type="button" class="btn-close" (click)="infoMsg = null"></button>
+            </div>
+          }
+          
+          @if (cargando) {
+            <div class="text-center my-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+              <p class="mt-3">Cargando información de la proyección...</p>
+            </div>
+          } @else {
+            
+            <form [formGroup]="proyeccionForm" (ngSubmit)="editarProyeccion()">
+              
+              <div class="mb-3">
+                <label class="form-label">
+                  <i class="bi bi-hash"></i> ID de Proyección
+                </label>
+                <input 
+                  type="hidden" 
+                  class="form-control" 
+                  [value]="proyeccion?.id" 
+                  disabled
+                  readonly
+                >
+                <small class="text-muted">Este campo no se puede modificar</small>
+              </div>
+              
+              <div class="mb-3">
+                <label for="sala" class="form-label">
+                  <i class="bi bi-door-closed"></i> Sala *
+                </label>
+                <select 
+                  id="sala" 
+                  class="form-select" 
+                  formControlName="idSala"
+                  [class.is-invalid]="proyeccionForm.get('idSala')?.invalid && proyeccionForm.get('idSala')?.touched"
+                >
+                  <option value="">Seleccione una sala</option>
+                  @for (sala of salas; track sala.id) {
+                    <option [value]="sala.id">
+                      Sala {{ sala.id }}
+                    </option>
+                  }
+                </select>
+                @if (proyeccionForm.get('idSala')?.invalid && proyeccionForm.get('idSala')?.touched) {
+                  <div class="invalid-feedback d-block">
+                    La sala es requerida
+                  </div>
+                }
+              </div>
+              
+              <div class="mb-3">
+                <label for="pelicula" class="form-label">
+                  <i class="bi bi-film"></i> Película *
+                </label>
+                <select 
+                  id="pelicula" 
+                  class="form-select" 
+                  formControlName="idPelicula"
+                  [class.is-invalid]="proyeccionForm.get('idPelicula')?.invalid && proyeccionForm.get('idPelicula')?.touched"
+                >
+                  <option value="">Seleccione una película</option>
+                  @for (pelicula of peliculas; track pelicula.id) {
+                    <option [value]="pelicula.id">
+                      {{ pelicula.titulo }} 
+                      ({{ pelicula.clasificacion.codigo }}) - 
+                      {{ pelicula.duracion }} min
+                    </option>
+                  }
+                </select>
+                @if (proyeccionForm.get('idPelicula')?.invalid && proyeccionForm.get('idPelicula')?.touched) {
+                  <div class="invalid-feedback d-block">
+                    La película es requerida
+                  </div>
+                }
+              </div>
+              
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="fecha" class="form-label">
+                    <i class="bi bi-calendar-event"></i> Fecha *
+                  </label>
+                  <input 
+                    type="date" 
+                    id="fecha" 
+                    class="form-control" 
+                    formControlName="fecha"
+                    [min]="obtenerFechaMinima()"
+                    [class.is-invalid]="proyeccionForm.get('fecha')?.invalid && proyeccionForm.get('fecha')?.touched"
+                  >
+                  @if (proyeccionForm.get('fecha')?.invalid && proyeccionForm.get('fecha')?.touched) {
+                    <div class="invalid-feedback d-block">
+                      La fecha es requerida
+                    </div>
+                  }
+                  <small class="text-muted d-block mt-1">
+                    Seleccione una fecha desde hoy en adelante
+                  </small>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                  <label for="hora" class="form-label">
+                    <i class="bi bi-clock"></i> Hora *
+                  </label>
+                  <input 
+                    type="time" 
+                    id="hora" 
+                    class="form-control" 
+                    formControlName="hora"
+                    [class.is-invalid]="proyeccionForm.get('hora')?.invalid && proyeccionForm.get('hora')?.touched"
+                  >
+                  @if (proyeccionForm.get('hora')?.invalid && proyeccionForm.get('hora')?.touched) {
+                    <div class="invalid-feedback d-block">
+                      La hora es requerida
+                    </div>
+                  }
+                  <small class="text-muted d-block mt-1">
+                    Formato: HH:MM (24 horas)
+                  </small>
+                </div>
+              </div>
+              
+              
+              <div class="d-flex gap-2 justify-content-end">
+                <button 
+                  type="submit" 
+                  class="btn btn-primary"
+                  [disabled]="proyeccionForm.invalid"
+                >
+                  <i class="bi bi-save"></i> Guardar Cambios
+                </button>
+              </div>
+              
+            </form>
+            
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

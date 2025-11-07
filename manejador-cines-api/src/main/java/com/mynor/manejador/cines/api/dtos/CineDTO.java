@@ -21,6 +21,8 @@ public class CineDTO extends Validador {
     private String fechaCreacion;
     private Boolean bloqueoActivo;
     private String fechaUltimoCambioDeCosto;
+    private ProyeccionDTO[] proyecciones;
+    
 
     public String getFechaUltimoCambioDeCosto() {
         return fechaUltimoCambioDeCosto;
@@ -41,6 +43,14 @@ public class CineDTO extends Validador {
         if(!esBoolean(activado)) throw new CineInvalidoException("Estado del cine inválido");
         if(!esEnteroPositivo(idUsuarioCreador)) throw new CineInvalidoException("Id del usuario inválido");
         if(!esEnteroPositivo(id)) throw new CineInvalidoException("Id del cine inválido");
+    }
+
+    public ProyeccionDTO[] getProyecciones() {
+        return proyecciones;
+    }
+
+    public void setProyecciones(ProyeccionDTO[] proyecciones) {
+        this.proyecciones = proyecciones;
     }
 
     public Boolean getBloqueoActivo() {

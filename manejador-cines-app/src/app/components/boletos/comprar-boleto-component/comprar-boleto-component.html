@@ -1,0 +1,148 @@
+<div class="container mt-5">
+  @if (cargando) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando información...</p>
+    </div>
+  } @else {
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg">
+          <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">
+              <i class="bi bi-ticket-perforated"></i> Comprar Boleto
+            </h4>
+          </div>
+          
+          <div class="card-body p-4">
+            @if (errorMsg) {
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i> {{ errorMsg }}
+                <button type="button" class="btn-close" (click)="errorMsg = null"></button>
+              </div>
+            }
+
+            @if (infoMsg) {
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill"></i> {{ infoMsg }}
+                <button type="button" class="btn-close" (click)="infoMsg = null"></button>
+              </div>
+            }
+
+            @if (proyeccion) {
+               <div class="mb-4">
+                <h5 class="text-secondary mb-3">
+                  <i class="bi bi-film"></i> Detalles de la Proyección
+                </h5>
+                <div class="row g-3">
+                  <div class="col-6">
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-calendar3 text-primary me-2"></i>
+                      <div>
+                        <small class="text-muted d-block">Fecha</small>
+                        <strong>{{ proyeccion.fecha }}</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-clock text-primary me-2"></i>
+                      <div>
+                        <small class="text-muted d-block">Hora</small>
+                        <strong>{{ proyeccion.hora }}</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-door-closed text-primary me-2"></i>
+                      <div>
+                        <small class="text-muted d-block">Sala</small>
+                        <strong>{{ proyeccion.idSala }}</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="d-flex align-items-center">
+                      <i class="bi bi-camera-reels text-primary me-2"></i>
+                      <div>
+                        <small class="text-muted d-block">Película</small>
+                        <a [routerLink]="['/ver-pelicula', proyeccion.idPelicula]" class="text-decoration-none">
+                          <strong>Ver detalles</strong>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+
+               <div class="mb-4">
+                <h5 class="text-secondary mb-3">
+                  <i class="bi bi-credit-card"></i> Información de Pago
+                </h5>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                  <span class="fw-bold">Precio del boleto:</span>
+                  <span class="fs-4 text-success fw-bold">Q{{ proyeccion.precio }}</span>
+                </div>
+              </div>
+
+              <hr>
+
+               <form [formGroup]="compraForm" (ngSubmit)="comprarBoleto()">
+                <!-- Fecha de Pago -->
+                <div class="mb-4">
+                  <label for="fechaPago" class="form-label fw-bold">
+                    <i class="bi bi-calendar-event"></i> Fecha del Pago
+                  </label>
+                  <input 
+                    type="date" 
+                    id="fechaPago" 
+                    class="form-control"
+                    formControlName="fechaPago"
+                    [class.is-invalid]="compraForm.get('fechaPago')?.invalid && compraForm.get('fechaPago')?.touched">
+                  
+                  @if (compraForm.get('fechaPago')?.invalid && compraForm.get('fechaPago')?.touched) {
+                    <div class="invalid-feedback">
+                      La fecha de pago es requerida
+                    </div>
+                  }
+                </div>
+
+                 <div class="form-check mb-4">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="confirmar"
+                    formControlName="confirmar">
+                  <label class="form-check-label" for="confirmar">
+                    Confirmar compra de este boleto por <strong>Q{{ proyeccion.precio }}</strong>
+                  </label>
+                </div>
+
+                 <div class="d-grid gap-2">
+                  <button 
+                    type="submit" 
+                    class="btn btn-primary btn-lg"
+                    [disabled]="procesandoCompra || compraForm.invalid">
+                    @if (procesandoCompra) {
+                      <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                      Procesando...
+                    } @else {
+                      <i class="bi bi-cart-check"></i> Comprar Boleto
+                    }
+                  </button>
+                  
+                </div>
+              </form>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

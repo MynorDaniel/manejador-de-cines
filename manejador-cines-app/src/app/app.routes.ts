@@ -27,6 +27,10 @@ import { EditarSalaComponent } from './components/salas/editar-sala-component/ed
 import { CrearPeliculaComponent } from './components/peliculas/crear-pelicula-component/crear-pelicula-component';
 import { VerPeliculaComponent } from './components/peliculas/ver-pelicula-component/ver-pelicula-component';
 import { EditarPeliculaComponent } from './components/peliculas/editar-pelicula-component/editar-pelicula-component';
+import { CrearProyeccionComponent } from './components/proyecciones/crear-proyeccion-component/crear-proyeccion-component';
+import { EditarProyeccionComponent } from './components/proyecciones/editar-proyeccion-component/editar-proyeccion-component';
+import { ComprarBoletoComponent } from './components/boletos/comprar-boleto-component/comprar-boleto-component';
+import { MisBoletosComponent } from './components/boletos/mis-boletos-component/mis-boletos-component';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -57,5 +61,9 @@ export const routes: Routes = [
     {path: 'editar-sala/:id', component: EditarSalaComponent},
     {path: 'crear-pelicula', component: CrearPeliculaComponent},
     {path: 'ver-pelicula/:id', component: VerPeliculaComponent},
-    {path: 'editar-pelicula/:id', component: EditarPeliculaComponent}
+    {path: 'editar-pelicula/:id', component: EditarPeliculaComponent},
+    {path: 'crear-proyeccion/:idCine', component: CrearProyeccionComponent},
+    {path: 'editar-proyeccion/:id', component: EditarProyeccionComponent},
+    {path: 'comprar-boleto/:idProyeccion', component: ComprarBoletoComponent},
+    {path: 'mis-boletos', component: MisBoletosComponent}
 ];
