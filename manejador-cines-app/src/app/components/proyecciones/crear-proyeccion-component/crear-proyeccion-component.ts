@@ -11,7 +11,7 @@ import { PeliculaService } from '../../../services/pelicula-service';
 
 @Component({
   selector: 'app-crear-proyeccion-component',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './crear-proyeccion-component.html',
   styleUrl: './crear-proyeccion-component.css'
 })

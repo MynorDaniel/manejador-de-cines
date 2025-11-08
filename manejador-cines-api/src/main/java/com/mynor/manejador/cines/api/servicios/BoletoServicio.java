@@ -10,6 +10,10 @@ import com.mynor.manejador.cines.api.bd.CarteraBD;
 import com.mynor.manejador.cines.api.bd.PagoBD;
 import com.mynor.manejador.cines.api.bd.Transaccion;
 import com.mynor.manejador.cines.api.dtos.BoletoDTO;
+import com.mynor.manejador.cines.api.dtos.CineDTO;
+import com.mynor.manejador.cines.api.dtos.PeliculaDTO;
+import com.mynor.manejador.cines.api.dtos.ProyeccionDTO;
+import com.mynor.manejador.cines.api.dtos.SalaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
 import com.mynor.manejador.cines.api.filtros.FiltrosBoleto;
@@ -68,12 +72,48 @@ public class BoletoServicio {
     public BoletoDTO[] verBoletosPorUsuario(Integer id) throws AccesoDeDatosException {
         Optional<Boleto[]> boletos = leerPorUsuario(id);
         if(boletos.isEmpty()) throw new AccesoDeDatosException("Sin boletos");
-        
+
         return Arrays.stream(boletos.get()).map(boleto -> {
             BoletoDTO boletoDTO = new BoletoDTO();
             boletoDTO.setId(boleto.getId().toString());
-            boletoDTO.setIdProyeccion(boleto.getProyeccion().getId().toString());
             boletoDTO.setIdUsuario(boleto.getUsuario().getId().toString());
+            boletoDTO.setIdProyeccion(boleto.getProyeccion().getId().toString());
+
+            // Mapear Proyección
+            if (boleto.getProyeccion() != null) {
+                ProyeccionDTO proyeccionDTO = new ProyeccionDTO();
+                proyeccionDTO.setId(boleto.getProyeccion().getId().toString());
+                proyeccionDTO.setFecha(boleto.getProyeccion().getFecha().toString());
+                proyeccionDTO.setHora(boleto.getProyeccion().getHora().toString());
+                proyeccionDTO.setPrecio(boleto.getProyeccion().getPrecio().toString());
+
+                if (boleto.getProyeccion().getSala() != null) {
+                    SalaDTO salaDTO = new SalaDTO();
+                    salaDTO.setId(boleto.getProyeccion().getSala().getId().toString());
+                    proyeccionDTO.setIdSala(boleto.getProyeccion().getSala().getId().toString());
+                    boletoDTO.setSala(salaDTO);
+
+                    if (boleto.getProyeccion().getSala().getCine() != null) {
+                        CineDTO cineDTO = new CineDTO();
+                        cineDTO.setId(boleto.getProyeccion().getSala().getCine().getId().toString());
+                        cineDTO.setNombre(boleto.getProyeccion().getSala().getCine().getNombre());
+                        cineDTO.setUbicacion(boleto.getProyeccion().getSala().getCine().getUbicacion());
+                        salaDTO.setIdCine(boleto.getProyeccion().getSala().getCine().getId().toString());
+                        boletoDTO.setCine(cineDTO);
+                    }
+                }
+
+                if (boleto.getProyeccion().getPelicula() != null) {
+                    PeliculaDTO peliculaDTO = new PeliculaDTO();
+                    peliculaDTO.setId(boleto.getProyeccion().getPelicula().getId().toString());
+                    peliculaDTO.setTitulo(boleto.getProyeccion().getPelicula().getTitulo());
+                    proyeccionDTO.setIdPelicula(boleto.getProyeccion().getPelicula().getId().toString());
+                    boletoDTO.setPelicula(peliculaDTO);
+                }
+
+                boletoDTO.setProyeccion(proyeccionDTO);
+            }
+
             return boletoDTO;
         }).toArray(BoletoDTO[]::new);
     }
@@ -83,7 +123,7 @@ public class BoletoServicio {
         filtros.setIdUsuario(Optional.ofNullable(id));
         
         try(Transaccion t = new Transaccion()){
-            Boleto[] boletos = BOLETO_BD.leer(filtros, t.obtenerConexion());
+            Boleto[] boletos = BOLETO_BD.leerCompleto(filtros, t.obtenerConexion());
             t.commit();
             
             if(boletos.length < 1) return Optional.empty();

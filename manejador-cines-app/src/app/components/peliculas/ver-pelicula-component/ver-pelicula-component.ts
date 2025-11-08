@@ -10,7 +10,7 @@ import { Usuario } from '../../../models/usuario';
 
 @Component({
   selector: 'app-ver-pelicula-component',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './ver-pelicula-component.html',
   styleUrl: './ver-pelicula-component.css'
 })

@@ -7,8 +7,11 @@ package com.mynor.manejador.cines.api.bd;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.filtros.FiltrosBoleto;
 import com.mynor.manejador.cines.api.modelo.Boleto;
+import com.mynor.manejador.cines.api.modelo.Cine;
 import com.mynor.manejador.cines.api.modelo.Pago;
+import com.mynor.manejador.cines.api.modelo.Pelicula;
 import com.mynor.manejador.cines.api.modelo.Proyeccion;
+import com.mynor.manejador.cines.api.modelo.Sala;
 import com.mynor.manejador.cines.api.modelo.Usuario;
 import java.sql.*;
 
@@ -103,18 +106,26 @@ public class BoletoBD implements BaseDeDatos<Boleto, FiltrosBoleto> {
             "b.usuario as boleto_usuario, " +
             "b.proyeccion as boleto_proyeccion, " +
             "b.pago as boleto_pago, " +
-            "u.id as usuario_id, u.imagen as usuario_imagen, u.nombre as usuario_nombre, " +
-            "u.rol as usuario_rol, u.correo as usuario_correo, u.activado as usuario_activado, " +
+            // Proyeccion
             "p.id as proyeccion_id, p.sala as proyeccion_sala, p.pelicula as proyeccion_pelicula, " +
-            "p.fecha as proyeccion_fecha, p.hora as proyeccion_hora, " +
-            "pg.id as pago_id, pg.usuario as pago_usuario, pg.fecha as pago_fecha, pg.monto as pago_monto " +
+            "p.fecha as proyeccion_fecha, p.hora as proyeccion_hora, p.precio as proyeccion_precio, " +
+            // Pago
+            "pg.id as pago_id, pg.fecha as pago_fecha, pg.monto as pago_monto, " +
+            // Sala
+            "s.id as sala_id, s.cine as sala_cine, " +
+            // Pelicula
+            "pe.id as pelicula_id, pe.titulo as pelicula_titulo, " +
+            // Cine
+            "c.id as cine_id, c.nombre as cine_nombre, c.ubicacion as cine_ubicacion " +
             "FROM Boleto b " +
-            "LEFT JOIN Usuario u ON b.usuario = u.id " +
             "LEFT JOIN Proyeccion p ON b.proyeccion = p.id " +
             "LEFT JOIN Pago pg ON b.pago = pg.id " +
+            "LEFT JOIN Sala s ON p.sala = s.id " +
+            "LEFT JOIN Pelicula pe ON p.pelicula = pe.id " +
+            "LEFT JOIN Cine c ON s.cine = c.id " +
             "WHERE 1=1"
         );
-        
+
         if (filtros.getId().isPresent()) {
             sql.append(" AND b.id = ?");
         }
@@ -124,14 +135,14 @@ public class BoletoBD implements BaseDeDatos<Boleto, FiltrosBoleto> {
         if (filtros.getIdSala().isPresent()) {
             sql.append(" AND p.sala = ?");
         }
-        
+
         sql.append(" ORDER BY b.id DESC");
-        
+
         try (PreparedStatement stmt = conn.prepareStatement(sql.toString(),
                                                             ResultSet.TYPE_SCROLL_INSENSITIVE,
                                                             ResultSet.CONCUR_READ_ONLY)) {
             int paramIndex = 1;
-            
+
             if (filtros.getId().isPresent()) {
                 stmt.setInt(paramIndex++, filtros.getId().get());
             }
@@ -141,22 +152,81 @@ public class BoletoBD implements BaseDeDatos<Boleto, FiltrosBoleto> {
             if (filtros.getIdSala().isPresent()) {
                 stmt.setInt(paramIndex++, filtros.getIdSala().get());
             }
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 int longitud = obtenerLongitudRS(rs);
                 Boleto[] boletos = new Boleto[longitud];
                 int index = 0;
-                
+
                 while (rs.next()) {
                     boletos[index++] = mapearBoletoCompleto(rs);
                 }
-                
+
                 return boletos;
             }
-            
+
         } catch (SQLException e) {
             throw new AccesoDeDatosException("Error al leer boletos completos: " + e.getMessage());
         }
+    }
+
+    private Boleto mapearBoletoCompleto(ResultSet rs) throws SQLException {
+        Boleto boleto = new Boleto();
+        boleto.setId(rs.getInt("boleto_id"));
+
+        // Mapear Usuario (solo ID)
+        if (rs.getObject("boleto_usuario") != null) {
+            Usuario usuario = new Usuario();
+            usuario.setId(rs.getInt("boleto_usuario"));
+            boleto.setUsuario(usuario);
+        }
+
+        // Mapear Proyección
+        if (rs.getObject("proyeccion_id") != null) {
+            Proyeccion proyeccion = new Proyeccion();
+            proyeccion.setId(rs.getInt("proyeccion_id"));
+            proyeccion.setFecha(rs.getDate("proyeccion_fecha").toLocalDate());
+            proyeccion.setHora(rs.getTime("proyeccion_hora").toLocalTime());
+            proyeccion.setPrecio(rs.getDouble("proyeccion_precio"));
+
+            // Mapear Sala dentro de Proyección
+            if (rs.getObject("sala_id") != null) {
+                Sala sala = new Sala();
+                sala.setId(rs.getInt("sala_id"));
+
+                // Mapear Cine dentro de Sala
+                if (rs.getObject("cine_id") != null) {
+                    Cine cine = new Cine();
+                    cine.setId(rs.getInt("cine_id"));
+                    cine.setNombre(rs.getString("cine_nombre"));
+                    cine.setUbicacion(rs.getString("cine_ubicacion"));
+                    sala.setCine(cine);
+                }
+
+                proyeccion.setSala(sala);
+            }
+
+            // Mapear Película dentro de Proyección
+            if (rs.getObject("pelicula_id") != null) {
+                Pelicula pelicula = new Pelicula();
+                pelicula.setId(rs.getInt("pelicula_id"));
+                pelicula.setTitulo(rs.getString("pelicula_titulo"));
+                proyeccion.setPelicula(pelicula);
+            }
+
+            boleto.setProyeccion(proyeccion);
+        }
+
+        // Mapear Pago
+        if (rs.getObject("pago_id") != null) {
+            Pago pago = new Pago();
+            pago.setId(rs.getInt("pago_id"));
+            pago.setFecha(rs.getDate("pago_fecha").toLocalDate());
+            pago.setMonto(rs.getDouble("pago_monto"));
+            boleto.setPago(pago);
+        }
+
+        return boleto;
     }
 
     @Override
@@ -228,49 +298,5 @@ public class BoletoBD implements BaseDeDatos<Boleto, FiltrosBoleto> {
         return boleto;
     }
     
-    private Boleto mapearBoletoCompleto(ResultSet rs) throws SQLException {
-        Boleto boleto = new Boleto();
-        boleto.setId(rs.getInt("boleto_id"));
-        
-        if (rs.getObject("usuario_id") != null) {
-            Usuario usuario = new Usuario();
-            usuario.setId(rs.getInt("usuario_id"));
-            usuario.setNombre(rs.getString("usuario_nombre"));
-            usuario.setCorreo(rs.getString("usuario_correo"));
-            usuario.setActivado(rs.getBoolean("usuario_activado"));
-            
-            if (rs.getObject("usuario_imagen") != null) {
-                usuario.setImagen(new com.mynor.manejador.cines.api.modelo.Imagen());
-                usuario.getImagen().setId(rs.getInt("usuario_imagen"));
-            }
-            
-            boleto.setUsuario(usuario);
-        }
-        
-        if (rs.getObject("proyeccion_id") != null) {
-            Proyeccion proyeccion = new Proyeccion();
-            proyeccion.setId(rs.getInt("proyeccion_id"));
-            proyeccion.setFecha(rs.getDate("proyeccion_fecha").toLocalDate());
-            proyeccion.setHora(rs.getTime("proyeccion_hora").toLocalTime());
-            
-            boleto.setProyeccion(proyeccion);
-        }
-        
-        if (rs.getObject("pago_id") != null) {
-            Pago pago = new Pago();
-            pago.setId(rs.getInt("pago_id"));
-            pago.setFecha(rs.getDate("pago_fecha").toLocalDate());
-            pago.setMonto(rs.getDouble("pago_monto"));
-            
-            if (rs.getObject("pago_usuario") != null) {
-                Usuario usuarioPago = new Usuario();
-                usuarioPago.setId(rs.getInt("pago_usuario"));
-                pago.setUsuario(usuarioPago);
-            }
-            
-            boleto.setPago(pago);
-        }
-        
-        return boleto;
-    }
+    
 }

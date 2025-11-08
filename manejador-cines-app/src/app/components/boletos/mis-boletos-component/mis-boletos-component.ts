@@ -17,7 +17,45 @@ import { forkJoin } from 'rxjs';
 })
 export class MisBoletosComponent implements OnInit {
 
+  boletoService = inject(BoletoService);
+  proyeccionService = inject(ProyeccionService);
+  cineService = inject(CineService);
+  salaService = inject(SalaService);
+  peliculaService = inject(PeliculaService);
+
+  boletos: Boleto[] = [];
+  cargando = true;
+  errorMsg: string | null = null;
+
   ngOnInit(): void {
-    
+    this.cargarBoletos();
+  }
+
+  cargarBoletos(): void {
+    this.boletoService.verMisBoletos().subscribe({
+      next: (boletos) => {
+        this.boletos = boletos;
+        this.cargando = false;
+        console.log(boletos);
+        
+      },
+      error: (err) => {
+        this.errorMsg = err.error || 'Error al cargar los boletos';
+        this.cargando = false;
+      }
+    });
+  }
+
+  formatearFecha(fecha: string): string {
+    const date = new Date(fecha);
+    return date.toLocaleDateString('es-GT', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  formatearHora(hora: string): string {
+    return hora.substring(0, 5);
   }
 }

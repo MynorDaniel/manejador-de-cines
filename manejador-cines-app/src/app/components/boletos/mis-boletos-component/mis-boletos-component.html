@@ -1,0 +1,107 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary">
+      <i class="bi bi-ticket-perforated-fill"></i> Mis Boletos
+    </h2>
+  </div>
+
+  @if (cargando) {
+    <div class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2">Cargando tus boletos...</p>
+    </div>
+  } @else if (errorMsg) {
+    <div class="alert alert-danger" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i> {{ errorMsg }}
+    </div>
+  } @else if (boletos.length === 0) {
+    <div class="text-center my-5">
+      <i class="bi bi-ticket" style="font-size: 5rem; color: #ccc;"></i>
+      <h4 class="text-muted mt-3">No tienes boletos</h4>
+      <p class="text-muted">Aún no has comprado ningún boleto para películas</p>
+      <a routerLink="/cines" class="btn btn-primary mt-3">
+        <i class="bi bi-film"></i> Explorar Cines
+      </a>
+    </div>
+  } @else {
+    <div class="row g-4">
+      @for (boleto of boletos; track boleto.id) {
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card h-100 shadow-sm hover-shadow">
+            <div class="card-header bg-primary text-white">
+              <div class="d-flex justify-content-between align-items-center">
+                <h6 class="mb-0">
+                  <i class="bi bi-ticket-detailed"></i> Boleto #{{ boleto.id }}
+                </h6>
+                
+              </div>
+            </div>
+
+            <div class="card-body">
+              @if (boleto.pelicula) {
+                <div class="mb-3">
+                  <h5 class="card-title">
+                    <i class="bi bi-film text-primary"></i>
+                    <a [routerLink]="['/ver-pelicula', boleto.pelicula.id]" class="text-decoration-none">
+                      {{ boleto.pelicula.titulo }}
+                    </a>
+                  </h5>
+                </div>
+              }
+
+              @if (boleto.cine) {
+                <div class="mb-2">
+                  <small class="text-muted">
+                    <i class="bi bi-geo-alt-fill"></i> Cine
+                  </small>
+                  <div>
+                    <a [routerLink]="['/ver-cine', boleto.cine.id]" class="text-decoration-none fw-bold">
+                      {{ boleto.cine.nombre }}
+                    </a>
+                  </div>
+                  <small class="text-muted">{{ boleto.cine.ubicacion }}</small>
+                </div>
+              }
+
+              <hr class="my-2">
+
+              @if (boleto.sala) {
+                <div class="mb-2">
+                  <small class="text-muted">
+                    <i class="bi bi-door-closed"></i> Sala
+                  </small>
+                  <div>
+                    <a [routerLink]="['/ver-sala', boleto.sala.id]" class="text-decoration-none">
+                      Sala #{{ boleto.sala.id }}
+                    </a>
+                  </div>
+                </div>
+              }
+
+              @if (boleto.proyeccion) {
+                <div class="mb-2">
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <small class="text-muted d-block">
+                        <i class="bi bi-calendar3"></i> Fecha
+                      </small>
+                      <strong>{{ formatearFecha(boleto.proyeccion.fecha) }}</strong>
+                    </div>
+                    <div class="col-6">
+                      <small class="text-muted d-block">
+                        <i class="bi bi-clock"></i> Hora
+                      </small>
+                      <strong>{{ formatearHora(boleto.proyeccion.hora) }}</strong>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

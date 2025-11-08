@@ -11,7 +11,7 @@ import { PeliculaService } from '../../../services/pelicula-service';
 
 @Component({
   selector: 'app-editar-proyeccion-component',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './editar-proyeccion-component.html',
   styleUrl: './editar-proyeccion-component.css'
 })

@@ -17,11 +17,47 @@ public class BoletoDTO extends Validador {
     private String idUsuario;
     private String idProyeccion;
     private PagoEntradaDTO pagoDTO;
+    private CineDTO cine;
+    private SalaDTO sala;
+    private PeliculaDTO pelicula;
+    private ProyeccionDTO proyeccion;
 
     @Override
     public void validarEntrada() throws EntidadInvalidaException {
         if(!esEnteroPositivo(idProyeccion)) throw new BoletoInvalidoException("proyeccion inválida");
         pagoDTO.validarEntrada();
+    }
+
+    public CineDTO getCine() {
+        return cine;
+    }
+
+    public ProyeccionDTO getProyeccion() {
+        return proyeccion;
+    }
+
+    public void setProyeccion(ProyeccionDTO proyeccion) {
+        this.proyeccion = proyeccion;
+    }
+
+    public void setCine(CineDTO cine) {
+        this.cine = cine;
+    }
+
+    public SalaDTO getSala() {
+        return sala;
+    }
+
+    public void setSala(SalaDTO sala) {
+        this.sala = sala;
+    }
+
+    public PeliculaDTO getPelicula() {
+        return pelicula;
+    }
+
+    public void setPelicula(PeliculaDTO pelicula) {
+        this.pelicula = pelicula;
     }
     
     public String getId() {
