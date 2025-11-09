@@ -122,10 +122,7 @@ export const routes: Routes = [
     },
     {
         path: 'editar-cine/:id', 
-        component: EditarCineComponent,
-        canActivate: [RolGuardService],
-        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
-    },
+        component: EditarCineComponent  },
     {
         path: 'bloqueo-anuncios/:id', 
         component: BloqueoAnunciosComponent,
@@ -148,7 +145,7 @@ export const routes: Routes = [
         path: 'editar-sala/:id', 
         component: EditarSalaComponent,
         canActivate: [RolGuardService],
-        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+        data: {allowedRoles: ['ADMINISTRADOR_CINES', 'ADMINISTRADOR_SISTEMA']}
     },
     {
         path: 'crear-pelicula', 
