@@ -31,6 +31,9 @@ import { CrearProyeccionComponent } from './components/proyecciones/crear-proyec
 import { EditarProyeccionComponent } from './components/proyecciones/editar-proyeccion-component/editar-proyeccion-component';
 import { ComprarBoletoComponent } from './components/boletos/comprar-boleto-component/comprar-boleto-component';
 import { MisBoletosComponent } from './components/boletos/mis-boletos-component/mis-boletos-component';
+import { ReporteAdminCinesComponent } from './components/reportes/reporte-admin-cines-component/reporte-admin-cines-component';
+import { ReporteAdminSistemaComponent } from './components/reportes/reporte-admin-sistema-component/reporte-admin-sistema-component';
+import { RolGuardService } from './services/rol-guard-service';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -38,32 +41,156 @@ export const routes: Routes = [
     {path: 'home', component: Home},
     {path: 'registro', component: Registro},
     {path: 'perfil/:id', component: Perfil},
-    {path: 'usuarios', component: Usuarios},
-    {path: 'editar-usuario', component: EditarUsuario},
-    {path: 'cartera', component: Cartera},
-    {path: 'comprar-anuncio', component: ComprarAnuncio},
-    {path: 'ver-anuncios/:propios', component: AnunciosComponent},
-    {path: 'editar-anuncio', component: EditarAnuncio},
-    {path: 'precios-tipo-anuncio', component: PreciosTipoComponent},
-    {path: 'precios-vigencia-anuncio', component: PreciosVigenciaComponent},
-    {path: 'crear-cine', component: CrearCineComponent},
+    
+    {
+        path: 'usuarios', 
+        component: Usuarios,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'precios-tipo-anuncio', 
+        component: PreciosTipoComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'precios-vigencia-anuncio', 
+        component: PreciosVigenciaComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'costo-global', 
+        component: CostoGlobalComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'reportes-admin-sistema', 
+        component: ReporteAdminSistemaComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'ver-anuncios/:propios', 
+        component: AnunciosComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ANUNCIANTE', 'ADMINISTRADOR_SISTEMA']}
+    },
+
+    {
+        path: 'editar-usuario', 
+        component: EditarUsuario,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['CLIENTE', 'ANUNCIANTE', 'ADMINISTRADOR_CINES', 'ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'cartera', 
+        component: Cartera,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['CLIENTE', 'ANUNCIANTE', 'ADMINISTRADOR_CINES']}
+    },
+
+    {
+        path: 'comprar-boleto/:idProyeccion', 
+        component: ComprarBoletoComponent
+    },
+    {
+        path: 'mis-boletos', 
+        component: MisBoletosComponent
+    },
+
+    {
+        path: 'comprar-anuncio', 
+        component: ComprarAnuncio,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ANUNCIANTE']}
+    },
+    {
+        path: 'editar-anuncio', 
+        component: EditarAnuncio,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ANUNCIANTE', 'ADMINISTRADOR_SISTEMA']}
+    },
+
+    {
+        path: 'crear-cine', 
+        component: CrearCineComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'mis-cines', 
+        component: MisCinesComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'editar-cine/:id', 
+        component: EditarCineComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'bloqueo-anuncios/:id', 
+        component: BloqueoAnunciosComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'costo-diario/:id', 
+        component: CostoDiarioComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES', 'ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'crear-sala/:idCine', 
+        component: CrearSalaComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'editar-sala/:id', 
+        component: EditarSalaComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'crear-pelicula', 
+        component: CrearPeliculaComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'editar-pelicula/:id', 
+        component: EditarPeliculaComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
+    },
+    {
+        path: 'crear-proyeccion/:idCine', 
+        component: CrearProyeccionComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'editar-proyeccion/:id', 
+        component: EditarProyeccionComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'reportes-admin-cines', 
+        component: ReporteAdminCinesComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+
     {path: 'ver-cines', component: VerCinesComponent},
     {path: 'ver-cine/:id', component: VerCineComponent},
-    {path: 'mis-cines', component: MisCinesComponent},
-    {path: 'editar-cine/:id', component: EditarCineComponent},
-    {path: 'bloqueo-anuncios/:id', component: BloqueoAnunciosComponent},
-    {path: 'costo-diario/:id', component: CostoDiarioComponent},
-    {path: 'costo-global', component: CostoGlobalComponent},
-    {path: 'crear-sala/:idCine', component: CrearSalaComponent},
     {path: 'ver-salas/:idCine', component: VerSalasComponent},
     {path: 'ver-salas', component: VerSalasComponent},
     {path: 'ver-sala/:id', component: VerSalaComponent},
-    {path: 'editar-sala/:id', component: EditarSalaComponent},
-    {path: 'crear-pelicula', component: CrearPeliculaComponent},
     {path: 'ver-pelicula/:id', component: VerPeliculaComponent},
-    {path: 'editar-pelicula/:id', component: EditarPeliculaComponent},
-    {path: 'crear-proyeccion/:idCine', component: CrearProyeccionComponent},
-    {path: 'editar-proyeccion/:id', component: EditarProyeccionComponent},
-    {path: 'comprar-boleto/:idProyeccion', component: ComprarBoletoComponent},
-    {path: 'mis-boletos', component: MisBoletosComponent},
 ];

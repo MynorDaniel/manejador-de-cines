@@ -71,7 +71,7 @@ export class AnunciosWidget implements OnInit, OnChanges, OnDestroy {
               videoId = videoUrl.split('v=')[1].split('&')[0];
             }
             if (!videoId) return;
-            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&mute=1&vq=small&rel=0`;
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&vq=small&rel=0`;
             const safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
             this.mediaMap.set(anuncio.id!, safeUrl);
             this.anunciosCargados.add(anuncio.id!);

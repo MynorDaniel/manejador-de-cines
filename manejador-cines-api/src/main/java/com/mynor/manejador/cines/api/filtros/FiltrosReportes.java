@@ -10,6 +10,6 @@ import com.mynor.manejador.cines.api.dtos.Validador;
  *
  * @author mynordma
  */
-public abstract class Filtros {
+public abstract class FiltrosReportes extends Validador {
     
 }

@@ -1,0 +1,128 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      
+      @if(errorMsg) {
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle"></i> {{errorMsg}}
+        </div>
+      }
+
+      @if(infoMsg) {
+        <div class="alert alert-success" role="alert">
+          <i class="bi bi-check-circle"></i> {{infoMsg}}
+        </div>
+      }
+
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">
+            <i class="bi bi-file-earmark-pdf"></i> Reportes de Administración de Cines
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          
+          <form [formGroup]="filtrosForm" (ngSubmit)="generarReporte()">
+            
+            <div class="mb-3">
+              <label for="tipoReporte" class="form-label">
+                <i class="bi bi-card-list"></i> Tipo de Reporte <span class="text-danger">*</span>
+              </label>
+              <select 
+                class="form-select" 
+                id="tipoReporte" 
+                formControlName="tipoReporte"
+              >
+                @for(tipo of tiposReporte; track tipo.valor) {
+                  <option [value]="tipo.valor">{{ tipo.texto }}</option>
+                }
+              </select>
+            </div>
+
+            <hr>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="fechaInicio" class="form-label">
+                  <i class="bi bi-calendar-event"></i> Fecha de Inicio
+                </label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="fechaInicio" 
+                  formControlName="fechaInicio"
+                >
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="fechaFin" class="form-label">
+                  <i class="bi bi-calendar-event"></i> Fecha de Fin
+                </label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="fechaFin" 
+                  formControlName="fechaFin"
+                >
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="mb-3">
+              <label for="idSala" class="form-label">
+                <i class="bi bi-door-open"></i> Sala
+              </label>
+              @if(salas.length === 0) {
+                <div class="alert alert-warning">
+                  <i class="bi bi-info-circle"></i> No tienes salas disponibles en tus cines
+                </div>
+              } @else {
+                <select 
+                  class="form-select" 
+                  id="idSala" 
+                  formControlName="idSala"
+                >
+                  <option value="">Todas las salas de mis cines</option>
+                  @for(sala of salas; track sala.id) {
+                    <option [value]="sala.id">
+                      Sala #{{ sala.id }} - {{ obtenerNombreCine(+sala.idCine) }}
+                    </option>
+                  }
+                </select>
+              }
+            </div>
+
+            <hr>
+
+            <div class="d-flex gap-2 justify-content-end">
+              <button 
+                type="button" 
+                class="btn btn-secondary"
+                (click)="limpiarFormulario()"
+                [disabled]="cargando"
+              >
+                <i class="bi bi-x-circle"></i> Limpiar
+              </button>
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="cargando || filtrosForm.invalid"
+              >
+                @if(cargando) {
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Generando...
+                } @else {
+                  <i class="bi bi-file-earmark-pdf"></i> Generar Reporte
+                }
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

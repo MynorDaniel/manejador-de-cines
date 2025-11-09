@@ -1,0 +1,184 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      
+      @if(errorMsg) {
+        <div class="alert alert-danger" role="alert">
+          <i class="bi bi-exclamation-triangle"></i> {{errorMsg}}
+        </div>
+      }
+
+      @if(infoMsg) {
+        <div class="alert alert-success" role="alert">
+          <i class="bi bi-check-circle"></i> {{infoMsg}}
+        </div>
+      }
+
+      <div class="card shadow-lg">
+        <div class="card-header bg-success text-white">
+          <h3 class="mb-0">
+            <i class="bi bi-file-earmark-bar-graph"></i> Reportes de Administración del Sistema
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          
+          <form [formGroup]="filtrosForm" (ngSubmit)="generarReporte()">
+            
+            <div class="mb-3">
+              <label for="tipoReporte" class="form-label">
+                <i class="bi bi-card-list"></i> Tipo de Reporte <span class="text-danger">*</span>
+              </label>
+              <select 
+                class="form-select" 
+                id="tipoReporte" 
+                formControlName="tipoReporte"
+              >
+                @for(tipo of tiposReporte; track tipo.valor) {
+                  <option [value]="tipo.valor">{{ tipo.texto }}</option>
+                }
+              </select>
+            </div>
+
+            <hr>
+
+            <!-- Filtros de Fecha (opcionales) -->
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="fechaInicio" class="form-label">
+                  <i class="bi bi-calendar-event"></i> Fecha de Inicio (Opcional)
+                </label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="fechaInicio" 
+                  formControlName="fechaInicio"
+                >
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="fechaFin" class="form-label">
+                  <i class="bi bi-calendar-event"></i> Fecha de Fin (Opcional)
+                </label>
+                <input 
+                  type="date" 
+                  class="form-control" 
+                  id="fechaFin" 
+                  formControlName="fechaFin"
+                >
+              </div>
+            </div>
+
+
+            @if(mostrarFiltrosAnuncios()) {
+              <hr>
+              <div class="card bg-light mb-3">
+                <div class="card-body">
+                  <h6 class="card-title">
+                    <i class="bi bi-funnel"></i> Filtros Adicionales para Anuncios
+                  </h6>
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label for="tipoAnuncio" class="form-label">
+                        <i class="bi bi-image"></i> Tipo de Anuncio (Opcional)
+                      </label>
+                      <select 
+                        class="form-select" 
+                        id="tipoAnuncio" 
+                        formControlName="tipoAnuncio"
+                      >
+                        <option value="">Todos los tipos</option>
+                        @for(tipo of tiposAnuncio; track tipo.valor) {
+                          <option [value]="tipo.valor">{{ tipo.texto }}</option>
+                        }
+                      </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label for="vigencia" class="form-label">
+                        <i class="bi bi-calendar-check"></i> Vigencia en Días (Opcional)
+                      </label>
+                      <select 
+                        class="form-select" 
+                        id="vigencia" 
+                        formControlName="vigencia"
+                      >
+                        <option value="">Todas las vigencias</option>
+                        @for(dia of diasVigencia; track dia.valor) {
+                          <option [value]="dia.valor">{{ dia.texto }}</option>
+                        }
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if(mostrarFiltroAnunciante()) {
+              <hr>
+              <div class="card bg-light mb-3">
+                <div class="card-body">
+                  <h6 class="card-title">
+                    <i class="bi bi-funnel"></i> Filtro por Anunciante
+                  </h6>
+                  
+                  <div class="mb-3">
+                    <label for="anuncianteId" class="form-label">
+                      <i class="bi bi-person-badge"></i> Anunciante (Opcional)
+                    </label>
+                    @if(anunciantes.length === 0) {
+                      <div class="alert alert-warning">
+                        <i class="bi bi-info-circle"></i> No hay anunciantes registrados en el sistema
+                      </div>
+                    } @else {
+                      <select 
+                        class="form-select" 
+                        id="anuncianteId" 
+                        formControlName="anuncianteId"
+                      >
+                        <option value="">Todos los anunciantes</option>
+                        @for(anunciante of anunciantes; track anunciante.id) {
+                          <option [value]="anunciante.id">
+                            {{ anunciante.nombre }} ({{ anunciante.correo }})
+                          </option>
+                        }
+                      </select>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+
+            <hr>
+
+            <div class="d-flex gap-2 justify-content-end">
+              <button 
+                type="button" 
+                class="btn btn-secondary"
+                (click)="limpiarFormulario()"
+                [disabled]="cargando"
+              >
+                <i class="bi bi-x-circle"></i> Limpiar
+              </button>
+              <button 
+                type="submit" 
+                class="btn btn-success"
+                [disabled]="cargando"
+              >
+                @if(cargando) {
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Generando...
+                } @else {
+                  <i class="bi bi-file-earmark-pdf"></i> Generar Reporte
+                }
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
