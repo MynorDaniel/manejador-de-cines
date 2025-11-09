@@ -16,6 +16,7 @@ public class ProyeccionDTO extends Validador {
     private String id;
     private String idSala;
     private String idPelicula;
+    private String nombrePelicula;
     private String fecha;
     private String hora;
     private String precio;
@@ -31,6 +32,14 @@ public class ProyeccionDTO extends Validador {
     public void validarEdicion() throws EntidadInvalidaException{
         if(!esEnteroPositivo(id)) throw new ProyeccionInvalidaException("Id inválido");
         validarEntrada();
+    }
+
+    public String getNombrePelicula() {
+        return nombrePelicula;
+    }
+
+    public void setNombrePelicula(String nombrePelicula) {
+        this.nombrePelicula = nombrePelicula;
     }
 
     public String getPrecio() {

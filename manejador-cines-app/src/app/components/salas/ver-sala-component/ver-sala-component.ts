@@ -9,11 +9,12 @@ import { Calificacion } from '../../../models/calificacion';
 import { AnuncioService } from '../../../services/anuncio-service';
 import { CineService } from '../../../services/cine-service';
 import { Cine } from '../../../models/cine';
+import { ComentariosComponent } from '../../comentarios/comentarios-component/comentarios-component';
 
 @Component({
   selector: 'app-ver-sala-component',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ComentariosComponent],
   templateUrl: './ver-sala-component.html',
   styleUrl: './ver-sala-component.css'
 })

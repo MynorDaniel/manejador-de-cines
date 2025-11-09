@@ -7,10 +7,11 @@ import { PeliculaService } from '../../../services/pelicula-service';
 import { ImagenService } from '../../../services/imagen-service';
 import { JwtService } from '../../../services/jwt-service';
 import { Usuario } from '../../../models/usuario';
+import { ComentariosComponent } from '../../comentarios/comentarios-component/comentarios-component';
 
 @Component({
   selector: 'app-ver-pelicula-component',
-  imports: [CommonModule],
+  imports: [CommonModule, ComentariosComponent],
   templateUrl: './ver-pelicula-component.html',
   styleUrl: './ver-pelicula-component.css'
 })

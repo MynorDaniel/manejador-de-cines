@@ -65,5 +65,5 @@ export const routes: Routes = [
     {path: 'crear-proyeccion/:idCine', component: CrearProyeccionComponent},
     {path: 'editar-proyeccion/:id', component: EditarProyeccionComponent},
     {path: 'comprar-boleto/:idProyeccion', component: ComprarBoletoComponent},
-    {path: 'mis-boletos', component: MisBoletosComponent}
+    {path: 'mis-boletos', component: MisBoletosComponent},
 ];

@@ -33,24 +33,28 @@
             </h3>
             
             @if (usuarioActual.rol === 'ADMINISTRADOR_CINES' || usuarioActual.rol === 'ADMINISTRADOR_SISTEMA') {
-              <div class="dropdown">
-                <button 
-                  class="btn btn-light btn-sm" 
-                  type="button" 
-                  id="dropdownMenuButton" 
-                  data-bs-toggle="dropdown" 
-                  aria-expanded="false"
-                >
-                  <i class="bi bi-three-dots-vertical"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                  <li>
-                    <a class="dropdown-item" (click)="editarSala(sala)">
-                      <i class="bi bi-pencil"></i> Editar
-                    </a>
-                  </li>
-                </ul>
-              </div>
+
+              @if(usuarioActual.id === +(cine?.idUsuarioCreador ?? 0)) {
+
+                <div class="dropdown">
+                  <button 
+                    class="btn btn-light btn-sm" 
+                    type="button" 
+                    id="dropdownMenuButton" 
+                    data-bs-toggle="dropdown" 
+                    aria-expanded="false"
+                  >
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <li>
+                      <a class="dropdown-item" (click)="editarSala(sala)">
+                        <i class="bi bi-pencil"></i> Editar
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              }
             }
           </div>
           <div class="card-body p-4">
@@ -127,41 +131,37 @@
 
             <hr>
 
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <div class="card bg-light">
-                  <div class="card-body text-center">
-                    <h5 class="card-title text-muted mb-3">
-                      <i class="bi bi-star-fill text-warning"></i> Calificación General
-                    </h5>
-                    <div class="fs-3">
-                      @for (estrella of obtenerEstrellas(sala.calificacion); track $index) {
-                        @if (estrella === 1) {
-                          <i class="bi bi-star-fill text-warning"></i>
-                        } @else {
-                          <i class="bi bi-star text-muted"></i>
+            @if (sala.calificacionesBloqueadas !== 'true') {
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h5 class="card-title text-muted mb-3">
+                        <i class="bi bi-star-fill text-warning"></i> Calificación General
+                      </h5>
+                      <div class="fs-3">
+                        @for (estrella of obtenerEstrellas(sala.calificacion); track $index) {
+                          @if (estrella === 1) {
+                            <i class="bi bi-star-fill text-warning"></i>
+                          } @else {
+                            <i class="bi bi-star text-muted"></i>
+                          }
                         }
-                      }
+                      </div>
+                      <p class="text-muted mt-2 mb-0">
+                        {{ sala.calificacion || 0 }} / 5
+                      </p>
                     </div>
-                    <p class="text-muted mt-2 mb-0">
-                      {{ sala.calificacion || 0 }} / 5
-                    </p>
                   </div>
                 </div>
-              </div>
 
-              <div class="col-md-6 mb-3">
-                <div class="card bg-light">
-                  <div class="card-body text-center">
-                    <h5 class="card-title text-muted mb-3">
-                      <i class="bi bi-person-fill text-primary"></i> Tu Calificación
-                    </h5>
-                    
-                    @if (sala.calificacionesBloqueadas === 'true') {
-                      <p class="text-danger">
-                        <i class="bi bi-lock-fill"></i> Calificaciones bloqueadas
-                      </p>
-                    } @else {
+                <div class="col-md-6 mb-3">
+                  <div class="card bg-light">
+                    <div class="card-body text-center">
+                      <h5 class="card-title text-muted mb-3">
+                        <i class="bi bi-person-fill text-primary"></i> Tu Calificación
+                      </h5>
+                      
                       <div class="fs-3 mb-3">
                         @for (valor of [1, 2, 3, 4, 5]; track $index) {
                           <i 
@@ -194,14 +194,27 @@
                           <i class="bi bi-info-circle"></i> Haz clic en las estrellas para calificar
                         </p>
                       }
-                    }
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            } @else {
+              <div class="alert alert-warning text-center">
+                <i class="bi bi-lock-fill"></i> Las calificaciones están bloqueadas para esta sala
+              </div>
+            }
 
           </div>
         </div>
+
+        <div class="mt-4">
+          <app-comentarios-component 
+            tipo="sala" 
+            [entidadId]="+sala.id!"
+            [comentariosBloqueados]="sala.comentariosBloqueados === 'true'"
+          ></app-comentarios-component>
+        </div>
+
       </div>
     </div>
   }

@@ -18,10 +18,24 @@ public class ComentarioDTO extends Validador {
     private String idUsuario;
     private String contenido;
     private String fecha;
+    private UsuarioSalidaDTO usuario;
 
     @Override
     public void validarEntrada() throws EntidadInvalidaException {
         if(StringUtils.isBlank(contenido)) throw new InteraccionInvalidaException("Contenido inválido");
+    }
+    
+    public void validarEdicion() throws EntidadInvalidaException {
+        if(StringUtils.isBlank(contenido)) throw new InteraccionInvalidaException("Contenido inválido");
+        if(!esEnteroPositivo(id))throw new InteraccionInvalidaException("Id inválido");
+    }
+
+    public UsuarioSalidaDTO getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(UsuarioSalidaDTO usuario) {
+        this.usuario = usuario;
     }
 
     public String getId() {

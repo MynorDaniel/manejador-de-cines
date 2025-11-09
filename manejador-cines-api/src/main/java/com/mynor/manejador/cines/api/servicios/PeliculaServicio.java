@@ -325,7 +325,7 @@ public class PeliculaServicio {
         }
     }
     
-    private Pelicula leerPeliculaPorId(Integer id) throws AccesoDeDatosException{
+    protected Pelicula leerPeliculaPorId(Integer id) throws AccesoDeDatosException{
         FiltrosPelicula filtros = new FiltrosPelicula();
         filtros.setId(Optional.ofNullable(id));
         

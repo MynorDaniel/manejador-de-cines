@@ -30,7 +30,6 @@ import com.mynor.manejador.cines.api.filtros.FiltrosCostoDiarioCine;
 import com.mynor.manejador.cines.api.filtros.FiltrosCostoGlobalCines;
 import com.mynor.manejador.cines.api.filtros.FiltrosPago;
 import com.mynor.manejador.cines.api.filtros.FiltrosPagoCine;
-import com.mynor.manejador.cines.api.filtros.FiltrosProyeccion;
 import com.mynor.manejador.cines.api.modelo.BloqueoAnunciosCine;
 import com.mynor.manejador.cines.api.modelo.Cartera;
 import com.mynor.manejador.cines.api.modelo.Cine;
@@ -510,6 +509,7 @@ public class CineServicio {
         ProyeccionServicio proyeccionServicio = new ProyeccionServicio();
         LinkedList<ProyeccionDTO> proyeccionesDTO = new LinkedList<>();
 
+        PeliculaServicio peliculaServicio = new PeliculaServicio();
         for (Sala sala : salas) {
             Proyeccion[] proyeccionesSala = proyeccionServicio.leerPorSala(sala.getId());
             if(proyeccionesSala != null){
@@ -518,6 +518,9 @@ public class CineServicio {
                     dto.setId(proyeccion.getId().toString());
                     dto.setIdSala(proyeccion.getSala().getId().toString());
                     dto.setIdPelicula(proyeccion.getPelicula().getId().toString());
+                    
+                    dto.setNombrePelicula(peliculaServicio.leerPeliculaPorId(proyeccion.getPelicula().getId()).getTitulo());
+                    System.out.println("nombre: " + dto.getNombrePelicula());
                     dto.setFecha(proyeccion.getFecha().toString());
                     dto.setHora(proyeccion.getHora().toString());
                     proyeccionesDTO.add(dto);

@@ -164,7 +164,7 @@ CREATE TABLE ComentarioSala (
     comentario INT,
     sala INT,
     PRIMARY KEY (comentario, sala),
-    CONSTRAINT fk_comentario_comentariosala FOREIGN KEY (comentario) REFERENCES Comentario (id),
+    CONSTRAINT fk_comentario_comentariosala FOREIGN KEY (comentario) REFERENCES Comentario (id) ON DELETE CASCADE,
     CONSTRAINT fk_sala_comentariosala FOREIGN KEY (sala) REFERENCES Sala (id)
 );
 
@@ -180,7 +180,7 @@ CREATE TABLE ComentarioPelicula (
     comentario INT,
     pelicula INT,
     PRIMARY KEY (comentario, pelicula),
-    CONSTRAINT fk_comentario_comentariopelicula FOREIGN KEY (comentario) REFERENCES Comentario (id),
+    CONSTRAINT fk_comentario_comentariopelicula FOREIGN KEY (comentario) REFERENCES Comentario (id) ON DELETE CASCADE,
     CONSTRAINT fk_pelicula_comentariopelicula FOREIGN KEY (pelicula) REFERENCES Pelicula (id)
 );
 

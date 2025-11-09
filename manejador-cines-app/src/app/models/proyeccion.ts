@@ -5,4 +5,5 @@ export interface Proyeccion {
     fecha: string;
     hora: string;
     precio?: string;
+    nombrePelicula?: string;
 }

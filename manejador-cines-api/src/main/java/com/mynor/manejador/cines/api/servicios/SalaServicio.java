@@ -164,6 +164,9 @@ public class SalaServicio {
      */
     public void cambiarCalificacion(CalificacionSalaDTO calificacionDTO) throws AccesoDeDatosException {
         
+        Sala sala = leerPorId(Integer.valueOf(calificacionDTO.getIdSala()));
+        if(sala.getCalificacionesBloqueadas()) throw new AccesoDeDatosException("Calificaciones bloqueadas");
+        
         Optional<CalificacionSala> calificacionExistente = leerCalificacionSala(Integer.valueOf(calificacionDTO.getIdUsuario()), Integer.valueOf(calificacionDTO.getIdSala()));
         
         if(calificacionExistente.isPresent()){
@@ -179,9 +182,6 @@ public class SalaServicio {
             Calificacion calificacion = new CalificacionSala();
             calificacion.setFecha(LocalDate.now());
             calificacion.setValor(Integer.valueOf(calificacionDTO.getValor()));
-            
-            Sala sala = new Sala();
-            sala.setId(Integer.valueOf(calificacionDTO.getIdSala()));
             
             Usuario usuario = new Usuario();
             usuario.setId(Integer.valueOf(calificacionDTO.getIdUsuario()));

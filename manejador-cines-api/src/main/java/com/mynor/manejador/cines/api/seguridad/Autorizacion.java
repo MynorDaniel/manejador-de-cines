@@ -12,6 +12,7 @@ import com.mynor.manejador.cines.api.dtos.BloqueoAnunciosCineDTO;
 import com.mynor.manejador.cines.api.dtos.CalificacionSalaDTO;
 import com.mynor.manejador.cines.api.dtos.CarteraEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.CineDTO;
+import com.mynor.manejador.cines.api.dtos.ComentarioDTO;
 import com.mynor.manejador.cines.api.dtos.ProyeccionDTO;
 import com.mynor.manejador.cines.api.dtos.SalaDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEditadoDTO;
@@ -21,11 +22,13 @@ import com.mynor.manejador.cines.api.excepciones.AutorizacionException;
 import com.mynor.manejador.cines.api.filtros.FiltrosUsuario;
 import com.mynor.manejador.cines.api.modelo.Anuncio;
 import com.mynor.manejador.cines.api.modelo.Cine;
+import com.mynor.manejador.cines.api.modelo.Comentario;
 import com.mynor.manejador.cines.api.modelo.Rol;
 import com.mynor.manejador.cines.api.modelo.Sala;
 import com.mynor.manejador.cines.api.modelo.Usuario;
 import com.mynor.manejador.cines.api.servicios.AnuncioServicio;
 import com.mynor.manejador.cines.api.servicios.CineServicio;
+import com.mynor.manejador.cines.api.servicios.ComentarioServicio;
 import com.mynor.manejador.cines.api.servicios.SalaServicio;
 import java.util.Optional;
 
@@ -217,6 +220,14 @@ public class Autorizacion {
         Cine cine = cineServicio.leerCinePorId(sala.getCine().getId());
         
         if(!cine.getUsuarioCreador().getId().equals(credencialesUsuarioActual.getId())) throw new AutorizacionException("No puedes modificar este cine");
+    }
+    
+    public void validarEdicionDeComentario(Integer id) throws AccesoDeDatosException, AutorizacionException {
+        credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
+        
+        ComentarioServicio comentarioServicio = new ComentarioServicio();
+        Comentario comentario = comentarioServicio.leerPorId(id);
+        if(!comentario.getUsuario().getId().equals(credencialesUsuarioActual.getId())) throw new AutorizacionException("Sin autorizacion");
     }
 
     

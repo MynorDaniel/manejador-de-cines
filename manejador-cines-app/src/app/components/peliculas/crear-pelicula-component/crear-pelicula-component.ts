@@ -166,6 +166,7 @@ export class CrearPeliculaComponent implements OnInit {
     this.peliculaService.crearPelicula(pelicula).subscribe({
       next: () => {
         this.infoMsg = 'Película creada exitosamente';
+        this.peliculaForm.reset();
       },
       error: (err) => {
         this.errorMsg = err.error || 'Error al crear la película';
