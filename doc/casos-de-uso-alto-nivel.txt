@@ -245,12 +245,6 @@ Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del S
 Descripción: El usuario ingresa al apartado de boletos comprados, el sistema muestra una lista de todos los boletos comprados por el usuario
 Tipo: Primario
 
-Número: 041
-Caso de uso: Descargar boleto
-Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
-Descripción: El usuario ingresa al apartado de boletos comprados, el sistema muestra cada boleto con la opción de descargar el boleto, el usuario realiza la descarga
-Tipo: Secundario
-
 Comentarios
 
 Número: 042
@@ -281,32 +275,6 @@ Número: 046
 Caso de uso: Eliminar comentario
 Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
 Descripción: El usuario ingresa al apartado de comentarios, el sistema muestra los comentarios del usuario entre la lista de comentarios con la opción de eliminarlos, el usuario elimina un comentario, el sistema refleja los cambios en la lista de comentarios
-Tipo: Secundario
-
-Categorías
-
-Número: 047
-Caso de uso: Crear categoría
-Actores: Administrador del Sistema
-Descripción: El usuario ingresa al apartado de crear categoría, el sistema muestra opciones para ingresar la información de la nueva categoría, el usuario ingresa la información y confirma la creación, el sistema muestra la nueva categoría en la lista general
-Tipo: Primario
-
-Número: 048
-Caso de uso: Editar categoría
-Actores: Administrador del Sistema
-Descripción: El usuario ingresa al apartado de editar una categoría, el sistema muestra la información de la categoría con la opción de editarla, el usuario confirma la eliminación, el sistema muestra la categoría con la información cambiada
-Tipo: Secundario
-
-Número: 049
-Caso de uso: Eliminar categoría
-Actores: Administrador del Sistema
-Descripción: El usuario ingresa al listado de categorías, el sistema muestra cada categoría con la opción de eliminarla, el usuario confirma la eliminación de una categoría, el sistema muestra la lista de categorías sin la recién eliminada
-Tipo: Secundario
-
-Número: 050
-Caso de uso: Ver categorías
-Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema
-Descripción: El usuario ingresa al apartado de categorías, el sistema muestra una lista de todas las categorías de películas disponibles
 Tipo: Secundario
 
 Reportes admin cines
@@ -367,13 +335,6 @@ Actores: Administrador de Cines, Administrador del Sistema
 Descripción: El usuario ingresa al apartado de reporte de salas más comentadas, el sistema muestra la información del reporte con la opción de agregar filtros, el usuario selecciona los filtros correspondientes, el sistema muestra la información filtrada
 Tipo: Primario
 
-Exportación
-
-Número: 060
-Caso de uso: Exportar reporte
-Actores: Administrador del Sistema, Administrador de Cines
-Descripción: El usuario ingresa al apartado del reporte, el sistema muestra el reporte con la opción de exportarlo, el usuario confirma la exportación del reporte, el sistema muestra el reporte exportado
-Tipo: Primario
 
 Proyecciones
 

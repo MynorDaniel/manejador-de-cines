@@ -81,15 +81,11 @@ export const routes: Routes = [
 
     {
         path: 'editar-usuario', 
-        component: EditarUsuario,
-        canActivate: [RolGuardService],
-        data: {allowedRoles: ['CLIENTE', 'ANUNCIANTE', 'ADMINISTRADOR_CINES', 'ADMINISTRADOR_SISTEMA']}
+        component: EditarUsuario
     },
     {
         path: 'cartera', 
-        component: Cartera,
-        canActivate: [RolGuardService],
-        data: {allowedRoles: ['CLIENTE', 'ANUNCIANTE', 'ADMINISTRADOR_CINES']}
+        component: Cartera
     },
 
     {
@@ -122,9 +118,7 @@ export const routes: Routes = [
     },
     {
         path: 'mis-cines', 
-        component: MisCinesComponent,
-        canActivate: [RolGuardService],
-        data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+        component: MisCinesComponent
     },
     {
         path: 'editar-cine/:id', 

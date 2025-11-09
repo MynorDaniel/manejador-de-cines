@@ -7,16 +7,14 @@ Fecha final: 07/11/2025
 
 ---------------------------------------------------------------------------------------------------------------------------
 
-Iteración 1 (07/10/2025 - 17/10/2025)
+Iteración 1 (07/10/2025 - 01/11/2025)
 Objetivo: Implementar funcionalidades de sesión, usuario, cartera digital y anuncios.
 
-Diseño de la base de datos (2 días)
-
-Sesión (2 días):
+Sesión:
 001 Iniciar sesión
 002 Cerrar sesión
 
-Usuarios (3 días):
+Usuarios:
 003 Crear usuario administrador de sistema
 004 Crear usuario administrador de cines
 005 Crear usuario normal
@@ -24,11 +22,11 @@ Usuarios (3 días):
 007 Editar perfil de usuario
 008 Desactivar cuenta de usuario
 
-Cartera digital (1 día):
+Cartera digital:
 009 Recargar cartera digital
 010 Ver movimientos de la cartera digital
 
-Anuncios (3 días):
+Anuncios:
 011 Comprar anuncio
 012 Desactivar anuncio
 013 Cambiar precio en tipos de anuncios
@@ -38,10 +36,10 @@ Anuncios (3 días):
 
 ---------------------------------------------------------------------------------------------------------------------------
 
-Iteración 2 (18/10/2025 - 28/10/2025)
+Iteración 2 (01/11/2025 - 01/11/2025)
 Objetivo: Implementar gestión de salas, cines, películas y proyecciones.
 
-Salas (3 días):
+Salas:
 018 Crear sala
 019 Calificar sala
 020 Cambiar bloqueo de comentarios a sala
@@ -51,7 +49,7 @@ Salas (3 días):
 024 Ver sala
 025 Eliminar sala
 
-Cines (3 días):
+Cines:
 026 Ver cine
 027 Cambiar costo por día a cine
 028 Cambiar costo global a cines
@@ -60,7 +58,7 @@ Cines (3 días):
 031 Eliminar cine
 032 Pagar costo por día de un cine
 
-Películas (3 días):
+Películas:
 033 Ver película
 034 Buscar película
 035 Calificar película
@@ -68,48 +66,38 @@ Películas (3 días):
 037 Editar película
 038 Eliminar película
 
-Proyecciones (2 días):
+Proyecciones:
 061 Crear proyección
 062 Editar proyección
 
 ---------------------------------------------------------------------------------------------------------------------------
 
-Iteración 3 (29/10/2025 - 06/11/2025)
+Iteración 3 (07/11/2025 - 09/11/2025)
 Objetivo: Implementar reportes y exportación, gestión de boletos, comentarios y categorías.
 
-Boletos (2 días):
+Boletos:
 039 Comprar boleto
 040 Ver boletos comprados
-041 Descargar boleto
 
-Comentarios (1 días):
+Comentarios:
 042 Crear comentario a sala
 043 Crear comentario a película
 044 Editar comentario
 045 Ver comentarios
 046 Eliminar comentario
 
-Categorías (1 días):
-047 Crear categoría
-048 Editar categoría
-049 Eliminar categoría
-050 Ver categorías
-
-Reportes admin cines (2 días):
+Reportes admin cines:
 051 Ver reporte comentarios a salas
 052 Ver reporte películas proyectadas en salas
 053 Ver reporte calificaciones en salas
 054 Ver reporte ventas de boletos
 
-Reportes admin sistema (2 días):
+Reportes admin sistema:
 055 Ver reporte ganancias de cines
 056 Ver reporte anuncios comprados
 057 Ver reporte ganancias por anunciantes
 058 Ver reporte salas más populares
 059 Ver reporte salas más comentadas
-
-Exportación (1 día):
-060 Exportar reporte
 
 ---------------------------------------------------------------------------------------------------------------------------
 

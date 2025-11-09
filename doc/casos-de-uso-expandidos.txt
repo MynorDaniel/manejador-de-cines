@@ -832,26 +832,6 @@ Flujo principal:
 Escenarios alternos:
 2. Si el usuario no ha comprado boletos, el sistema muestra un mensaje indicando que no hay boletos disponibles.
 
----------------------------------------------------------------------------------------------------------------------------
-
-Número: 041
-Caso de uso: Descargar boleto
-Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
-Propósito: Permitir al usuario descargar los boletos que ha comprado.
-Precondición: 040 (Ver boletos comprados)
-Resumen: El usuario ingresa al apartado de boletos comprados, el sistema muestra cada boleto con la opción de descargarlo, el usuario realiza la descarga.
-Tipo: Secundario, Real
-
-Flujo principal:
-
-1. El usuario selecciona un boleto de la lista de boletos comprados.
-2. El sistema muestra la opción de descargar el boleto.
-3. El usuario confirma la descarga.
-4. El sistema genera el archivo del boleto y permite su descarga.
-
-Escenarios alternos:
-4. Si ocurre un error en la descarga, el sistema muestra un mensaje de error e indica que la operación no se completó.
-2. Si el boleto seleccionado ya no está disponible para descarga, el sistema notifica al usuario.
 
 ---------------------------------------------------------------------------------------------------------------------------
 
@@ -954,89 +934,6 @@ Flujo principal:
 
 Escenarios alternos:
 3. Si el comentario no puede eliminarse, el sistema notifica al usuario y no realiza cambios.
-
----------------------------------------------------------------------------------------------------------------------------
-
-Número: 047
-Caso de uso: Crear categoría
-Actores: Administrador del Sistema (Iniciador)
-Propósito: Permitir al administrador crear una nueva categoría de películas.
-Precondición: 001 (Iniciar sesión)
-Resumen: El usuario ingresa al apartado de crear categoría, el sistema muestra opciones para ingresar la información de la nueva categoría, el usuario ingresa la información y confirma la creación, el sistema muestra la nueva categoría en la lista general.
-Tipo: Primario, Real
-
-Flujo principal:
-
-1. El usuario selecciona la opción de crear categoría.
-2. El sistema muestra campos para ingresar el nombre y descripción de la categoría.
-3. El usuario completa la información requerida y confirma la creación.
-4. El sistema valida la información y agrega la categoría a la lista general.
-5. El sistema confirma que la categoría fue creada exitosamente.
-
-Escenarios alternos:
-3. Si algún campo obligatorio está vacío, el sistema solicita completarlo antes de continuar.
-4. Si la categoría ya existe, el sistema muestra un mensaje de error y no permite duplicar.
-
----------------------------------------------------------------------------------------------------------------------------
-
-Número: 048
-Caso de uso: Editar categoría
-Actores: Administrador del Sistema (Iniciador)
-Propósito: Permitir al administrador modificar una categoría existente.
-Precondición: 001 (Iniciar sesión), 047 (Crear categoría)
-Resumen: El usuario ingresa al apartado de editar una categoría, el sistema muestra la información de la categoría con la opción de editarla, el usuario confirma la edición, el sistema muestra la categoría con la información cambiada.
-Tipo: Secundario, Real
-
-Flujo principal:
-
-1. El usuario selecciona la categoría que desea editar.
-2. El sistema muestra la información de la categoría con campos editables.
-3. El usuario modifica la información y confirma la edición.
-4. El sistema valida los cambios y actualiza la categoría.
-5. El sistema confirma que la categoría fue editada correctamente.
-
-Escenarios alternos:
-3. Si el usuario deja campos obligatorios vacíos, el sistema solicita completarlos.
-4. Si la categoría ya existe con el nuevo nombre, el sistema muestra un mensaje de error y no actualiza.
-
----------------------------------------------------------------------------------------------------------------------------
-
-Número: 049
-Caso de uso: Eliminar categoría
-Actores: Administrador del Sistema (Iniciador)
-Propósito: Permitir al administrador eliminar una categoría existente.
-Precondición: 001 (Iniciar sesión), 047 (Crear categoría)
-Resumen: El usuario ingresa al listado de categorías, el sistema muestra cada categoría con la opción de eliminarla, el usuario confirma la eliminación de una categoría, el sistema muestra la lista de categorías sin la recién eliminada.
-Tipo: Secundario, Real
-
-Flujo principal:
-
-1. El usuario selecciona la categoría que desea eliminar.
-2. El sistema muestra la opción de eliminar.
-3. El usuario confirma la eliminación.
-4. El sistema elimina la categoría y actualiza la lista.
-5. El sistema confirma que la categoría fue eliminada correctamente.
-
-Escenarios alternos:
-4. Si la categoría está asociada a películas, el sistema solicita confirmación adicional antes de eliminar.
-
----------------------------------------------------------------------------------------------------------------------------
-
-Número: 050
-Caso de uso: Ver categorías
-Actores: Usuario Normal, Anunciante, Administrador de Cines, Administrador del Sistema (Iniciador)
-Propósito: Permitir a los usuarios visualizar todas las categorías de películas disponibles.
-Precondición: Ninguna
-Resumen: El usuario ingresa al apartado de categorías, el sistema muestra una lista de todas las categorías de películas disponibles.
-Tipo: Secundario, Real
-
-Flujo principal:
-
-1. El usuario selecciona el apartado de categorías.
-2. El sistema muestra la lista completa de categorías disponibles, incluyendo nombre y descripción.
-
-Escenarios alternos:
-2. Si no existen categorías registradas, el sistema muestra un mensaje indicando que no hay categorías disponibles.
 
 ---------------------------------------------------------------------------------------------------------------------------
 
@@ -1217,26 +1114,6 @@ Flujo principal:
 
 Escenarios alternos:
 3. Si no existen registros de comentarios, el sistema muestra un mensaje indicando que no hay información disponible.
-
----------------------------------------------------------------------------------------------------------------------------
-
-Número: 060
-Caso de uso: Exportar reporte
-Actores: Administrador del Sistema, Administrador de Cines (Iniciador)
-Propósito: Permitir exportar un reporte a un archivo.
-Precondición: 001 (Iniciar sesión)
-Resumen: El usuario ingresa al apartado del reporte, el sistema muestra el reporte con la opción de exportarlo, el usuario confirma la exportación, el sistema genera y muestra el archivo exportado.
-Tipo: Primario, Real
-
-Flujo principal:
-
-1. El usuario selecciona el apartado del reporte a exportar.
-2. El sistema muestra la información del reporte con la opción de exportarlo.
-3. El usuario confirma la exportación.
-4. El sistema genera el archivo exportado y notifica al usuario.
-
-Escenarios alternos:
-3. Si ocurre un error durante la exportación, el sistema muestra un mensaje indicando que no se pudo exportar el reporte.
 
 ---------------------------------------------------------------------------------------------------------------------------
 
