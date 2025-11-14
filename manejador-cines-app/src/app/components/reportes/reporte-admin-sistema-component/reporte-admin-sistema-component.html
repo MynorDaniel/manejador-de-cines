@@ -1,6 +1,6 @@
 <div class="container mt-4">
   <div class="row justify-content-center">
-    <div class="col-lg-8">
+    <div class="col-lg-10">
       
       @if(errorMsg) {
         <div class="alert alert-danger" role="alert">
@@ -17,35 +17,17 @@
       <div class="card shadow-lg">
         <div class="card-header bg-success text-white">
           <h3 class="mb-0">
-            <i class="bi bi-file-earmark-bar-graph"></i> Reportes de Administración del Sistema
+            <i class="bi bi-cash-coin"></i> Reporte de Ganancias del Sistema
           </h3>
         </div>
         <div class="card-body p-4">
           
           <form [formGroup]="filtrosForm" (ngSubmit)="generarReporte()">
             
-            <div class="mb-3">
-              <label for="tipoReporte" class="form-label">
-                <i class="bi bi-card-list"></i> Tipo de Reporte <span class="text-danger">*</span>
-              </label>
-              <select 
-                class="form-select" 
-                id="tipoReporte" 
-                formControlName="tipoReporte"
-              >
-                @for(tipo of tiposReporte; track tipo.valor) {
-                  <option [value]="tipo.valor">{{ tipo.texto }}</option>
-                }
-              </select>
-            </div>
-
-            <hr>
-
-            <!-- Filtros de Fecha (opcionales) -->
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="fechaInicio" class="form-label">
-                  <i class="bi bi-calendar-event"></i> Fecha de Inicio (Opcional)
+                  <i class="bi bi-calendar-event"></i> Fecha de Inicio
                 </label>
                 <input 
                   type="date" 
@@ -57,7 +39,7 @@
 
               <div class="col-md-6 mb-3">
                 <label for="fechaFin" class="form-label">
-                  <i class="bi bi-calendar-event"></i> Fecha de Fin (Opcional)
+                  <i class="bi bi-calendar-event"></i> Fecha de Fin
                 </label>
                 <input 
                   type="date" 
@@ -67,87 +49,6 @@
                 >
               </div>
             </div>
-
-
-            @if(mostrarFiltrosAnuncios()) {
-              <hr>
-              <div class="card bg-light mb-3">
-                <div class="card-body">
-                  <h6 class="card-title">
-                    <i class="bi bi-funnel"></i> Filtros Adicionales para Anuncios
-                  </h6>
-                  
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label for="tipoAnuncio" class="form-label">
-                        <i class="bi bi-image"></i> Tipo de Anuncio (Opcional)
-                      </label>
-                      <select 
-                        class="form-select" 
-                        id="tipoAnuncio" 
-                        formControlName="tipoAnuncio"
-                      >
-                        <option value="">Todos los tipos</option>
-                        @for(tipo of tiposAnuncio; track tipo.valor) {
-                          <option [value]="tipo.valor">{{ tipo.texto }}</option>
-                        }
-                      </select>
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                      <label for="vigencia" class="form-label">
-                        <i class="bi bi-calendar-check"></i> Vigencia en Días (Opcional)
-                      </label>
-                      <select 
-                        class="form-select" 
-                        id="vigencia" 
-                        formControlName="vigencia"
-                      >
-                        <option value="">Todas las vigencias</option>
-                        @for(dia of diasVigencia; track dia.valor) {
-                          <option [value]="dia.valor">{{ dia.texto }}</option>
-                        }
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            }
-
-            @if(mostrarFiltroAnunciante()) {
-              <hr>
-              <div class="card bg-light mb-3">
-                <div class="card-body">
-                  <h6 class="card-title">
-                    <i class="bi bi-funnel"></i> Filtro por Anunciante
-                  </h6>
-                  
-                  <div class="mb-3">
-                    <label for="anuncianteId" class="form-label">
-                      <i class="bi bi-person-badge"></i> Anunciante (Opcional)
-                    </label>
-                    @if(anunciantes.length === 0) {
-                      <div class="alert alert-warning">
-                        <i class="bi bi-info-circle"></i> No hay anunciantes registrados en el sistema
-                      </div>
-                    } @else {
-                      <select 
-                        class="form-select" 
-                        id="anuncianteId" 
-                        formControlName="anuncianteId"
-                      >
-                        <option value="">Todos los anunciantes</option>
-                        @for(anunciante of anunciantes; track anunciante.id) {
-                          <option [value]="anunciante.id">
-                            {{ anunciante.nombre }} ({{ anunciante.correo }})
-                          </option>
-                        }
-                      </select>
-                    }
-                  </div>
-                </div>
-              </div>
-            }
 
             <hr>
 
@@ -161,6 +62,13 @@
                 <i class="bi bi-x-circle"></i> Limpiar
               </button>
               <button 
+                type="button" 
+                class="btn btn-danger"
+                (click)="generarReportePDF()"
+              >
+                <i class="bi bi-file-pdf"></i> PDF
+              </button>
+              <button 
                 type="submit" 
                 class="btn btn-success"
                 [disabled]="cargando"
@@ -169,7 +77,7 @@
                   <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                   Generando...
                 } @else {
-                  <i class="bi bi-file-earmark-pdf"></i> Generar Reporte
+                  <i class="bi bi-file-earmark-text"></i> Generar Reporte
                 }
               </button>
             </div>
@@ -178,6 +86,151 @@
 
         </div>
       </div>
+
+      @if(reporteGanancias) {
+        <div class="mt-4">
+          
+          <div class="card shadow mb-4">
+            <div class="card-header bg-dark text-white">
+              <h4 class="mb-0">
+                <i class="bi bi-graph-up"></i> Resumen
+              </h4>
+            </div>
+            <div class="card-body">
+              <div class="row text-center">
+                <div class="col-md-4">
+                  <div class="p-3 border rounded bg-danger bg-opacity-10">
+                    <h5 class="text-danger">Costos</h5>
+                    <h2 class="mb-0">${{ reporteGanancias.costo }}</h2>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="p-3 border rounded bg-primary bg-opacity-10">
+                    <h5 class="text-primary">Ingresos</h5>
+                    <h2 class="mb-0">${{ reporteGanancias.ingreso }}</h2>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="p-3 border rounded bg-success bg-opacity-10">
+                    <h5 class="text-success">Ganancias</h5>
+                    <h2 class="mb-0">${{ reporteGanancias.ganancia }}</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cines -->
+          @if(reporteGanancias.cines && reporteGanancias.cines.length > 0) {
+            <div class="card shadow mb-4">
+              <div class="card-header bg-info text-white">
+                <h4 class="mb-0">
+                  <i class="bi bi-building"></i> Costo diario a cines
+                </h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Monto Adeudado</th>
+                        <th>Monto Pagado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for(cine of reporteGanancias.cines; track cine.idCine) {
+                        <tr>
+                          <td>{{ cine.idCine }}</td>
+                          <td>{{ cine.nombre }}</td>
+                          <td class="text-danger">${{ cine.montoAdeudado }}</td>
+                          <td class="text-success">${{ cine.montoPagado }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Anuncios -->
+          @if(reporteGanancias.anuncios && reporteGanancias.anuncios.length > 0) {
+            <div class="card shadow mb-4">
+              <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">
+                  <i class="bi bi-megaphone"></i> Anuncios pagados
+                </h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>Tipo</th>
+                        <th>Vigencia</th>
+                        <th>Texto</th>
+                        <th>Costo</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for(anuncio of reporteGanancias.anuncios; track anuncio.id) {
+                        <tr>
+                          <td>{{ anuncio.id }}</td>
+                          <td>
+                            <span class="badge bg-primary">{{ anuncio.tipo }}</span>
+                          </td>
+                          <td>{{ anuncio.vigencia }} días</td>
+                          <td>{{ anuncio.texto }}</td>
+                          <td class="text-success">${{ anuncio.costo }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Bloqueos -->
+          @if(reporteGanancias.bloqueos && reporteGanancias.bloqueos.length > 0) {
+            <div class="card shadow mb-4">
+              <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">
+                  <i class="bi bi-lock"></i> Bloqueos de anuncios por administradores de cines
+                </h4>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead>
+                      <tr>
+                        <th>Administrador de Cine</th>
+                        <th>Días de Bloqueo</th>
+                        <th>Monto Pagado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for(bloqueo of reporteGanancias.bloqueos; track $index) {
+                        <tr>
+                          <td>{{ bloqueo.administradorCine }}</td>
+                          <td>
+                            <span class="badge bg-danger">{{ bloqueo.dias }} días</span>
+                          </td>
+                          <td class="text-success">${{ bloqueo.montoPagado }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          }
+
+        </div>
+      }
 
     </div>
   </div>

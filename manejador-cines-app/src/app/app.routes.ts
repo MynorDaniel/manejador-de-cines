@@ -32,8 +32,8 @@ import { EditarProyeccionComponent } from './components/proyecciones/editar-proy
 import { ComprarBoletoComponent } from './components/boletos/comprar-boleto-component/comprar-boleto-component';
 import { MisBoletosComponent } from './components/boletos/mis-boletos-component/mis-boletos-component';
 import { ReporteAdminCinesComponent } from './components/reportes/reporte-admin-cines-component/reporte-admin-cines-component';
-import { ReporteAdminSistemaComponent } from './components/reportes/reporte-admin-sistema-component/reporte-admin-sistema-component';
 import { RolGuardService } from './services/rol-guard-service';
+import { ReporteAdminSistemaComponent } from './components/reportes/reporte-admin-sistema-component/reporte-admin-sistema-component';
 
 export const routes: Routes = [
     {path: '', component: Inicio},
@@ -63,12 +63,6 @@ export const routes: Routes = [
     {
         path: 'costo-global', 
         component: CostoGlobalComponent,
-        canActivate: [RolGuardService],
-        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
-    },
-    {
-        path: 'reportes-admin-sistema', 
-        component: ReporteAdminSistemaComponent,
         canActivate: [RolGuardService],
         data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
     },
@@ -176,6 +170,12 @@ export const routes: Routes = [
         component: ReporteAdminCinesComponent,
         canActivate: [RolGuardService],
         data: {allowedRoles: ['ADMINISTRADOR_CINES']}
+    },
+    {
+        path: 'reportes-admin-sistema', 
+        component: ReporteAdminSistemaComponent,
+        canActivate: [RolGuardService],
+        data: {allowedRoles: ['ADMINISTRADOR_SISTEMA']}
     },
 
     {path: 'ver-cines', component: VerCinesComponent},

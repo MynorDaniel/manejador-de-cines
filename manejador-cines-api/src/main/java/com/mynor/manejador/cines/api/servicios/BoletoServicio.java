@@ -15,6 +15,9 @@ import com.mynor.manejador.cines.api.dtos.PeliculaDTO;
 import com.mynor.manejador.cines.api.dtos.ProyeccionDTO;
 import com.mynor.manejador.cines.api.dtos.SalaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
+import com.mynor.manejador.cines.api.excepciones.BoletoInvalidoException;
+import com.mynor.manejador.cines.api.excepciones.EntidadInvalidaException;
+import com.mynor.manejador.cines.api.excepciones.PagoInvalidoException;
 import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
 import com.mynor.manejador.cines.api.filtros.FiltrosBoleto;
 import com.mynor.manejador.cines.api.filtros.FiltrosCartera;
@@ -40,12 +43,15 @@ public class BoletoServicio {
         CARTERA_BD = new CarteraBD();
     }
 
-    public void comprarBoleto(BoletoDTO boletoDTO) throws AccesoDeDatosException, UsuarioInvalidoException {
+    public void comprarBoleto(BoletoDTO boletoDTO) throws AccesoDeDatosException, EntidadInvalidaException {
         Usuario usuario = new Usuario();
         usuario.setId(Integer.valueOf(boletoDTO.getIdUsuario()));
         
         ProyeccionServicio proyeccionServicio = new ProyeccionServicio();
         Proyeccion proyeccion = proyeccionServicio.leerPorId(Integer.valueOf(boletoDTO.getIdProyeccion()));
+        
+        // TODO: Validar disponibilidad de la sala
+        if(!salaDisponible(proyeccion) || !asientosDisponibles(proyeccion.getSala())) throw new BoletoInvalidoException("Sala no disponible");
         
         Pago pago = new Pago();
         pago.setFecha(LocalDate.parse(boletoDTO.getPagoDTO().getFecha()));
@@ -58,6 +64,7 @@ public class BoletoServicio {
         
         CarteraServicio carteraServicio = new CarteraServicio();
         Cartera cartera = carteraServicio.leerModeloPorId(usuario.getId());
+        if(!(cartera.getSaldo() >= pago.getMonto())) throw new PagoInvalidoException("Saldo insuficiente");
         cartera.setSaldo(cartera.getSaldo() - pago.getMonto());
         
         try(Transaccion t = new Transaccion()){
@@ -130,6 +137,14 @@ public class BoletoServicio {
             
             return Optional.of(boletos);
         }
+    }
+
+    private boolean salaDisponible(Proyeccion proyeccion) {
+        return true;
+    }
+
+    private boolean asientosDisponibles(Sala sala) {
+        return true;
     }
     
 }

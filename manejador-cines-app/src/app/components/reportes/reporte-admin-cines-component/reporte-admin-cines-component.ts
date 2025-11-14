@@ -2,16 +2,15 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReporteService } from '../../../services/reporte-service';
-import { FiltrosReporteAdminCines } from '../../../models/filtros-reporte-admin-cines';
 import { SalaService } from '../../../services/sala-service';
 import { Sala } from '../../../models/sala';
 import { CineService } from '../../../services/cine-service';
 import { Cine } from '../../../models/cine';
 import { JwtService } from '../../../services/jwt-service';
+import { SalaReporte } from '../../../models/sala-reporte';
 
 @Component({
   selector: 'app-reporte-admin-cines-component',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './reporte-admin-cines-component.html',
   styleUrl: './reporte-admin-cines-component.css'
@@ -27,13 +26,14 @@ export class ReporteAdminCinesComponent implements OnInit {
   filtrosForm: FormGroup;
   salas: Sala[] = [];
   cines: Cine[] = [];
+  salasReporte: SalaReporte[] = [];
   cargando = false;
   errorMsg: string | null = null;
   infoMsg: string | null = null;
 
   tiposReporte = [
     { valor: 'comentarios', texto: 'Comentarios de Salas' },
-    { valor: 'peliculas', texto: 'Películas Más Gustadas' },
+    { valor: 'peliculas', texto: 'Películas Proyectadas' },
     { valor: 'salas', texto: 'Salas Más Gustadas' },
     { valor: 'boletos', texto: 'Boletos Vendidos' }
   ];
@@ -88,7 +88,7 @@ export class ReporteAdminCinesComponent implements OnInit {
     const fechaInicio = this.filtrosForm.get('fechaInicio')?.value;
     const fechaFin = this.filtrosForm.get('fechaFin')?.value;
 
-    if (fechaInicio > fechaFin) {
+    if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
       this.errorMsg = 'La fecha de inicio debe ser menor o igual a la fecha de fin';
       return false;
     }
@@ -104,6 +104,7 @@ export class ReporteAdminCinesComponent implements OnInit {
   generarReporte(): void {
     this.errorMsg = null;
     this.infoMsg = null;
+    this.salasReporte = [];
 
     if (!this.validarFormulario()) {
       return;
@@ -111,29 +112,110 @@ export class ReporteAdminCinesComponent implements OnInit {
 
     this.cargando = true;
 
-    const filtros: FiltrosReporteAdminCines = {
-      fechaInicio: this.filtrosForm.get('fechaInicio')?.value,
-      fechaFin: this.filtrosForm.get('fechaFin')?.value
-    };
-
-    const idSala = this.filtrosForm.get('idSala')?.value;
-    if (idSala) {
-      filtros.idSala = idSala;
-    }
-
+    const fechaInicio = this.filtrosForm.get('fechaInicio')?.value || undefined;
+    const fechaFin = this.filtrosForm.get('fechaFin')?.value || undefined;
+    const idSala = this.filtrosForm.get('idSala')?.value || undefined;
     const tipoReporte = this.filtrosForm.get('tipoReporte')?.value;
 
-    this.reporteService.verReporteAdminCines(filtros, tipoReporte).subscribe({
-      next: (blob) => {
+    let observable;
+
+    switch (tipoReporte) {
+      case 'comentarios':
+        observable = this.reporteService.verReporteComentariosSalas("false", fechaInicio, fechaFin, idSala);
+        break;
+      case 'peliculas':
+        observable = this.reporteService.verReportePeliculasProyectadas("false", fechaInicio, fechaFin, idSala);
+        break;
+      case 'salas':
+        observable = this.reporteService.verReporteSalasMasGustadas("false", fechaInicio, fechaFin, idSala);
+        break;
+      case 'boletos':
+        observable = this.reporteService.verReporteBoletoVendidos("false", fechaInicio, fechaFin, idSala);
+        break;
+      default:
         this.cargando = false;
-        this.infoMsg = 'Reporte generado exitosamente';
+        this.errorMsg = 'Tipo de reporte no válido';
+        return;
+    }
+
+    observable.subscribe({
+      next: (salas) => {
+        this.cargando = false;
+        this.salasReporte = salas;
         
-        const url = window.URL.createObjectURL(blob);
-        window.open(url, '_blank');
+        if (this.salasReporte.length === 0) {
+          this.infoMsg = 'No se encontraron resultados para los filtros seleccionados';
+        } else {
+          this.infoMsg = 'Reporte generado exitosamente';
+        }
       },
       error: (err) => {
         this.cargando = false;
-        this.errorMsg = "Sin coincidencias"
+        this.errorMsg = err.error || 'Error al generar el reporte';
+      }
+    });
+  }
+
+  generarReportePDF(): void {
+    this.errorMsg = null;
+    this.infoMsg = null;
+
+    if (!this.validarFormulario()) {
+      return;
+    }
+
+    const fechaInicio = this.filtrosForm.get('fechaInicio')?.value || undefined;
+    const fechaFin = this.filtrosForm.get('fechaFin')?.value || undefined;
+    const idSala = this.filtrosForm.get('idSala')?.value || undefined;
+    const tipoReporte = this.filtrosForm.get('tipoReporte')?.value;
+
+    let observable;
+
+    switch (tipoReporte) {
+      case 'comentarios':
+        observable = this.reporteService.verReporteComentariosSalas("true", fechaInicio, fechaFin, idSala);
+        break;
+      case 'peliculas':
+        observable = this.reporteService.verReportePeliculasProyectadas("true", fechaInicio, fechaFin, idSala);
+        break;
+      case 'salas':
+        observable = this.reporteService.verReporteSalasMasGustadas("true", fechaInicio, fechaFin, idSala);
+        break;
+      case 'boletos':
+        observable = this.reporteService.verReporteBoletoVendidos("true", fechaInicio, fechaFin, idSala);
+        break;
+      default:
+        this.errorMsg = 'Tipo de reporte no válido';
+        return;
+    }
+
+    observable.subscribe({
+      next: (response: any) => {
+        // Crear un blob con el tipo MIME correcto
+        const blob = new Blob([response], { type: 'application/pdf' });
+        
+        // Verificar que sea un Blob válido
+        if (blob.size === 0) {
+          this.errorMsg = 'El PDF generado está vacío';
+          return;
+        }
+
+        // Crear URL del blob
+        const url = window.URL.createObjectURL(blob);
+        
+        // Abrir en nueva pestaña
+        window.open(url, '_blank');
+        
+        // Liberar la URL después de un tiempo
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 100);
+        
+        this.infoMsg = 'PDF abierto en nueva pestaña';
+      },
+      error: (err) => {
+        console.error('Error al generar PDF:', err);
+        this.errorMsg = 'Error al generar el PDF';
       }
     });
   }
@@ -142,6 +224,7 @@ export class ReporteAdminCinesComponent implements OnInit {
     this.filtrosForm.reset({
       tipoReporte: 'comentarios'
     });
+    this.salasReporte = [];
     this.errorMsg = null;
     this.infoMsg = null;
   }
@@ -149,5 +232,9 @@ export class ReporteAdminCinesComponent implements OnInit {
   obtenerNombreCine(idCine: number): string {
     const cine = this.cines.find(c => c.id === idCine.toString());
     return cine ? cine.nombre : `Cine ${idCine}`;
+  }
+
+  get tipoReporteSeleccionado(): string {
+    return this.filtrosForm.get('tipoReporte')?.value;
   }
 }

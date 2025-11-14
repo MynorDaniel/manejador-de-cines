@@ -129,6 +129,9 @@ public class SalaBD implements BaseDeDatos<Sala, FiltrosSala> {
         if (filtros.getVisible().isPresent()) {
             sql.append(" AND s.visible = ?");
         }
+        if (filtros.getIdCreador().isPresent()) {
+            sql.append(" AND c.usuario_creador = ?");
+        }
         
         try (PreparedStatement stmt = conn.prepareStatement(sql.toString(),
                                                             ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -143,6 +146,9 @@ public class SalaBD implements BaseDeDatos<Sala, FiltrosSala> {
             }
             if (filtros.getVisible().isPresent()) {
                 stmt.setBoolean(paramIndex++, filtros.getVisible().get());
+            }
+            if (filtros.getIdCreador().isPresent()) {
+                stmt.setInt(paramIndex++, filtros.getIdCreador().get());
             }
             
             try (ResultSet rs = stmt.executeQuery()) {

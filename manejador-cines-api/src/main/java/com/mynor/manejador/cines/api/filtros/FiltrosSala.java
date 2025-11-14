@@ -15,11 +15,21 @@ public class FiltrosSala extends Filtros{
     private Optional<Integer> id;
     private Optional<Integer> idCine;
     private Optional<Boolean> visible;
+    private Optional<Integer> idCreador;
     
     public FiltrosSala(){
         id = Optional.empty();
         idCine = Optional.empty();
         visible = Optional.empty();
+        idCreador = Optional.empty();
+    }
+
+    public Optional<Integer> getIdCreador() {
+        return idCreador;
+    }
+
+    public void setIdCreador(Optional<Integer> idCreador) {
+        this.idCreador = idCreador;
     }
 
     public Optional<Integer> getId() {

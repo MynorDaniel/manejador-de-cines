@@ -4,18 +4,15 @@
  */
 package com.mynor.manejador.cines.api.recursos;
 
+import com.mynor.manejador.cines.api.dtos.reportes.*;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.excepciones.AutorizacionException;
-import com.mynor.manejador.cines.api.excepciones.EntidadInvalidaException;
-import com.mynor.manejador.cines.api.excepciones.ReporteInvalidoException;
-import com.mynor.manejador.cines.api.filtros.Filtros;
-import com.mynor.manejador.cines.api.filtros.FiltrosReporteAdminCines;
-import com.mynor.manejador.cines.api.filtros.FiltrosReporteAdminSistema;
-import com.mynor.manejador.cines.api.filtros.FiltrosReportes;
 import com.mynor.manejador.cines.api.seguridad.Autorizacion;
+import com.mynor.manejador.cines.api.servicios.ReportePDF;
 import com.mynor.manejador.cines.api.servicios.ReporteServicio;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.*;
+import java.time.format.DateTimeParseException;
 import net.sf.jasperreports.engine.JRException;
 
 /**
@@ -25,99 +22,327 @@ import net.sf.jasperreports.engine.JRException;
 @Path("reportes")
 public class ReporteRecurso {
     
-    @POST
-    @Path("admin-cines/{tipo}") // comentarios/peliculas/salas/boletos
-    @Produces("application/pdf")
-    public Response verReporteAdminCines(@HeaderParam("Authorization") String authHeader, FiltrosReporteAdminCines filtros, @PathParam("tipo") String tipo) {
+    // Admin cines
+    
+    @GET
+    @Path("comentarios-salas/{pdf}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReporteComentariosSalas(
+            @HeaderParam("Authorization") String authHeader, 
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal, 
+            @QueryParam("id-sala") String idSala,
+            @PathParam("pdf") String pdf) {
         
         ReporteServicio servicio = new ReporteServicio();
         
         try {
             Autorizacion autorizacion = new Autorizacion(authHeader);
-            autorizacion.validarAdminCines();
+            Integer idCreador = autorizacion.validarSesion().getId();
             
-            filtros.validarEntrada();
+            ReporteComentariosSalasDTO reporte = servicio.obtenerReporteComentariosSalas(fechaInicial, fechaFinal, idSala, idCreador);
             
-            byte[] pdfBytes = obtenerReporte(servicio, filtros, tipo);
+            if(pdf.equals("true")){
+                ReportePDF reportePDF = new ReportePDF();
+                byte[] pdfBytes = reportePDF.generarReporteComentariosSalas(reporte.getSalas());
+        
+                return Response.ok(pdfBytes)
+                    .header("Content-Disposition", "attachment; filename=reporte_salas.pdf")
+                    .build();
+            }
             
-            return Response
-                .ok(pdfBytes)
-                .header("Content-Disposition", "inline; filename=\"reporte.pdf\"")
-                .type("application/pdf")
-                .build();
-                
+            return Response.ok(reporte.getSalas()).build();
         } catch (AccesoDeDatosException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         } catch (AutorizacionException ex) {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                .entity(ex.getMessage()).build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity(ex.getMessage()).build();
+        } catch (DateTimeParseException | NumberFormatException e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Filtro invalido").build();
         } catch (JRException ex) {
-            System.err.println("Error JRException: " + ex.getMessage());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("No se pudo cargar el reporte: " + ex.getMessage()).build();
-        } catch (EntidadInvalidaException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+            System.out.println(ex.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al cargar el reporte").build();
         }
     }
     
-    @POST
-    @Path("admin-sistema/{tipo}") // ganancias/anuncios/ganancias-anunciante/salas-populares/salas-comentadas
-    @Produces("application/pdf")
-    public Response verReporteAdminSistema(@HeaderParam("Authorization") String authHeader, FiltrosReporteAdminSistema filtros, @PathParam("tipo") String tipo) {
-        
+    @GET
+    @Path("peliculas-proyectadas/{pdf}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReportePeliculasProyectadas(
+            @HeaderParam("Authorization") String authHeader,
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal,
+            @QueryParam("id-sala") String idSala,
+            @PathParam("pdf") String pdf) {
+
         ReporteServicio servicio = new ReporteServicio();
-        
+
         try {
             Autorizacion autorizacion = new Autorizacion(authHeader);
-            autorizacion.validarAdminSistema();
+            Integer idCreador = autorizacion.validarSesion().getId();
+
+            ReportePeliculasProyectadasDTO reporte = servicio.obtenerReportePeliculasProyectadas(
+                fechaInicial, fechaFinal, idSala, idCreador);
             
-            filtros.validarEntrada();
-            
-            byte[] pdfBytes = obtenerReporte(servicio, filtros, tipo);
-            
-            return Response
-                .ok(pdfBytes)
-                .header("Content-Disposition", "inline; filename=\"reporte.pdf\"")
-                .type("application/pdf")
-                .build();
-                
+            if(pdf.equals("true")){
+                ReportePDF reportePDF = new ReportePDF();
+                byte[] pdfBytes = reportePDF.generarReportePeliculasProyectadas(reporte.getSalas());
+        
+                return Response.ok(pdfBytes)
+                    .header("Content-Disposition", "attachment; filename=reporte_salas.pdf")
+                    .build();
+            }
+
+            return Response.ok(reporte.getSalas()).build();
         } catch (AccesoDeDatosException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(e.getMessage()).build();
         } catch (AutorizacionException ex) {
             return Response.status(Response.Status.UNAUTHORIZED)
                 .entity(ex.getMessage()).build();
-        } catch (JRException ex) {
-            System.err.println("Error JRException: " + ex.getMessage());
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity("No se pudo cargar el reporte: " + ex.getMessage()).build();
-        } catch (EntidadInvalidaException ex) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
+        }catch (DateTimeParseException | NumberFormatException e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Filtro invalido").build();
+        }catch (JRException ex) {
+            System.out.println(ex.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al cargar el reporte").build();
         }
     }
 
-    private byte[] obtenerReporte(ReporteServicio servicio, FiltrosReportes filtros, String tipo) throws AccesoDeDatosException, JRException, ReporteInvalidoException {
-        if(tipo.equals("comentarios")){
-            return servicio.verReporteComentariosDeSalas((FiltrosReporteAdminCines) filtros);
-        } else if(tipo.equals("peliculas")){
-            return servicio.verReportePeliculasProyectadas((FiltrosReporteAdminCines) filtros);
-        } else if(tipo.equals("salas")){
-            return servicio.verReporteSalasGustadas((FiltrosReporteAdminCines) filtros);
-        } else if(tipo.equals("boletos")){
-            return servicio.verReporteBoletos((FiltrosReporteAdminCines) filtros);
-        } else if(tipo.equals("ganancias")){
-            return servicio.verReporteGanancias((FiltrosReporteAdminSistema) filtros);
-        } else if(tipo.equals("anuncios")){
-            return servicio.verReporteAnuncios((FiltrosReporteAdminSistema) filtros);
-        } else if(tipo.equals("ganancias-anunciante")){
-            return servicio.verReporteGananciasAnunciante((FiltrosReporteAdminSistema) filtros);
-        } else if(tipo.equals("salas-populares")){
-            return servicio.verReporteSalasPopulares((FiltrosReporteAdminSistema) filtros);
-        } else if(tipo.equals("salas-comentadas")){
-            return servicio.verReporteSalasComentadas((FiltrosReporteAdminSistema) filtros);
-        } else {
-            throw new AccesoDeDatosException("Tipo de reporte no válido: " + tipo);
+    @GET
+    @Path("salas-mas-gustadas/{pdf}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReporteSalasMasGustadas(
+            @HeaderParam("Authorization") String authHeader,
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal,
+            @QueryParam("id-sala") String idSala,
+            @PathParam("pdf") String pdf) {
+
+        ReporteServicio servicio = new ReporteServicio();
+
+        try {
+            Autorizacion autorizacion = new Autorizacion(authHeader);
+            Integer idCreador = autorizacion.validarSesion().getId();
+
+            ReporteSalasMasGustadasDTO reporte = servicio.obtenerReporteSalasMasGustadas(
+                fechaInicial, fechaFinal, idSala, idCreador);
+            
+            if(pdf.equals("true")){
+                ReportePDF reportePDF = new ReportePDF();
+                byte[] pdfBytes = reportePDF.generarReporteSalasGustadas(reporte.getSalas());
+        
+                return Response.ok(pdfBytes)
+                    .header("Content-Disposition", "attachment; filename=reporte_salas.pdf")
+                    .build();
+            }
+
+            return Response.ok(reporte.getSalas()).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(e.getMessage()).build();
+        } catch (AutorizacionException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(ex.getMessage()).build();
+        }catch (DateTimeParseException | NumberFormatException e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Filtro invalido").build();
+        }catch (JRException ex) {
+            System.out.println(ex.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al cargar el reporte").build();
+        }
+    }
+
+    @GET
+    @Path("boletos-vendidos/{pdf}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReporteBoletoVendidos(
+            @HeaderParam("Authorization") String authHeader,
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal,
+            @QueryParam("id-sala") String idSala,
+            @PathParam("pdf") String pdf) {
+
+        ReporteServicio servicio = new ReporteServicio();
+
+        try {
+            Autorizacion autorizacion = new Autorizacion(authHeader);
+            Integer idCreador = autorizacion.validarSesion().getId();
+
+            ReporteBoletoVendidosDTO reporte = servicio.obtenerReporteBoletoVendidos(
+                fechaInicial, fechaFinal, idSala, idCreador);
+            
+            if(pdf.equals("true")){
+                ReportePDF reportePDF = new ReportePDF();
+                byte[] pdfBytes = reportePDF.generarReporteBoletosVendidos(reporte.getSalas());
+        
+                return Response.ok(pdfBytes)
+                    .header("Content-Disposition", "attachment; filename=reporte_salas.pdf")
+                    .build();
+            }
+
+            return Response.ok(reporte.getSalas()).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(e.getMessage()).build();
+        } catch (AutorizacionException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(ex.getMessage()).build();
+        }catch (DateTimeParseException | NumberFormatException e){
+            return Response.status(Response.Status.BAD_REQUEST).entity("Filtro invalido").build();
+        }catch (JRException ex) {
+            System.out.println(ex.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al cargar el reporte").build();
+        }
+    }
+
+    // Admin sistema
+
+    @GET
+    @Path("ganancias/{pdf}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReporteGanancias(
+            @HeaderParam("Authorization") String authHeader,
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal,
+            @PathParam("pdf") String pdf) {
+
+        ReporteServicio servicio = new ReporteServicio();
+
+        try {
+            Autorizacion autorizacion = new Autorizacion(authHeader);
+            autorizacion.validarAdminSistema();
+
+            ReporteGananciasDTO reporte = servicio.obtenerReporteGanancias(
+                fechaInicial, fechaFinal);
+            
+            if(pdf.equals("true")){
+                ReportePDF reportePDF = new ReportePDF();
+                byte[] pdfBytes = reportePDF.generarReporteGanancias(reporte);
+        
+                return Response.ok(pdfBytes)
+                    .header("Content-Disposition", "attachment; filename=reporte_salas.pdf")
+                    .build();
+            }
+
+            return Response.ok(reporte).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(e.getMessage()).build();
+        } catch (AutorizacionException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(ex.getMessage()).build();
+        }catch (JRException ex) {
+            System.out.println(ex.getMessage());
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Error al cargar el reporte").build();
+        }
+    }
+
+    @GET
+    @Path("anuncios-comprados")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReporteAnunciosComprados(
+            @HeaderParam("Authorization") String authHeader,
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal,
+            @QueryParam("tipo-anuncio") String tipoAnuncio,
+            @QueryParam("periodo") String periodo) {
+
+        ReporteServicio servicio = new ReporteServicio();
+
+        try {
+            Autorizacion autorizacion = new Autorizacion(authHeader);
+            autorizacion.validarAdminSistema();
+
+            ReporteAnunciosCompradosDTO reporte = servicio.obtenerReporteAnunciosComprados(
+                fechaInicial, fechaFinal, tipoAnuncio, periodo);
+
+            return Response.ok(reporte).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(e.getMessage()).build();
+        } catch (AutorizacionException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(ex.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("ganancias-anunciante")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReporteGananciasAnunciante(
+            @HeaderParam("Authorization") String authHeader,
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal,
+            @QueryParam("id-anunciante") String idAnunciante) {
+
+        ReporteServicio servicio = new ReporteServicio();
+
+        try {
+            Autorizacion autorizacion = new Autorizacion(authHeader);
+            autorizacion.validarAdminSistema();
+
+            ReporteGananciasAnuncianteDTO reporte = servicio.obtenerReporteGananciasAnunciante(
+                fechaInicial, fechaFinal, idAnunciante);
+
+            return Response.ok(reporte).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(e.getMessage()).build();
+        } catch (AutorizacionException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(ex.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("salas-mas-populares")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReporteSalasMasPopulares(
+            @HeaderParam("Authorization") String authHeader,
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal) {
+
+        ReporteServicio servicio = new ReporteServicio();
+
+        try {
+            Autorizacion autorizacion = new Autorizacion(authHeader);
+            autorizacion.validarAdminSistema();
+
+            ReporteSalasMasPopularesDTO reporte = servicio.obtenerReporteSalasMasPopulares(
+                fechaInicial, fechaFinal);
+
+            return Response.ok(reporte).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(e.getMessage()).build();
+        } catch (AutorizacionException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(ex.getMessage()).build();
+        }
+    }
+
+    @GET
+    @Path("salas-mas-comentadas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verReporteSalasMasComentadas(
+            @HeaderParam("Authorization") String authHeader,
+            @QueryParam("fecha-inicial") String fechaInicial,
+            @QueryParam("fecha-final") String fechaFinal) {
+
+        ReporteServicio servicio = new ReporteServicio();
+
+        try {
+            Autorizacion autorizacion = new Autorizacion(authHeader);
+            autorizacion.validarAdminSistema();
+
+            ReporteSalasMasComentadasDTO reporte = servicio.obtenerReporteSalasMasComentadas(
+                fechaInicial, fechaFinal);
+
+            return Response.ok(reporte).build();
+        } catch (AccesoDeDatosException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(e.getMessage()).build();
+        } catch (AutorizacionException ex) {
+            return Response.status(Response.Status.UNAUTHORIZED)
+                .entity(ex.getMessage()).build();
         }
     }
 }

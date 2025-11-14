@@ -5,7 +5,7 @@
 package com.mynor.manejador.cines.api.servicios;
 
 import com.mynor.manejador.cines.api.bd.BaseDeDatos;
-import com.mynor.manejador.cines.api.bd.Transaccion;
+import com.mynor.manejador.cines.api.bd.*;
 import com.mynor.manejador.cines.api.bd.UsuarioBD;
 import com.mynor.manejador.cines.api.dtos.ImagenEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioEditadoDTO;
@@ -13,8 +13,8 @@ import com.mynor.manejador.cines.api.dtos.UsuarioEntradaDTO;
 import com.mynor.manejador.cines.api.dtos.UsuarioSalidaDTO;
 import com.mynor.manejador.cines.api.excepciones.AccesoDeDatosException;
 import com.mynor.manejador.cines.api.excepciones.UsuarioInvalidoException;
-import com.mynor.manejador.cines.api.filtros.FiltrosUsuario;
-import com.mynor.manejador.cines.api.modelo.Imagen;
+import com.mynor.manejador.cines.api.filtros.*;
+import com.mynor.manejador.cines.api.modelo.*;
 import com.mynor.manejador.cines.api.modelo.Rol;
 import com.mynor.manejador.cines.api.modelo.Usuario;
 import com.mynor.manejador.cines.api.seguridad.Cifrador;
@@ -30,9 +30,12 @@ import org.apache.commons.lang3.StringUtils;
 public class UsuarioServicio {
     
     private final BaseDeDatos<Usuario, FiltrosUsuario> USUARIO_BD;
+    private final BaseDeDatos<Cartera, FiltrosCartera> CARTERA_BD;
     
     public UsuarioServicio(){
         USUARIO_BD = new UsuarioBD();
+        CARTERA_BD = new CarteraBD();
+        
     }
 
     public void crearUsuario(UsuarioEntradaDTO usuarioDTO) throws AccesoDeDatosException, NoSuchAlgorithmException, UsuarioInvalidoException {
@@ -50,9 +53,15 @@ public class UsuarioServicio {
         usuario.setCorreo(usuarioDTO.getCorreo());
         usuario.setNombre(usuarioDTO.getNombre());
         usuario.setRol(Rol.valueOf(usuarioDTO.getRol()));
+        
+        Cartera cartera = new Cartera();
+        
                 
         try(Transaccion transaccion = new Transaccion()){
-            USUARIO_BD.crear(usuario, transaccion.obtenerConexion());
+            usuario = USUARIO_BD.crear(usuario, transaccion.obtenerConexion());
+            cartera.setUsuario(usuario);
+            cartera.setSaldo(0.0);
+            CARTERA_BD.crear(cartera, transaccion.obtenerConexion());
             transaccion.commit();
         }
     }

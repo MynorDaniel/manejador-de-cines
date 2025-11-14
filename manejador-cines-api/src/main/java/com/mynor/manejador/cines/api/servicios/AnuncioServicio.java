@@ -111,7 +111,7 @@ public class AnuncioServicio {
         }
     }
     
-    private Double obtenerPrecioTipo(TipoAnuncio tipo) throws AccesoDeDatosException{
+    protected Double obtenerPrecioTipo(TipoAnuncio tipo) throws AccesoDeDatosException{
         FiltrosTipoAnuncio filtros = new FiltrosTipoAnuncio();
         filtros.setTipo(Optional.ofNullable(tipo));
         
@@ -123,7 +123,7 @@ public class AnuncioServicio {
         
     }
     
-    private Double obtenerPrecioVigencia(Integer dias) throws AccesoDeDatosException{
+    protected Double obtenerPrecioVigencia(Integer dias) throws AccesoDeDatosException{
         FiltrosVigenciaAnuncio filtros = new FiltrosVigenciaAnuncio();
         filtros.setDias(Optional.ofNullable(dias));
         

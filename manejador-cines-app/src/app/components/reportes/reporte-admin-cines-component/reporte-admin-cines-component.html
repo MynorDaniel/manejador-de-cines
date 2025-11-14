@@ -1,6 +1,6 @@
 <div class="container mt-4">
   <div class="row justify-content-center">
-    <div class="col-lg-8">
+    <div class="col-lg-10">
       
       @if(errorMsg) {
         <div class="alert alert-danger" role="alert">
@@ -17,7 +17,7 @@
       <div class="card shadow-lg">
         <div class="card-header bg-primary text-white">
           <h3 class="mb-0">
-            <i class="bi bi-file-earmark-pdf"></i> Reportes de Administración de Cines
+            <i class="bi bi-file-earmark-text"></i> Reportes de Administración de Cines
           </h3>
         </div>
         <div class="card-body p-4">
@@ -105,6 +105,14 @@
                 <i class="bi bi-x-circle"></i> Limpiar
               </button>
               <button 
+                type="button" 
+                class="btn btn-danger"
+                (click)="generarReportePDF()"
+                [disabled]="filtrosForm.invalid"
+              >
+                <i class="bi bi-file-pdf"></i> PDF
+              </button>
+              <button 
                 type="submit" 
                 class="btn btn-primary"
                 [disabled]="cargando || filtrosForm.invalid"
@@ -113,7 +121,7 @@
                   <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                   Generando...
                 } @else {
-                  <i class="bi bi-file-earmark-pdf"></i> Generar Reporte
+                  <i class="bi bi-file-earmark-text"></i> Generar Reporte
                 }
               </button>
             </div>
@@ -122,6 +130,172 @@
 
         </div>
       </div>
+
+      @if(salasReporte.length > 0) {
+        <div class="mt-4">
+          @for(sala of salasReporte; track sala.id) {
+            <div class="card shadow mb-4">
+              <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">
+                  <i class="bi bi-door-open"></i> Sala #{{ sala.id }} - {{ sala.nombreCine }}
+                </h4>
+                <div class="mt-2">
+                  <small>
+                    <strong>Filas:</strong> {{ sala.filas }} | 
+                    <strong>Columnas:</strong> {{ sala.columnas }} | 
+                    <strong>Visible:</strong> {{ sala.visible }} | 
+                    <strong>Calificaciones bloqueadas:</strong> {{ sala.calificacionesBloqueadas }} | 
+                    <strong>Comentarios bloqueados:</strong> {{ sala.comentariosBloqueados }}
+                  </small>
+                </div>
+              </div>
+              <div class="card-body">
+                
+                <!-- Reporte de Comentarios -->
+                @if(tipoReporteSeleccionado === 'comentarios' && sala.comentarios) {
+                  <h5><i class="bi bi-chat-left-text"></i> Comentarios</h5>
+                  @if(sala.comentarios.length === 0) {
+                    <p class="text-muted">No hay comentarios para esta sala</p>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Contenido</th>
+                            <th>Fecha</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for(comentario of sala.comentarios; track comentario.id) {
+                            <tr>
+                              <td>{{ comentario.id }}</td>
+                              <td>{{ comentario.correoUsuario }}</td>
+                              <td>{{ comentario.contenido }}</td>
+                              <td>{{ comentario.fecha }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                }
+
+                <!-- Reporte de Películas Proyectadas -->
+                @if(tipoReporteSeleccionado === 'peliculas' && sala.proyecciones) {
+                  <h5><i class="bi bi-film"></i> Películas Proyectadas</h5>
+                  @if(sala.proyecciones.length === 0) {
+                    <p class="text-muted">No hay proyecciones para esta sala</p>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>Título</th>
+                            <th>Director</th>
+                            <th>Clasificación</th>
+                            <th>Duración</th>
+                            <th>Fecha Estreno</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for(proyeccion of sala.proyecciones; track $index) {
+                            <tr>
+                              <td>{{ proyeccion.titulo }}</td>
+                              <td>{{ proyeccion.director }}</td>
+                              <td>{{ proyeccion.clasificacion }}</td>
+                              <td>{{ proyeccion.duracion }} min</td>
+                              <td>{{ proyeccion.fechaEstreno }}</td>
+                              <td>{{ proyeccion.fecha }}</td>
+                              <td>{{ proyeccion.hora }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                }
+
+                <!-- Reporte de Salas Más Gustadas -->
+                @if(tipoReporteSeleccionado === 'salas' && sala.calificaciones) {
+                  <h5><i class="bi bi-star-fill"></i> Calificaciones</h5>
+                  <div class="alert alert-info">
+                    <strong>Promedio de Calificación:</strong> {{ sala.promedioCalificacion }}
+                  </div>
+                  @if(sala.calificaciones.length === 0) {
+                    <p class="text-muted">No hay calificaciones para esta sala</p>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>Usuario</th>
+                            <th>Calificación</th>
+                            <th>Fecha</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for(calificacion of sala.calificaciones; track $index) {
+                            <tr>
+                              <td>{{ calificacion.correoUsuario }}</td>
+                              <td>
+                                <span class="badge bg-warning text-dark">
+                                  {{ calificacion.valor }} <i class="bi bi-star-fill"></i>
+                                </span>
+                              </td>
+                              <td>{{ calificacion.fecha }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                }
+
+                <!-- Reporte de Boletos Vendidos -->
+                @if(tipoReporteSeleccionado === 'boletos' && sala.boletos) {
+                  <h5><i class="bi bi-ticket-perforated"></i> Boletos Vendidos</h5>
+                  <div class="alert alert-success">
+                    <strong>Total Dinero Recaudado:</strong> ${{ sala.totalDineroBoletosVendidos }}
+                  </div>
+                  @if(sala.boletos.length === 0) {
+                    <p class="text-muted">No hay boletos vendidos para esta sala</p>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID Boleto</th>
+                            <th>Usuario</th>
+                            <th>Película</th>
+                            <th>Monto Pagado</th>
+                            <th>Fecha</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for(boleto of sala.boletos; track boleto.id) {
+                            <tr>
+                              <td>{{ boleto.id }}</td>
+                              <td>{{ boleto.correoUsuario }}</td>
+                              <td>{{ boleto.tituloPelicula }}</td>
+                              <td>${{ boleto.montoPagado }}</td>
+                              <td>{{ boleto.fecha }}</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                }
+
+              </div>
+            </div>
+          }
+        </div>
+      }
 
     </div>
   </div>

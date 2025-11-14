@@ -106,6 +106,7 @@ public class BoletoBD implements BaseDeDatos<Boleto, FiltrosBoleto> {
             "b.usuario as boleto_usuario, " +
             "b.proyeccion as boleto_proyeccion, " +
             "b.pago as boleto_pago, " +
+            "u.correo as correo_usuario, " +
             // Proyeccion
             "p.id as proyeccion_id, p.sala as proyeccion_sala, p.pelicula as proyeccion_pelicula, " +
             "p.fecha as proyeccion_fecha, p.hora as proyeccion_hora, p.precio as proyeccion_precio, " +
@@ -118,6 +119,7 @@ public class BoletoBD implements BaseDeDatos<Boleto, FiltrosBoleto> {
             // Cine
             "c.id as cine_id, c.nombre as cine_nombre, c.ubicacion as cine_ubicacion " +
             "FROM Boleto b " +
+            "LEFT JOIN Usuario u ON b.usuario = u.id " +
             "LEFT JOIN Proyeccion p ON b.proyeccion = p.id " +
             "LEFT JOIN Pago pg ON b.pago = pg.id " +
             "LEFT JOIN Sala s ON p.sala = s.id " +
@@ -174,10 +176,11 @@ public class BoletoBD implements BaseDeDatos<Boleto, FiltrosBoleto> {
         Boleto boleto = new Boleto();
         boleto.setId(rs.getInt("boleto_id"));
 
-        // Mapear Usuario (solo ID)
+        // Mapear Usuario
         if (rs.getObject("boleto_usuario") != null) {
             Usuario usuario = new Usuario();
             usuario.setId(rs.getInt("boleto_usuario"));
+            usuario.setCorreo(rs.getString("correo_usuario"));
             boleto.setUsuario(usuario);
         }
 

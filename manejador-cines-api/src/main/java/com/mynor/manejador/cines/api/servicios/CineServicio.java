@@ -145,7 +145,7 @@ public class CineServicio {
         return cinesDTO;
     }
     
-    private Cine[] leerTodosLosCines() throws AccesoDeDatosException{
+    protected Cine[] leerTodosLosCines() throws AccesoDeDatosException{
         FiltrosCine filtros = new FiltrosCine();
         try(Transaccion t = new Transaccion()){
             Cine[] coincidencias = CINE_BD.leer(filtros, t.obtenerConexion());
@@ -165,10 +165,14 @@ public class CineServicio {
         cineDTO.setUbicacion(cine.getUbicacion());
         cineDTO.setBloqueoActivo(cineTieneBloqueoActivo(cine.getId()));
         cineDTO.setFechaUltimoCambioDeCosto(verUltimoCambioDeCosto(cine.getId()).getFechaCambio().toString());
-        Optional<ProyeccionDTO[]> proyecciones = proyeccionesPorCine(cine.getId());
-        if(proyecciones.isPresent()){
-            System.out.println("P: " + proyecciones.get()[0].getId());
-            cineDTO.setProyecciones(proyecciones.get());
+        
+        try {
+            Optional<ProyeccionDTO[]> proyecciones = proyeccionesPorCine(cine.getId());
+            if(proyecciones.isPresent()){
+                cineDTO.setProyecciones(proyecciones.get());
+            }
+        } catch (AccesoDeDatosException ex) {
+            System.getLogger(CineServicio.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         return cineDTO;
         
@@ -379,7 +383,7 @@ public class CineServicio {
         
     }
 
-    private Double calcularDeudaTotal(Integer idCine) throws AccesoDeDatosException {
+    public Double calcularDeudaTotal(Integer idCine) throws AccesoDeDatosException {
         CostoDiarioCine[] costos = leerCostosPorCine(idCine);
         Double deuda = 0.0;
 
@@ -400,7 +404,7 @@ public class CineServicio {
         return deuda;
     }
 
-    private Double calcularMontoPagado(Integer idCine) throws AccesoDeDatosException {
+    public Double calcularMontoPagado(Integer idCine) throws AccesoDeDatosException {
         PagoCine[] pagos = obtenerPagosPorCine(idCine);
         
         if(pagos == null) return 0.0;

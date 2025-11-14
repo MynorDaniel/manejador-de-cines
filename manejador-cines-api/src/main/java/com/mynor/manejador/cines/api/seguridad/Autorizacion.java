@@ -186,13 +186,15 @@ public class Autorizacion {
         return credencialesUsuarioActual.getId();
     }
 
-    public void validarAdminCines() throws AutorizacionException, AccesoDeDatosException {
+    public Integer validarAdminCines() throws AutorizacionException, AccesoDeDatosException {
         credencialesUsuarioActual = MANEJADOR_JWT.validarToken(AUTH_HEADER);
         Usuario usuarioActual = obtenerUsuarioActual(credencialesUsuarioActual);
         
         boolean esAdminCines = usuarioActual.getRol() == Rol.ADMINISTRADOR_CINES;
         
         if(!esAdminCines) throw new AutorizacionException("Sin autorización");
+        
+        return usuarioActual.getId();
     }
 
     public void validarEdicionDeSala(SalaDTO salaDTO) throws AutorizacionException, AccesoDeDatosException {
